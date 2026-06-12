@@ -2,21 +2,20 @@
 import { watch, ref } from 'vue'
 import { useTripStore } from '@/store/tripStore'
 import { useMap, ROUTE_STRATEGIES } from '@/composables/useMap'
-import { searchPoisByCities, POI_TYPES } from '@/services/poiSearch'
 import PinInfoCard from './PinInfoCard.vue'
 
 const store = useTripStore()
 const mapContainer = ref<HTMLElement | null>(null)
-const { renderPoiMarkers, renderRouteByREST, setStrategy, fitView, toggleSatellite, zoomIn, zoomOut } = useMap(mapContainer)
+const { renderPoiMarkers, renderRouteByREST, setStrategy, fitView, toggleSatellite, zoomIn, zoomOut, updateMap } = useMap(mapContainer)
 
 const selectedStrategy = ref(0)
 const isSatellite = ref(false)
 
-// 监听路线信息变化，在地图上显示
+// 监听路线信息变化，刷新地图
 watch(
   () => store.routeInfo,
   () => {
-    renderPins()
+    updateMap()
   },
   { deep: true }
 )

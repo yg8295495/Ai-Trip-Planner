@@ -74,7 +74,7 @@ export const useTripStore = defineStore('trip', () => {
   })
 
   // 路线操作
-  function setRouteInfo(info: RouteInfo) {
+  function setRouteInfo(info: RouteInfo | null) {
     routeInfo.value = info
   }
 
