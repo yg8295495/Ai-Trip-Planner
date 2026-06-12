@@ -35,13 +35,13 @@ export interface RouteInfo {
 export const useTripStore = defineStore('trip', () => {
   // 基础参数
   const params = ref<TripParams>({
-    origin: { query: '上海', lat: 31.2304, lon: 121.4737, shortName: '上海, 中国', fullName: '上海市, 中国' },
-    destination: { query: '成都', lat: 30.5728, lon: 104.0668, shortName: '成都, 中国', fullName: '成都市, 四川省, 中国' },
-    totalDays: 10,
+    origin: null,
+    destination: null,
+    totalDays: null,
     departureDate: null,
     dailyDrivingLimitHours: DAILY_LIMIT_DEFAULT,
     hotelBudget: HOTEL_BUDGET_DEFAULT,
-    travelStyle: ['nature', 'food'],
+    travelStyle: [],
   })
 
   const locations = ref<Location[]>([])

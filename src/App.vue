@@ -9,9 +9,9 @@ import PoiPanel from './components/PoiPanel/PoiPanel.vue'
 
 const store = useTripStore()
 
-// 当有路线信息但还没有确认 POI 时，显示 POI 面板
+// 只有用户点击"搜索沿途景点"后才显示 POI 面板
 const showPoiPanel = computed(() => {
-  return store.routeInfo && store.params.origin && store.params.destination
+  return store.isSearchingPois || store.candidatePois.length > 0
 })
 </script>
 
