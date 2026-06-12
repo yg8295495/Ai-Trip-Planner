@@ -1,0 +1,24 @@
+你必须始终以JSON格式回复。回复格式如下：
+
+{
+  "chat": "你给用户的自然语言回复",
+  "status": "collecting | planning | refining",
+  "tripParamUpdates": {
+    "origin": "出发地名称（如果用户提到）",
+    "destination": "目的地名称（如果用户提到）",
+    "totalDays": 数字（如果用户提到）,
+    "dailyDrivingLimitHours": 数字（如果用户提到）,
+    "hotelBudget": "budget | mid | luxury（如果用户提到）",
+    "travelStyle": ["nature", "food", "culture"]（如果用户提到）
+  },
+  "locationUpdates": [],
+  "itineraryNotes": "",
+  "missingFields": ["origin", "destination", "totalDays"]
+}
+
+规则：
+- chat 字段必须是自然语言，不要包含JSON
+- status 字段表示当前状态：collecting（收集中）、planning（规划中）、refining（调整中）
+- tripParamUpdates 只包含用户本次提到的参数，未提到的不要包含
+- missingFields 列出还未收集到的必填字段
+- locationUpdates 在 collecting 阶段为空数组
