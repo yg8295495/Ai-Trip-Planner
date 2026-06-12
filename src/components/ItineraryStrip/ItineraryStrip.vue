@@ -2,7 +2,7 @@
 import { ref, computed, watch } from 'vue'
 import { useTripStore } from '@/store/tripStore'
 import { ROUTE_STRATEGIES } from '@/composables/useMap'
-import { getCurrentPosition, getInputTips } from '@/services/poiSearch'
+import { getCurrentPosition, getInputTips, geocodeAddress } from '@/services/poiSearch'
 import DayCard from './DayCard.vue'
 
 const store = useTripStore()
@@ -15,6 +15,14 @@ const dailyDrivingLimit = ref(store.params.dailyDrivingLimitHours || 5)
 const deviationDistance = ref(store.maxDeviation || 30)
 const selectedStrategy = ref(0)
 
+// 搜索次数限制
+const searchCount = ref(0)
+
+// 自定义地点
+const customLocationInput = ref('')
+const customSuggestions = ref<any[]>([])
+const showCustomSuggestions = ref(false)
+
 // 下拉联想
 const originSuggestions = ref<any[]>([])
 const destSuggestions = ref<any[]>([])
@@ -25,6 +33,8 @@ const isConfirmed = computed(() => {
   return store.params.origin && store.params.destination && store.routeInfo
 })
 
+const AMAP_KEY = 'c866b4e29221cbc714a4fc78060f23b7'
+
 // 输入提示
 let originTimer: ReturnType<typeof setTimeout> | null = null
 watch(originInput, (val) => {
@@ -34,6 +44,160 @@ watch(originInput, (val) => {
     showOriginSuggestions.value = false
     return
   }
+  originTimer = setTimeout(async () => {
+    originSuggestions.value = await getInputTips(val.trim())
+    showOriginSuggestions.value = originSuggestions.value.length > 0
+  }, 300)
+})
+
+let destTimer: ReturnType<typeof setTimeout> | null = null
+watch(destinationInput, (val) => {
+  if (destTimer) clearTimeout(destTimer)
+  if (!val.trim() || val.trim().length < 2) {
+    destSuggestions.value = []
+    showDestSuggestions.value = false
+    return
+  }
+  destTimer = setTimeout(async () => {
+    destSuggestions.value = await getInputTips(val.trim())
+    showDestSuggestions.value = destSuggestions.value.length > 0
+  }, 300)
+})
+
+// 自定义地点搜索
+let customTimer: ReturnType<typeof setTimeout> | null = null
+watch(customLocationInput, (val) => {
+  if (customTimer) clearTimeout(customTimer)
+  if (!val.trim() || val.trim().length < 2) {
+    customSuggestions.value = []
+    showCustomSuggestions.value = false
+    return
+  }
+  customTimer = setTimeout(async () => {
+    customSuggestions.value = await getInputTips(val.trim())
+    showCustomSuggestions.value = customSuggestions.value.length > 0
+  }, 300)
+})
+
+function selectOrigin(tip: any) {
+  originInput.value = tip.name
+  showOriginSuggestions.value = false
+  if (tip.location) {
+    const [lon, lat] = tip.location.split(',').map(Number)
+    store.params.origin = { query: tip.name, lat, lon, shortName: tip.name, fullName: tip.name || tip.address }
+  }
+}
+
+function selectDest(tip: any) {
+  destinationInput.value = tip.name
+  showDestSuggestions.value = false
+  if (tip.location) {
+    const [lon, lat] = tip.location.split(',').map(Number)
+    store.params.destination = { query: tip.name, lat, lon, shortName: tip.name, fullName: tip.name || tip.address }
+  }
+}
+
+function selectCustomLocation(tip: any) {
+  customLocationInput.value = ''
+  showCustomSuggestions.value = false
+  if (tip.location) {
+    const [lon, lat] = tip.location.split(',').map(Number)
+    const newPoi = {
+      id: `custom_${Date.now()}`,
+      name: tip.name,
+      type: tip.type || '',
+      typecode: '',
+      address: tip.address || '',
+      location: tip.location,
+      cityname: tip.cityname || '',
+      adname: tip.adname || '',
+      rating: '',
+      cost: '',
+      photos: [],
+      tel: '',
+      tag: '',
+    }
+    store.candidatePois.unshift(newPoi)
+    store.togglePoiSelection(newPoi)
+  }
+}
+
+async function handleAddCustomLocation() {
+  if (!customLocationInput.value.trim()) return
+  const coord = await geocodeAddress(customLocationInput.value.trim())
+  if (coord) {
+    const newPoi = {
+      id: `custom_${Date.now()}`,
+      name: customLocationInput.value.trim(),
+      type: '自定义',
+      typecode: '',
+      address: '',
+      location: `${coord.lon},${coord.lat}`,
+      cityname: '',
+      adname: '',
+      rating: '',
+      cost: '',
+      photos: [],
+      tel: '',
+      tag: '',
+    }
+    store.candidatePois.unshift(newPoi)
+    store.togglePoiSelection(newPoi)
+    customLocationInput.value = ''
+  }
+}
+
+function closeSuggestions() {
+  showOriginSuggestions.value = false
+  showDestSuggestions.value = false
+  showCustomSuggestions.value = false
+}
+
+// 我的位置
+async function useMyLocation() {
+  const pos = await getCurrentPosition()
+  if (pos) {
+    originInput.value = pos.city || '当前位置'
+    store.params.origin = { query: pos.city || '当前位置', lat: pos.lat, lon: pos.lon, shortName: pos.city, fullName: pos.city }
+  }
+}
+
+// 互换起终点
+function swapOriginDest() {
+  const temp = originInput.value
+  originInput.value = destinationInput.value
+  destinationInput.value = temp
+  const tempParams = store.params.origin
+  store.params.origin = store.params.destination
+  store.params.destination = tempParams
+}
+
+const isFormComplete = computed(() => {
+  return originInput.value.trim() && destinationInput.value.trim() && totalDays.value > 0
+})
+
+function handleConfirmRoute() {
+  if (!isFormComplete.value) return
+  store.params.totalDays = totalDays.value
+  store.params.dailyDrivingLimitHours = dailyDrivingLimit.value
+  store.setMaxDeviation(deviationDistance.value)
+  searchCount.value = 0
+  closeSuggestions()
+}
+
+function handleSearch() {
+  if (searchCount.value >= 3) return
+  searchCount.value++
+  store.searchPoisByRoute()
+}
+
+function handleBackToForm() {
+  store.params.origin = null
+  store.params.destination = null
+  store.setRouteInfo(null)
+  store.setCandidatePois([])
+  searchCount.value = 0
+}
   originTimer = setTimeout(async () => {
     originSuggestions.value = await getInputTips(val.trim())
     showOriginSuggestions.value = originSuggestions.value.length > 0
@@ -201,13 +365,6 @@ function handleBackToForm() {
             <span class="text-sm font-medium text-blue-600 w-8 text-right">{{ dailyDrivingLimit }}h</span>
           </div>
         </div>
-        <div>
-          <label class="text-xs text-gray-400 mb-1 block">绕路距离</label>
-          <div class="flex items-center gap-2">
-            <input v-model.number="deviationDistance" type="range" min="10" max="100" step="10" class="flex-1" />
-            <span class="text-sm font-medium text-blue-600 w-10 text-right">{{ deviationDistance }}km</span>
-          </div>
-        </div>
       </div>
 
       <!-- 线路偏好 -->
@@ -231,7 +388,7 @@ function handleBackToForm() {
       </button>
     </div>
 
-    <!-- 路线信息 -->
+    <!-- 路线信息（确认后显示） -->
     <div v-if="isConfirmed && store.routeInfo" class="flex-shrink-0 px-4 py-3 border-b border-gray-100">
       <div class="grid grid-cols-3 gap-2 text-center">
         <div>
@@ -247,6 +404,37 @@ function handleBackToForm() {
           <p class="text-xs text-gray-400">城市</p>
         </div>
       </div>
+
+      <!-- 搜索次数限制 -->
+      <div class="mt-2 flex items-center justify-between">
+        <span class="text-xs text-gray-400">搜索次数：{{ 3 - searchCount }}/3</span>
+        <div class="flex items-center gap-2">
+          <span class="text-xs text-gray-400">绕路 {{ deviationDistance }}km</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 自定义地点添加 -->
+    <div v-if="isConfirmed" class="flex-shrink-0 px-4 py-2 border-b border-gray-100">
+      <div class="flex gap-2">
+        <input v-model="customLocationInput" placeholder="添加自定义地点..."
+          class="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none"
+          @keydown.enter="handleAddCustomLocation" />
+        <button :disabled="!customLocationInput.trim()"
+          class="px-3 py-2 bg-green-500 text-white text-sm rounded-lg hover:bg-green-600 disabled:opacity-50"
+          @click="handleAddCustomLocation">
+          添加
+        </button>
+      </div>
+      <div v-if="showCustomSuggestions && customSuggestions.length > 0"
+        class="mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-32 overflow-y-auto">
+        <div v-for="tip in customSuggestions" :key="tip.id"
+          class="px-3 py-2 text-sm cursor-pointer hover:bg-gray-50 border-b border-gray-100 last:border-0"
+          @click="selectCustomLocation(tip)">
+          <p class="font-medium">{{ tip.name }}</p>
+          <p class="text-xs text-gray-400">{{ tip.address }}</p>
+        </div>
+      </div>
     </div>
 
     <!-- 景点列表 -->
@@ -260,7 +448,7 @@ function handleBackToForm() {
         <p class="text-sm text-gray-500 mt-2">搜索中...</p>
       </div>
       <div v-else-if="store.candidatePois.length === 0" class="text-center py-8 text-gray-400 text-sm">
-        点击下方按钮搜索沿途景点
+        点击下方按钮搜索沿途景点，或在上方添加自定义地点
       </div>
       <div v-else class="space-y-2">
         <p class="text-xs text-gray-400 mb-2">找到 {{ store.candidatePois.length }} 个景点</p>
@@ -293,11 +481,15 @@ function handleBackToForm() {
 
     <!-- 搜索按钮 -->
     <div v-if="isConfirmed" class="flex-shrink-0 px-4 py-3 border-t border-gray-100 bg-white">
-      <button :disabled="store.isSearchingPois"
-        class="w-full py-2.5 rounded-lg text-sm font-medium transition-colors bg-blue-500 text-white hover:bg-blue-600 disabled:opacity-50"
-        @click.stop="store.searchPoisByRoute">
-        {{ store.isSearchingPois ? '搜索中...' : '搜索沿途景点' }}
+      <button :disabled="store.isSearchingPois || searchCount >= 3"
+        class="w-full py-2.5 rounded-lg text-sm font-medium transition-colors disabled:opacity-50"
+        :class="searchCount >= 3 ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-blue-500 text-white hover:bg-blue-600'"
+        @click.stop="handleSearch">
+        {{ store.isSearchingPois ? '搜索中...' : searchCount >= 3 ? '搜索次数已用完' : '搜索沿途景点' }}
       </button>
+      <p v-if="searchCount >= 3" class="text-xs text-red-500 mt-1 text-center">
+        搜索次数已用完，重新搜索请返回修改路线
+      </p>
     </div>
   </div>
 </template>

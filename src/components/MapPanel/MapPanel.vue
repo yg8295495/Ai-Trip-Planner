@@ -12,6 +12,15 @@ const { renderPoiMarkers, renderRouteByREST, setStrategy, fitView, toggleSatelli
 const selectedStrategy = ref(0)
 const isSatellite = ref(false)
 
+// 监听路线信息变化，在地图上显示
+watch(
+  () => store.routeInfo,
+  () => {
+    renderPins()
+  },
+  { deep: true }
+)
+
 // 监听起点终点变化，触发路线计算
 watch(
   () => [store.params.origin, store.params.destination],

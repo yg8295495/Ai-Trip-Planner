@@ -25,6 +25,14 @@ export function useSession() {
   })
 
   async function createSession(): Promise<string> {
+    // 清除旧数据
+    store.locations = []
+    store.params.origin = null
+    store.params.destination = null
+    store.setRouteInfo(null)
+    store.setCandidatePois([])
+    store.clearSelectedPois()
+
     const id = `session-${Date.now()}`
     currentSessionId.value = id
 
