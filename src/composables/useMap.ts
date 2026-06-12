@@ -17,7 +17,6 @@ export interface RouteInfo {
   polyline: number[][]
 }
 
-// 高德驾车策略：0-速度优先(高速), 1-距离最短, 2-避免收费, 3-不走高速, 7-高速优先
 export const ROUTE_STRATEGIES = [
   { value: 0, label: '高速优先', icon: '🛣️' },
   { value: 1, label: '距离最短', icon: '📏' },
@@ -32,52 +31,26 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
   let routeLines: any[] = []
   let currentRouteInfo: RouteInfo | null = null
   let currentStrategy = 0
-  let layerSwitcher: any = null
 
   function initMap() {
     if (!containerRef.value || !window.AMap) return
 
+    // 默认普通图，不加卫星图
     map = new window.AMap.Map(containerRef.value, {
       zoom: 7,
       center: [115, 30],
       viewMode: '2D',
-      layers: [
-        new window.AMap.TileLayer(),
-        new window.AMap.TileLayer.Satellite(),
-      ],
     })
 
     // 添加图层切换控件
-    addLayerControl()
-
-    // 添加归位按钮
-    addResetButton()
+    try {
+      map.addControl(new window.AMap.MapType())
+    } catch (e) {
+      console.warn('MapType control failed:', e)
+    }
 
     renderPins()
     renderRouteByREST()
-  }
-
-  function addLayerControl() {
-    // 高德自带图层切换
-    map.addControl(new window.AMap.MapType({
-      defaultType: 0,
-      showTraffic: false,
-      showRoad: false,
-    }))
-  }
-
-  function addResetButton() {
-    const button = document.createElement('div')
-    button.className = 'amap-reset-btn'
-    button.innerHTML = '<div style="background:white;padding:8px 12px;border-radius:6px;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.2);font-size:13px;color:#333">📍 归位</div>'
-    button.onclick = () => {
-      if (routeLines.length > 0) {
-        map.setFitView(routeLines)
-      } else if (markers.length > 0) {
-        map.setFitView()
-      }
-    }
-    map.addControl(button)
   }
 
   function setStrategy(strategy: number) {
@@ -98,9 +71,9 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
         position: [loc.lon, loc.lat],
         title: loc.name,
         label: {
-          content: `<div style="background:${color};color:white;padding:4px 8px;border-radius:4px;font-size:12px;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,0.3);cursor:pointer">${loc.name}</div>`,
+          content: `<div style="background:${color};color:white;padding:4px 8px;border-radius:4px;font-size:12px;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,0.3);cursor:pointer;font-weight:500">${loc.name}</div>`,
           direction: 'top',
-          offset: new window.AMap.Pixel(0, -8),
+          offset: new window.AMap.Pixel(0, -10),
         },
       })
 
@@ -127,14 +100,14 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
       const hasPhoto = poi.photos && poi.photos.length > 0
 
       const content = hasPhoto
-        ? `<div style="position:relative"><img src="${poi.photos[0].url}" style="width:40px;height:40px;border-radius:6px;object-fit:cover;border:2px solid white;box-shadow:0 2px 6px rgba(0,0,0,0.3)"/><div style="position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);background:#3B82F6;color:white;padding:1px 4px;border-radius:3px;font-size:10px;white-space:nowrap">${poi.name}</div></div>`
-        : `<div style="background:#3B82F6;color:white;padding:3px 6px;border-radius:3px;font-size:11px;white-space:nowrap;box-shadow:0 2px 4px rgba(0,0,0,0.2)">${poi.name}</div>`
+        ? `<div style="position:relative"><img src="${poi.photos[0].url}" style="width:48px;height:48px;border-radius:8px;object-fit:cover;border:3px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.3)"/><div style="position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);background:#3B82F6;color:white;padding:2px 6px;border-radius:4px;font-size:10px;white-space:nowrap;box-shadow:0 1px 3px rgba(0,0,0,0.2)">${poi.name}</div></div>`
+        : `<div style="background:#3B82F6;color:white;padding:4px 8px;border-radius:4px;font-size:11px;white-space:nowrap;box-shadow:0 2px 4px rgba(0,0,0,0.2);cursor:pointer">${poi.name}</div>`
 
       const marker = new window.AMap.Marker({
         position: [lng, lat],
         title: poi.name,
         content: content,
-        offset: new window.AMap.Pixel(hasPhoto ? -20 : -30, hasPhoto ? -45 : -15),
+        offset: new window.AMap.Pixel(hasPhoto ? -24 : -30, hasPhoto ? -55 : -15),
         extData: { isPoi: true, poi },
       })
 
