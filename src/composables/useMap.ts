@@ -5,7 +5,6 @@ import { PIN_STATUS_COLORS } from '@/constants/categories'
 declare global {
   interface Window {
     AMap: any
-    AMapDriving: any
   }
 }
 
@@ -38,19 +37,17 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
         ? PIN_STATUS_COLORS.confirmed
         : PIN_STATUS_COLORS.suggested
 
+      const content = `
+        <div style="position:relative;text-align:center">
+          <div style="background:${color};color:white;padding:4px 8px;border-radius:4px;font-size:12px;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,0.3)">${loc.name}</div>
+        </div>
+      `
+
       const marker = new window.AMap.Marker({
         position: [loc.lon, loc.lat],
-        title: loc.name,
-        label: {
-          content: `<div style="background:${color};color:white;padding:4px 8px;border-radius:4px;font-size:12px;white-space:nowrap;box-shadow:0 2px 4px rgba(0,0,0,0.2)">${loc.name}</div>`,
-          direction: 'top',
-          offset: new window.AMap.Pixel(0, -30),
-        },
-        icon: new window.AMap.Icon({
-          size: new window.AMap.Size(25, 34),
-          image: 'https://webapi.amap.com/theme/v1.3/markers/n/markers.png',
-          imageOffset: new window.AMap.Pixel(0, -34),
-        }),
+        content: content,
+        offset: new window.AMap.Pixel(-40, -30),
+        anchor: 'bottom-center',
       })
 
       marker.on('click', () => {
@@ -67,9 +64,19 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
       map.remove(routeLine)
       routeLine = null
     }
+    if (driving) {
+      driving.clear()
+      driving = null
+    }
 
     const confirmed = store.confirmedLocations
     if (confirmed.length < 2) return
+
+    if (!window.AMap.Driving) {
+      console.warn('AMap.Driving not loaded, using simple route')
+      renderSimpleRoute(confirmed)
+      return
+    }
 
     const origin = new window.AMap.LngLat(confirmed[0].lon, confirmed[0].lat)
     const destination = new window.AMap.LngLat(
@@ -84,13 +91,12 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
     driving = new window.AMap.Driving({
       map: map,
       policy: window.AMap.DrivingPolicy.LEAST_TIME,
+      hideMarkers: true,
     })
 
-    driving.search(origin, destination, { waypoints }, (status: string, result: any) => {
-      if (status === 'complete') {
-        console.log('Route calculated')
-      } else {
-        console.error('Route failed:', status)
+    driving.search(origin, destination, { waypoints }, (status: string) => {
+      if (status !== 'complete') {
+        console.warn('Driving route failed, using simple route')
         renderSimpleRoute(confirmed)
       }
     })
@@ -108,10 +114,10 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
       strokeColor: '#3B82F6',
       strokeWeight: 4,
       strokeOpacity: 0.8,
+      strokeStyle: 'dashed',
     })
 
     map.add(routeLine)
-    map.setFitView()
   }
 
   function updateMap() {
@@ -121,7 +127,7 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
   }
 
   onMounted(() => {
-    setTimeout(initMap, 100)
+    setTimeout(initMap, 200)
   })
 
   onUnmounted(() => {

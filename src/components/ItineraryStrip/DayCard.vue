@@ -16,7 +16,7 @@ const emit = defineEmits<{
 <template>
   <div
     :class="[
-      'flex-shrink-0 w-64 cursor-pointer rounded-xl border-2 p-4 transition-all',
+      'w-full cursor-pointer rounded-xl border-2 p-4 transition-all',
       isSelected
         ? 'border-blue-500 bg-blue-50'
         : day.isOverLimit
