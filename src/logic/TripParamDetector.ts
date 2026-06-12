@@ -1,4 +1,4 @@
-import type { TripParams, GeocodedPlace } from '@/types'
+import type { GeocodedPlace } from '@/types'
 
 interface DetectedParams {
   origin?: string
