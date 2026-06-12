@@ -8,7 +8,6 @@ Default provider: CodeBuddy
 import os
 import json
 import time
-import uuid
 import subprocess
 from pathlib import Path
 from watchdog.observers import Observer
@@ -19,21 +18,13 @@ ARCHIVE_DIR = Path("sessions/archive")
 SYSTEM_PROMPT_PATH = Path("src/prompts/system.txt")
 NEW_SESSION_PROMPT_PATH = Path("src/prompts/new_session.txt")
 TIMEOUT_HOURS = 4
-SYSTEM_PROMPT_INTERVAL = 10  # 每 10 轮重新注入 system prompt
-
-
-class SessionState:
-    """管理单个会话的状态"""
-    def __init__(self):
-        self.turn_count = 0
-        self.session_id: str | None = None
-        self.provider = "codebuddy"
+SYSTEM_PROMPT_INTERVAL = 10
 
 
 class JSONLHandler(FileSystemEventHandler):
     def __init__(self):
         self.processing = set()
-        self.sessions: dict[str, SessionState] = {}  # file_path -> SessionState
+        self.turn_counters: dict[str, int] = {}
 
     def on_modified(self, event):
         if event.is_directory:
@@ -75,63 +66,49 @@ class JSONLHandler(FileSystemEventHandler):
         except Exception as e:
             print(f"Error processing {file_path}: {e}")
 
-    def get_session_state(self, file_path: Path) -> SessionState:
-        """获取或创建会话状态"""
+    def get_turn_count(self, file_path: Path) -> int:
         key = str(file_path)
-        if key not in self.sessions:
-            self.sessions[key] = SessionState()
-        return self.sessions[key]
+        if key not in self.turn_counters:
+            self.turn_counters[key] = 0
+        return self.turn_counters[key]
+
+    def increment_turn(self, file_path: Path):
+        key = str(file_path)
+        self.turn_counters[key] = self.get_turn_count(file_path) + 1
 
     def call_ai(self, file_path: Path, user_message: dict) -> dict | None:
-        session = self.get_session_state(file_path)
         provider = user_message.get("provider", "codebuddy")
         text = user_message.get("text", "")
 
-        # 读取 prompt 文件
-        system_prompt = SYSTEM_PROMPT_PATH.read_text(encoding="utf-8")
-        new_session_prompt = NEW_SESSION_PROMPT_PATH.read_text(encoding="utf-8")
+        turn = self.get_turn_count(file_path)
+        inject_system = (turn == 0) or (turn % SYSTEM_PROMPT_INTERVAL == 0)
 
-        # 判断是否需要注入 system prompt
-        session.turn_count += 1
-        inject_system = (session.turn_count == 1) or (session.turn_count % SYSTEM_PROMPT_INTERVAL == 0)
-
-        # 首次调用时生成 session ID（CodeBuddy 使用 UUID）
-        if session.session_id is None and provider == "codebuddy":
-            session.session_id = str(uuid.uuid4())
-
-        session.provider = provider
-
-        # 拼接消息
         if inject_system:
-            if session.turn_count == 1:
-                # 首次：system prompt + new session prompt
+            system_prompt = SYSTEM_PROMPT_PATH.read_text(encoding="utf-8")
+            if turn == 0:
+                new_session_prompt = NEW_SESSION_PROMPT_PATH.read_text(encoding="utf-8")
                 full_message = f"{system_prompt}\n\n{new_session_prompt}\n\n用户消息：{text}"
             else:
-                # 每 10 轮：只注入 system prompt
                 full_message = f"{system_prompt}\n\n用户消息：{text}"
         else:
             full_message = text
 
-        # 调用 CLI
+        self.increment_turn(file_path)
+        turn = self.get_turn_count(file_path)
+
         if provider == "codebuddy":
-            return self.call_codebuddy(file_path.stem, full_message, session)
+            return self.call_codebuddy(full_message, turn)
         elif provider == "mimo":
-            return self.call_mimo(file_path.stem, full_message, session)
+            return self.call_mimo(full_message, turn)
         else:
             print(f"Unknown provider: {provider}")
             return None
 
-    def call_codebuddy(self, session_id: str, user_message: str, session: SessionState) -> dict | None:
-        """调用 CodeBuddy CLI"""
+    def call_codebuddy(self, user_message: str, turn: int) -> dict | None:
         try:
-            cmd = ["codebuddy", "-p", user_message]
+            cmd = ["codebuddy", "-p", user_message, "-c"]
 
-            if session.session_id:
-                cmd += ["-r", session.session_id]
-            else:
-                cmd += ["-c"]
-
-            print(f"[CodeBuddy] Turn {session.turn_count}, session={session.session_id or 'new'}", flush=True)
+            print(f"[CodeBuddy] Turn {turn}", flush=True)
             result = subprocess.run(
                 cmd,
                 capture_output=True,
@@ -140,30 +117,24 @@ class JSONLHandler(FileSystemEventHandler):
             )
 
             if result.returncode != 0:
-                print(f"CodeBuddy error: {result.stderr}", flush=True)
-                # 回退到 MiMo
-                print("Falling back to MiMo...", flush=True)
-                return self.call_mimo(session_id, user_message, session)
+                print(f"[CodeBuddy] Error, falling back to MiMo", flush=True)
+                return self.call_mimo(user_message, turn)
 
-            print(f"[CodeBuddy] Response received ({len(result.stdout)} chars)", flush=True)
-            return self.parse_ai_response(result.stdout)
+            print(f"[CodeBuddy] Response ({len(result.stdout)} chars)", flush=True)
+            return self.parse_response(result.stdout)
 
         except subprocess.TimeoutExpired:
-            print("[CodeBuddy] Timeout, falling back to MiMo...", flush=True)
-            return self.call_mimo(session_id, user_message, session)
+            print("[CodeBuddy] Timeout, falling back to MiMo", flush=True)
+            return self.call_mimo(user_message, turn)
         except FileNotFoundError:
-            print("[CodeBuddy] Not found, falling back to MiMo...", flush=True)
-            return self.call_mimo(session_id, user_message, session)
+            print("[CodeBuddy] Not found, falling back to MiMo", flush=True)
+            return self.call_mimo(user_message, turn)
 
-    def call_mimo(self, session_id: str, user_message: str, session: SessionState) -> dict | None:
-        """调用 MiMo CLI"""
+    def call_mimo(self, user_message: str, turn: int) -> dict | None:
         try:
-            cmd = ["mimo", "run", "-m", "mimo/mimo-auto", "--dangerously-skip-permissions", user_message]
+            cmd = ["mimo", "run", "-m", "mimo/mimo-auto", "--dangerously-skip-permissions", "-c", user_message]
 
-            if session.session_id:
-                cmd += ["--session", session.session_id, "-c"]
-
-            print(f"[MiMo] Turn {session.turn_count}", flush=True)
+            print(f"[MiMo] Turn {turn}", flush=True)
             result = subprocess.run(
                 cmd,
                 capture_output=True,
@@ -172,11 +143,11 @@ class JSONLHandler(FileSystemEventHandler):
             )
 
             if result.returncode != 0:
-                print(f"MiMo error: {result.stderr}", flush=True)
+                print(f"[MiMo] Error: {result.stderr}", flush=True)
                 return None
 
-            print(f"[MiMo] Response received ({len(result.stdout)} chars)", flush=True)
-            return self.parse_ai_response(result.stdout)
+            print(f"[MiMo] Response ({len(result.stdout)} chars)", flush=True)
+            return self.parse_response(result.stdout)
 
         except subprocess.TimeoutExpired:
             print("[MiMo] Timeout (180s)", flush=True)
@@ -192,14 +163,12 @@ class JSONLHandler(FileSystemEventHandler):
             print("[MiMo] Not found", flush=True)
             return None
 
-    def parse_ai_response(self, response: str) -> dict | None:
-        """解析 AI 响应为 JSON 信封"""
+    def parse_response(self, response: str) -> dict:
         try:
             json_start = response.find("{")
             json_end = response.rfind("}") + 1
 
             if json_start == -1 or json_end == 0:
-                # 回退：整段文本当 chat 处理
                 return {
                     "chat": response.strip(),
                     "status": "unknown",
@@ -209,13 +178,8 @@ class JSONLHandler(FileSystemEventHandler):
                     "missingFields": []
                 }
 
-            json_str = response[json_start:json_end]
-            envelope = json.loads(json_str)
-
-            return {
-                "text": envelope.get("chat", response),
-                "envelope": envelope,
-            }
+            envelope = json.loads(response[json_start:json_end])
+            return {"text": envelope.get("chat", response), "envelope": envelope}
 
         except json.JSONDecodeError:
             return {
@@ -228,65 +192,45 @@ class JSONLHandler(FileSystemEventHandler):
             }
 
     def append_response(self, file_path: Path, response: dict):
-        """追加 AI 响应到 JSONL 文件"""
-        session = self.get_session_state(file_path)
+        provider = "codebuddy"
         message = {
             "ts": time.strftime("%Y-%m-%dT%H:%M:%S"),
             "role": "ai",
             "text": response.get("text", ""),
             "envelope": response.get("envelope", {}),
-            "provider": session.provider,
+            "provider": provider,
         }
-
         with open(file_path, "a") as f:
             f.write(json.dumps(message, ensure_ascii=False) + "\n")
 
     def archive_session(self, file_path: Path):
-        """归档会话"""
-        timestamp = time.strftime("%Y%m%d-%H%M%S")
-        archive_name = f"{timestamp}.jsonl"
-        archive_path = ARCHIVE_DIR / archive_name
-
-        # 清理会话状态
         key = str(file_path)
-        if key in self.sessions:
-            del self.sessions[key]
+        if key in self.turn_counters:
+            del self.turn_counters[key]
 
+        timestamp = time.strftime("%Y%m%d-%H%M%S")
+        archive_path = ARCHIVE_DIR / f"{timestamp}.jsonl"
         file_path.rename(archive_path)
-        print(f"Archived session: {file_path.name} -> {archive_name}")
+        print(f"Archived: {file_path.name}")
 
 
 def check_timeouts():
-    """检查超时会话并归档"""
     while True:
         time.sleep(60)
-
         now = time.time()
         for file_path in SESSIONS_DIR.glob("*.jsonl"):
-            mtime = file_path.stat().st_mtime
-            age_hours = (now - mtime) / 3600
-
-            if age_hours > TIMEOUT_HOURS:
+            if (now - file_path.stat().st_mtime) / 3600 > TIMEOUT_HOURS:
                 try:
                     lines = file_path.read_text().strip().split("\n")
                     last_line = json.loads(lines[-1]) if lines else {}
-
                     if last_line.get("event") != "session_closed":
-                        timeout_msg = {
-                            "ts": time.strftime("%Y-%m-%dT%H:%M:%S"),
-                            "role": "system",
-                            "event": "auto_archived",
-                        }
                         with open(file_path, "a") as f:
-                            f.write(json.dumps(timeout_msg, ensure_ascii=False) + "\n")
-
-                        timestamp = time.strftime("%Y%m%d-%H%M%S")
-                        archive_path = ARCHIVE_DIR / f"{timestamp}.jsonl"
+                            f.write(json.dumps({"ts": time.strftime("%Y-%m-%dT%H:%M:%S"), "role": "system", "event": "auto_archived"}, ensure_ascii=False) + "\n")
+                        archive_path = ARCHIVE_DIR / f"{time.strftime('%Y%m%d-%H%M%S')}.jsonl"
                         file_path.rename(archive_path)
-                        print(f"Auto-archived timeout session: {file_path.name}")
-
+                        print(f"Auto-archived: {file_path.name}")
                 except Exception as e:
-                    print(f"Error checking timeout for {file_path}: {e}")
+                    print(f"Timeout check error: {e}")
 
 
 def main():
@@ -296,15 +240,13 @@ def main():
     print("=" * 50)
     print("AI Road Trip Planner - File Bridge")
     print("=" * 50)
-    print(f"Default provider: codebuddy")
-    print(f"Sessions directory: {SESSIONS_DIR.absolute()}")
-    print(f"System prompt interval: every {SYSTEM_PROMPT_INTERVAL} turns")
-    print("Waiting for JSONL changes...")
+    print(f"Provider: codebuddy (fallback: mimo)")
+    print(f"Sessions: {SESSIONS_DIR.absolute()}")
+    print(f"System prompt: every {SYSTEM_PROMPT_INTERVAL} turns")
     print("=" * 50)
 
     import threading
-    timeout_thread = threading.Thread(target=check_timeouts, daemon=True)
-    timeout_thread.start()
+    threading.Thread(target=check_timeouts, daemon=True).start()
 
     handler = JSONLHandler()
     observer = Observer()
