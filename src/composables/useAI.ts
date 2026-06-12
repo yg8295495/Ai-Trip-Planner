@@ -1,10 +1,22 @@
 import { useTripStore } from '@/store/tripStore'
 import { callAI } from '@/services/ai/AIOrchestrator'
+import { detectParamsFromText, createGeocodedPlace } from '@/logic/TripParamDetector'
 
 export function useAI() {
   const store = useTripStore()
 
   async function sendMessage(text: string) {
+    const detected = detectParamsFromText(text)
+    if (detected.origin && !store.params.origin) {
+      store.params.origin = createGeocodedPlace(detected.origin)
+    }
+    if (detected.destination && !store.params.destination) {
+      store.params.destination = createGeocodedPlace(detected.destination)
+    }
+    if (detected.totalDays && !store.params.totalDays) {
+      store.params.totalDays = detected.totalDays
+    }
+
     store.addMessage({
       id: `msg_${Date.now()}`,
       role: 'user',
