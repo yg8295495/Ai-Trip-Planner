@@ -67,7 +67,7 @@ function swapOriginDest() { const t = originInput.value; originInput.value = des
 const isFormComplete = computed(() => originInput.value.trim() && destinationInput.value.trim() && totalDays.value > 0)
 function handleConfirmRoute() { if (!isFormComplete.value) return; store.params.totalDays = totalDays.value; store.params.dailyDrivingLimitHours = dailyDrivingLimit.value; store.setMaxDeviation(deviationDistance.value); searchCount.value = 0; closeSuggestions() }
 function handleSearch() { if (searchCount.value >= 3) return; searchCount.value++; store.searchPoisByRoute() }
-function handleBackToForm() { store.params.origin = null; store.params.destination = null; store.setRouteInfo(null); store.setCandidatePois([]); searchCount.value = 0 }
+function handleBackToForm() { store.params.origin = null; store.params.destination = null; store.setRouteInfo(null); store.setCandidatePois([]); store.locations = []; searchCount.value = 0 }
 </script>
 
 <template>
