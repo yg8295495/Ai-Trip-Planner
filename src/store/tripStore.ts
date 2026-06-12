@@ -159,6 +159,22 @@ export const useTripStore = defineStore('trip', () => {
     selectedLocationId.value = id
   }
 
+  // 搜索沿途景点（由组件调用）
+  async function searchPoisByRoute() {
+    if (!routeInfo.value || routeInfo.value.cities.length === 0) return
+    
+    isSearchingPois.value = true
+    try {
+      const { searchPoisByCities, POI_TYPES } = await import('@/services/poiSearch')
+      const results = await searchPoisByCities(routeInfo.value.cities, POI_TYPES.all, 5)
+      const allPois: any[] = []
+      results.forEach((pois) => allPois.push(...pois))
+      candidatePois.value = allPois
+    } finally {
+      isSearchingPois.value = false
+    }
+  }
+
   return {
     params,
     locations,
@@ -190,5 +206,6 @@ export const useTripStore = defineStore('trip', () => {
     addMessage,
     setSelectedDay,
     setSelectedLocation,
+    searchPoisByRoute,
   }
 })

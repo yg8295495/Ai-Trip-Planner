@@ -14,69 +14,101 @@ const dailyDrivingLimit = ref(store.params.dailyDrivingLimitHours || 5)
 const deviationDistance = ref(store.maxDeviation || 30)
 const selectedStrategy = ref(0)
 
-// 是否已确认路线
+// 下拉联想
+const originSuggestions = ref<any[]>([])
+const destSuggestions = ref<any[]>([])
+const showOriginSuggestions = ref(false)
+const showDestSuggestions = ref(false)
+
 const isConfirmed = computed(() => {
   return store.params.origin && store.params.destination && store.routeInfo
 })
 
-// 地理编码缓存
-const geocodeCache = ref<Map<string, { lat: number; lon: number }>>(new Map())
+const AMAP_KEY = 'c866b4e29221cbc714a4fc78060f23b7'
 
-// 监听起点输入，实时地理编码
-let originTimer: ReturnType<typeof setTimeout> | null = null
-watch(originInput, (val) => {
-  if (originTimer) clearTimeout(originTimer)
-  if (!val.trim()) return
-  originTimer = setTimeout(async () => {
-    const coord = await geocodeAddress(val.trim())
-    if (coord) {
-      store.params.origin = {
-        query: val.trim(),
-        lat: coord.lat,
-        lon: coord.lon,
-        shortName: val.trim(),
-        fullName: val.trim(),
-      }
-    }
-  }, 500)
-})
-
-// 监听终点输入，实时地理编码
-let destTimer: ReturnType<typeof setTimeout> | null = null
-watch(destinationInput, (val) => {
-  if (destTimer) clearTimeout(destTimer)
-  if (!val.trim()) return
-  destTimer = setTimeout(async () => {
-    const coord = await geocodeAddress(val.trim())
-    if (coord) {
-      store.params.destination = {
-        query: val.trim(),
-        lat: coord.lat,
-        lon: coord.lon,
-        shortName: val.trim(),
-        fullName: val.trim(),
-      }
-    }
-  }, 500)
-})
-
+// 地理编码
 async function geocodeAddress(address: string): Promise<{ lat: number; lon: number } | null> {
-  if (geocodeCache.value.has(address)) {
-    return geocodeCache.value.get(address)!
-  }
   try {
-    const res = await fetch(`https://restapi.amap.com/v3/geocode/geo?address=${encodeURIComponent(address)}&key=c866b4e29221cbc714a4fc78060f23b7`)
+    const res = await fetch(`https://restapi.amap.com/v3/geocode/geo?address=${encodeURIComponent(address)}&key=${AMAP_KEY}`)
     const data = await res.json()
     if (data.status === '1' && data.geocodes?.[0]) {
       const [lon, lat] = data.geocodes[0].location.split(',').map(Number)
-      const result = { lat, lon }
-      geocodeCache.value.set(address, result)
-      return result
+      return { lat, lon }
     }
   } catch (err) {
     console.error('Geocode failed:', err)
   }
   return null
+}
+
+// 输入提示 API
+async function getInputTips(keyword: string): Promise<any[]> {
+  if (!keyword || keyword.length < 2) return []
+  try {
+    const res = await fetch(`https://restapi.amap.com/v3/assistant/inputtips?keywords=${encodeURIComponent(keyword)}&datatype=all&city=全国&key=${AMAP_KEY}`)
+    const data = await res.json()
+    if (data.status === '1' && data.tips) {
+      return data.tips.filter((t: any) => t.location)
+    }
+  } catch (err) {
+    console.error('Input tips failed:', err)
+  }
+  return []
+}
+
+// 起点输入联想
+let originTimer: ReturnType<typeof setTimeout> | null = null
+watch(originInput, (val) => {
+  if (originTimer) clearTimeout(originTimer)
+  if (!val.trim() || val.trim().length < 2) {
+    originSuggestions.value = []
+    showOriginSuggestions.value = false
+    return
+  }
+  originTimer = setTimeout(async () => {
+    originSuggestions.value = await getInputTips(val.trim())
+    showOriginSuggestions.value = originSuggestions.value.length > 0
+  }, 300)
+})
+
+// 终点输入联想
+let destTimer: ReturnType<typeof setTimeout> | null = null
+watch(destinationInput, (val) => {
+  if (destTimer) clearTimeout(destTimer)
+  if (!val.trim() || val.trim().length < 2) {
+    destSuggestions.value = []
+    showDestSuggestions.value = false
+    return
+  }
+  destTimer = setTimeout(async () => {
+    destSuggestions.value = await getInputTips(val.trim())
+    showDestSuggestions.value = destSuggestions.value.length > 0
+  }, 300)
+})
+
+// 选择联想结果
+function selectOrigin(tip: any) {
+  originInput.value = tip.name
+  showOriginSuggestions.value = false
+  if (tip.location) {
+    const [lon, lat] = tip.location.split(',').map(Number)
+    store.params.origin = { query: tip.name, lat, lon, shortName: tip.name, fullName: tip.name || tip.address }
+  }
+}
+
+function selectDest(tip: any) {
+  destinationInput.value = tip.name
+  showDestSuggestions.value = false
+  if (tip.location) {
+    const [lon, lat] = tip.location.split(',').map(Number)
+    store.params.destination = { query: tip.name, lat, lon, shortName: tip.name, fullName: tip.name || tip.address }
+  }
+}
+
+// 点击外部关闭下拉
+function closeSuggestions() {
+  showOriginSuggestions.value = false
+  showDestSuggestions.value = false
 }
 
 const isFormComplete = computed(() => {
@@ -88,30 +120,26 @@ function handleConfirmRoute() {
   store.params.totalDays = totalDays.value
   store.params.dailyDrivingLimitHours = dailyDrivingLimit.value
   store.setMaxDeviation(deviationDistance.value)
+  closeSuggestions()
 }
 
 function handleBackToForm() {
   store.params.origin = null
   store.params.destination = null
   store.setRouteInfo(null)
-}
-
-function handleSelectDay(dayNumber: number) {
-  store.setSelectedDay(store.selectedDay === dayNumber ? null : dayNumber)
+  store.setCandidatePois([])
 }
 </script>
 
 <template>
-  <div class="flex flex-col h-full">
+  <div class="flex flex-col h-full" @click="closeSuggestions">
     <!-- Header -->
     <div class="flex-shrink-0 border-b border-gray-100 px-4 py-3 bg-white">
       <div class="flex items-center justify-between">
         <h2 class="text-base font-semibold text-gray-800">行程规划</h2>
-        <button
-          v-if="isConfirmed"
+        <button v-if="isConfirmed"
           class="text-sm text-blue-500 hover:text-blue-700 transition-colors"
-          @click="handleBackToForm"
-        >
+          @click.stop="handleBackToForm">
           ← 返回修改
         </button>
       </div>
@@ -126,17 +154,35 @@ function handleSelectDay(dayNumber: number) {
           <div class="w-0.5 h-8 bg-gray-200"></div>
           <div class="w-3 h-3 rounded-full bg-red-500"></div>
         </div>
-        <div class="flex-1 space-y-2">
-          <input
-            v-model="originInput"
-            placeholder="起点（如：长沙藏珑）"
-            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none"
-          />
-          <input
-            v-model="destinationInput"
-            placeholder="终点（如：昆明）"
-            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none"
-          />
+        <div class="flex-1 space-y-2 relative">
+          <div>
+            <input v-model="originInput" placeholder="起点（如：长沙藏珑）"
+              class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none"
+              @click.stop @input.stop />
+            <div v-if="showOriginSuggestions && originSuggestions.length > 0"
+              class="absolute left-0 right-0 top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-20 max-h-48 overflow-y-auto">
+              <div v-for="tip in originSuggestions" :key="tip.id"
+                class="px-3 py-2 text-sm cursor-pointer hover:bg-gray-50 border-b border-gray-100 last:border-0"
+                @click.stop="selectOrigin(tip)">
+                <p class="font-medium">{{ tip.name }}</p>
+                <p class="text-xs text-gray-400">{{ tip.address }}</p>
+              </div>
+            </div>
+          </div>
+          <div>
+            <input v-model="destinationInput" placeholder="终点（如：昆明）"
+              class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none"
+              @click.stop @input.stop />
+            <div v-if="showDestSuggestions && destSuggestions.length > 0"
+              class="absolute left-0 right-0 top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-20 max-h-48 overflow-y-auto">
+              <div v-for="tip in destSuggestions" :key="tip.id"
+                class="px-3 py-2 text-sm cursor-pointer hover:bg-gray-50 border-b border-gray-100 last:border-0"
+                @click.stop="selectDest(tip)">
+                <p class="font-medium">{{ tip.name }}</p>
+                <p class="text-xs text-gray-400">{{ tip.address }}</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -207,13 +253,7 @@ function handleSelectDay(dayNumber: number) {
       </div>
     </div>
 
-    <!-- 沿途景点 -->
-    <div v-if="isConfirmed" class="flex-shrink-0 px-4 py-2 border-b border-gray-100">
-      <p class="text-xs text-gray-400">
-        {{ store.candidatePois.length > 0 ? `沿途景点 (${store.candidatePois.length})` : '沿途景点' }}
-      </p>
-    </div>
-
+    <!-- 景点列表（确认后显示） -->
     <div v-if="isConfirmed" class="flex-1 overflow-y-auto px-4 py-2">
       <div v-if="store.isSearchingPois" class="text-center py-8">
         <div class="inline-flex gap-1">
@@ -224,20 +264,19 @@ function handleSelectDay(dayNumber: number) {
         <p class="text-sm text-gray-500 mt-2">搜索中...</p>
       </div>
       <div v-else-if="store.candidatePois.length === 0" class="text-center py-8 text-gray-400 text-sm">
-        确认路线后自动搜索沿途景点
+        点击下方按钮搜索沿途景点
       </div>
       <div v-else class="space-y-2">
+        <p class="text-xs text-gray-400 mb-2">找到 {{ store.candidatePois.length }} 个景点</p>
         <div v-for="poi in store.candidatePois" :key="poi.id"
           :class="['p-3 rounded-lg border cursor-pointer transition-all',
             store.selectedPois.some(p => p.id === poi.id) ? 'border-green-500 bg-green-50' : 'border-gray-200 bg-white hover:border-gray-300']"
-          @click="store.togglePoiSelection(poi)">
+          @click.stop="store.togglePoiSelection(poi)">
           <div class="flex items-center gap-3">
             <div v-if="poi.photos && poi.photos.length > 0" class="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
               <img :src="poi.photos[0].url" class="w-full h-full object-cover" />
             </div>
-            <div v-else class="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
-              <span class="text-xl">📷</span>
-            </div>
+            <div v-else class="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">📷</div>
             <div class="flex-1 min-w-0">
               <div class="flex items-center gap-2">
                 <span class="text-sm font-medium text-gray-800 truncate">{{ poi.name }}</span>
@@ -256,14 +295,14 @@ function handleSelectDay(dayNumber: number) {
       </div>
     </div>
 
-    <!-- 行程卡片 -->
-    <div v-if="store.itinerary.length > 0" class="border-t border-gray-200 px-4 py-3 flex-shrink-0">
-      <h3 class="text-sm font-semibold text-gray-700 mb-2">每日行程</h3>
-      <div class="flex flex-col gap-2">
-        <DayCard v-for="day in store.itinerary" :key="day.dayNumber" :day="day"
-          :driving-limit="store.params.dailyDrivingLimitHours"
-          :is-selected="store.selectedDay === day.dayNumber" @select="handleSelectDay" />
-      </div>
+    <!-- 搜索按钮 -->
+    <div v-if="isConfirmed" class="flex-shrink-0 px-4 py-3 border-t border-gray-100 bg-white">
+      <button
+        :disabled="store.isSearchingPois"
+        class="w-full py-2.5 rounded-lg text-sm font-medium transition-colors bg-blue-500 text-white hover:bg-blue-600 disabled:opacity-50"
+        @click.stop="store.searchPoisByRoute">
+        {{ store.isSearchingPois ? '搜索中...' : '搜索沿途景点' }}
+      </button>
     </div>
   </div>
 </template>
