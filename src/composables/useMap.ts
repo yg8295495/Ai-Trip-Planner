@@ -37,18 +37,15 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
   function initMap() {
     if (!containerRef.value || !window.AMap) return
 
-    // 创建卫星图层（默认不显示）
     satelliteLayer = new window.AMap.TileLayer.Satellite()
 
     map = new window.AMap.Map(containerRef.value, {
       zoom: 7,
       center: [115, 30],
       viewMode: '2D',
-      layers: [new window.AMap.TileLayer()], // 只显示普通图层
     })
 
     renderPins()
-    renderRouteByREST()
   }
 
   function toggleSatellite() {
@@ -61,28 +58,16 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
     }
   }
 
-  function zoomIn() {
-    if (map) map.zoomIn()
-  }
-
-  function zoomOut() {
-    if (map) map.zoomOut()
-  }
-
-  function setStrategy(strategy: number) {
-    currentStrategy = strategy
-    renderRouteByREST()
-  }
+  function zoomIn() { if (map) map.zoomIn() }
+  function zoomOut() { if (map) map.zoomOut() }
+  function setStrategy(strategy: number) { currentStrategy = strategy; renderRouteByREST() }
 
   function renderPins() {
     markers.forEach((m) => map.remove(m))
     markers = []
 
     store.locations.forEach((loc) => {
-      const color = loc.selected
-        ? PIN_STATUS_COLORS.confirmed
-        : PIN_STATUS_COLORS.suggested
-
+      const color = loc.selected ? PIN_STATUS_COLORS.confirmed : PIN_STATUS_COLORS.suggested
       const marker = new window.AMap.Marker({
         position: [loc.lon, loc.lat],
         title: loc.name,
@@ -92,18 +77,12 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
           offset: new window.AMap.Pixel(0, -10),
         },
       })
-
-      marker.on('click', () => {
-        store.toggleLocation(loc.id)
-      })
-
+      marker.on('click', () => store.toggleLocation(loc.id))
       map.add(marker)
       markers.push(marker)
     })
 
-    if (markers.length > 1) {
-      map.setFitView()
-    }
+    if (markers.length > 1) map.setFitView()
   }
 
   function renderPoiMarkers(pois: any[]) {
@@ -114,38 +93,59 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
     pois.forEach((poi) => {
       const [lng, lat] = poi.location.split(',').map(Number)
       const hasPhoto = poi.photos && poi.photos.length > 0
-
       const content = hasPhoto
-        ? `<div style="position:relative"><img src="${poi.photos[0].url}" style="width:48px;height:48px;border-radius:8px;object-fit:cover;border:3px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.3)"/><div style="position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);background:#3B82F6;color:white;padding:2px 6px;border-radius:4px;font-size:10px;white-space:nowrap;box-shadow:0 1px 3px rgba(0,0,0,0.2)">${poi.name}</div></div>`
+        ? `<div style="position:relative"><img src="${poi.photos[0].url}" style="width:48px;height:48px;border-radius:8px;object-fit:cover;border:3px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.3)"/><div style="position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);background:#3B82F6;color:white;padding:2px 6px;border-radius:4px;font-size:10px;white-space:nowrap">${poi.name}</div></div>`
         : `<div style="background:#3B82F6;color:white;padding:4px 8px;border-radius:4px;font-size:11px;white-space:nowrap;box-shadow:0 2px 4px rgba(0,0,0,0.2);cursor:pointer">${poi.name}</div>`
 
       const marker = new window.AMap.Marker({
         position: [lng, lat],
         title: poi.name,
-        content: content,
+        content,
         offset: new window.AMap.Pixel(hasPhoto ? -24 : -30, hasPhoto ? -55 : -15),
         extData: { isPoi: true, poi },
       })
-
-      marker.on('click', () => {
-        store.togglePoiSelection(poi)
-      })
-
+      marker.on('click', () => store.togglePoiSelection(poi))
       map.add(marker)
       markers.push(marker)
     })
   }
 
+  // 地理编码：文本 → 坐标
+  async function geocode(address: string): Promise<{ lat: number; lon: number } | null> {
+    try {
+      const url = `https://restapi.amap.com/v3/geocode/geo?address=${encodeURIComponent(address)}&key=${AMAP_KEY}`
+      const res = await fetch(url)
+      const data = await res.json()
+      if (data.status === '1' && data.geocodes?.[0]) {
+        const [lon, lat] = data.geocodes[0].location.split(',').map(Number)
+        return { lat, lon }
+      }
+    } catch (err) {
+      console.error('Geocode failed:', err)
+    }
+    return null
+  }
+
+  // 计算路线
   async function renderRouteByREST(): Promise<RouteInfo | null> {
     routeLines.forEach((l) => map.remove(l))
     routeLines = []
 
-    const confirmed = store.confirmedLocations
-    if (confirmed.length < 2) return null
+    const originText = store.params.origin?.query
+    const destText = store.params.destination?.query
+    if (!originText || !destText) return null
 
-    const origin = `${confirmed[0].lon},${confirmed[0].lat}`
-    const destination = `${confirmed[confirmed.length - 1].lon},${confirmed[confirmed.length - 1].lat}`
-    const waypoints = confirmed.slice(1, -1).map((loc) => `${loc.lon},${loc.lat}`)
+    // 地理编码获取坐标
+    const originCoord = await geocode(originText)
+    const destCoord = await geocode(destText)
+    if (!originCoord || !destCoord) return null
+
+    const origin = `${originCoord.lon},${originCoord.lat}`
+    const destination = `${destCoord.lon},${destCoord.lat}`
+
+    // 途经点（已确认的地点）
+    const confirmed = store.confirmedLocations
+    const waypoints = confirmed.map((loc) => `${loc.lon},${loc.lat}`)
 
     try {
       let url = `https://restapi.amap.com/v3/direction/driving?origin=${origin}&destination=${destination}&key=${AMAP_KEY}&extensions=all&strategy=${currentStrategy}`
@@ -201,23 +201,18 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
         return currentRouteInfo
       }
     } catch (err) {
-      console.warn('Route calculation failed:', err)
+      console.error('Route calculation failed:', err)
     }
 
     return null
   }
 
   function fitView() {
-    if (routeLines.length > 0) {
-      map.setFitView(routeLines)
-    } else if (markers.length > 0) {
-      map.setFitView()
-    }
+    if (routeLines.length > 0) map.setFitView(routeLines)
+    else if (markers.length > 0) map.setFitView()
   }
 
-  function getRouteInfo(): RouteInfo | null {
-    return currentRouteInfo
-  }
+  function getRouteInfo() { return currentRouteInfo }
 
   function updateMap() {
     if (!map) return
@@ -225,9 +220,7 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
     renderRouteByREST()
   }
 
-  onMounted(() => {
-    setTimeout(initMap, 300)
-  })
+  onMounted(() => { setTimeout(initMap, 300) })
 
-  return { updateMap, renderPoiMarkers, getRouteInfo, renderRouteByREST, setStrategy, fitView, toggleSatellite, zoomIn, zoomOut, isSatellite, ROUTE_STRATEGIES }
+  return { updateMap, renderPoiMarkers, getRouteInfo, renderRouteByREST, setStrategy, fitView, toggleSatellite, zoomIn, zoomOut, ROUTE_STRATEGIES }
 }
