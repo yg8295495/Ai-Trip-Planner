@@ -1,37 +1,35 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { ref, computed } from 'vue'
 import { useTripStore } from '@/store/tripStore'
 import DayCard from './DayCard.vue'
 
 const store = useTripStore()
 
-const displayLocations = computed(() => {
-  return store.locations
-})
+const originInput = ref(store.params.origin?.query || '')
+const destinationInput = ref(store.params.destination?.query || '')
+
+function handleConfirmRoute() {
+  if (!originInput.value.trim() || !destinationInput.value.trim()) return
+
+  // 设置起点终点
+  store.params.origin = {
+    query: originInput.value.trim(),
+    lat: 0,
+    lon: 0,
+    shortName: originInput.value.trim(),
+    fullName: originInput.value.trim(),
+  }
+  store.params.destination = {
+    query: destinationInput.value.trim(),
+    lat: 0,
+    lon: 0,
+    shortName: destinationInput.value.trim(),
+    fullName: destinationInput.value.trim(),
+  }
+}
 
 function handleSelectDay(dayNumber: number) {
   store.setSelectedDay(store.selectedDay === dayNumber ? null : dayNumber)
-}
-
-function handleConfirmSelection() {
-  // 用户确认选择，设置起点终点（用第一个和最后一个选中的地点）
-  const selected = store.locations.filter(l => l.selected)
-  if (selected.length >= 2) {
-    store.params.origin = {
-      query: selected[0].name,
-      lat: selected[0].lat,
-      lon: selected[0].lon,
-      shortName: selected[0].shortName,
-      fullName: selected[0].shortName,
-    }
-    store.params.destination = {
-      query: selected[selected.length - 1].name,
-      lat: selected[selected.length - 1].lat,
-      lon: selected[selected.length - 1].lon,
-      shortName: selected[selected.length - 1].shortName,
-      fullName: selected[selected.length - 1].shortName,
-    }
-  }
 }
 </script>
 
@@ -45,35 +43,47 @@ function handleConfirmSelection() {
       </p>
     </div>
 
-    <!-- 起点终点 -->
+    <!-- 起点终点输入 -->
     <div class="flex-shrink-0 px-4 py-3 border-b border-gray-100">
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-3 mb-3">
         <div class="flex flex-col items-center">
           <div class="w-3 h-3 rounded-full bg-green-500"></div>
-          <div class="w-0.5 h-6 bg-gray-200"></div>
+          <div class="w-0.5 h-8 bg-gray-200"></div>
           <div class="w-3 h-3 rounded-full bg-red-500"></div>
         </div>
         <div class="flex-1 space-y-2">
-          <div>
-            <p class="text-xs text-gray-400">起点</p>
-            <p class="text-sm font-medium text-gray-800">
-              {{ store.params.origin?.shortName || '待选择（点击下方景点）' }}
-            </p>
-          </div>
-          <div>
-            <p class="text-xs text-gray-400">终点</p>
-            <p class="text-sm font-medium text-gray-800">
-              {{ store.params.destination?.shortName || '待选择（点击下方景点）' }}
-            </p>
-          </div>
+          <input
+            v-model="originInput"
+            placeholder="输入起点（如：长沙）"
+            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none"
+          />
+          <input
+            v-model="destinationInput"
+            placeholder="输入终点（如：昆明）"
+            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none"
+          />
         </div>
       </div>
+      <button
+        :disabled="!originInput.trim() || !destinationInput.trim()"
+        class="w-full py-2 rounded-lg text-sm font-medium transition-colors"
+        :class="originInput.trim() && destinationInput.trim()
+          ? 'bg-blue-500 text-white hover:bg-blue-600'
+          : 'bg-gray-100 text-gray-400 cursor-not-allowed'"
+        @click="handleConfirmRoute"
+      >
+        确认路线
+      </button>
     </div>
 
-    <!-- 景点列表 -->
-    <div class="flex-1 overflow-y-auto px-4 py-3">
+    <!-- AI 推荐景点 -->
+    <div class="flex-shrink-0 px-4 py-2 border-b border-gray-100">
+      <p class="text-xs text-gray-400">AI 推荐沿途景点</p>
+    </div>
+
+    <div class="flex-1 overflow-y-auto px-4 py-2">
       <div v-if="store.locations.length === 0" class="text-center py-8 text-gray-400 text-sm">
-        暂无景点，等待 AI 推荐...
+        确认路线后，AI 将推荐沿途景点
       </div>
       <div v-else class="space-y-2">
         <div
@@ -108,35 +118,13 @@ function handleConfirmSelection() {
                 loc.selected ? 'border-green-500 bg-green-500' : 'border-gray-300',
               ]"
             >
-              <svg
-                v-if="loc.selected"
-                class="w-3 h-3 text-white"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
+              <svg v-if="loc.selected" class="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
               </svg>
             </div>
           </div>
         </div>
       </div>
-    </div>
-
-    <!-- 确认按钮 -->
-    <div v-if="store.locations.length > 0" class="flex-shrink-0 px-4 py-3 border-t border-gray-100 bg-white">
-      <button
-        :disabled="store.confirmedLocations.length < 2"
-        class="w-full py-2.5 rounded-lg text-sm font-medium transition-colors"
-        :class="store.confirmedLocations.length >= 2
-          ? 'bg-blue-500 text-white hover:bg-blue-600'
-          : 'bg-gray-100 text-gray-400 cursor-not-allowed'"
-        @click="handleConfirmSelection"
-      >
-        {{ store.confirmedLocations.length < 2
-          ? `还需选择 ${2 - store.confirmedLocations.length} 个地点`
-          : `确认路线 (${store.confirmedLocations.length}个地点)` }}
-      </button>
     </div>
 
     <!-- 行程卡片 -->
