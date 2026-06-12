@@ -12,7 +12,6 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
   const store = useTripStore()
   let map: any = null
   let markers: any[] = []
-  let routeLine: any = null
   let driving: any = null
 
   function initMap() {
@@ -38,9 +37,7 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
         : PIN_STATUS_COLORS.suggested
 
       const content = `
-        <div style="position:relative;text-align:center">
-          <div style="background:${color};color:white;padding:4px 8px;border-radius:4px;font-size:12px;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,0.3)">${loc.name}</div>
-        </div>
+        <div style="background:${color};color:white;padding:4px 8px;border-radius:4px;font-size:12px;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,0.3)">${loc.name}</div>
       `
 
       const marker = new window.AMap.Marker({
@@ -60,10 +57,6 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
   }
 
   function renderDrivingRoute() {
-    if (routeLine) {
-      map.remove(routeLine)
-      routeLine = null
-    }
     if (driving) {
       driving.clear()
       driving = null
@@ -72,52 +65,30 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
     const confirmed = store.confirmedLocations
     if (confirmed.length < 2) return
 
-    if (!window.AMap.Driving) {
-      console.warn('AMap.Driving not loaded, using simple route')
-      renderSimpleRoute(confirmed)
-      return
-    }
+    const startLngLat = [confirmed[0].lon, confirmed[0].lat]
+    const endLngLat = [confirmed[confirmed.length - 1].lon, confirmed[confirmed.length - 1].lat]
 
-    const origin = new window.AMap.LngLat(confirmed[0].lon, confirmed[0].lat)
-    const destination = new window.AMap.LngLat(
-      confirmed[confirmed.length - 1].lon,
-      confirmed[confirmed.length - 1].lat
-    )
+    const waypoints = confirmed.slice(1, -1).map((loc) => [loc.lon, loc.lat])
 
-    const waypoints = confirmed.slice(1, -1).map(
-      (loc) => new window.AMap.LngLat(loc.lon, loc.lat)
-    )
+    window.AMap.plugin('AMap.Driving', () => {
+      driving = new window.AMap.Driving({
+        map: map,
+        policy: window.AMap.DrivingPolicy.LEAST_TIME,
+        hideMarkers: true,
+      })
 
-    driving = new window.AMap.Driving({
-      map: map,
-      policy: window.AMap.DrivingPolicy.LEAST_TIME,
-      hideMarkers: true,
-    })
-
-    driving.search(origin, destination, { waypoints }, (status: string) => {
-      if (status !== 'complete') {
-        console.warn('Driving route failed, using simple route')
-        renderSimpleRoute(confirmed)
+      const opts = {
+        waypoints: waypoints,
       }
+
+      driving.search(startLngLat, endLngLat, opts, (status: string) => {
+        if (status === 'complete') {
+          console.log('Driving route rendered')
+        } else {
+          console.warn('Driving route failed:', status)
+        }
+      })
     })
-  }
-
-  function renderSimpleRoute(locations: any[]) {
-    if (routeLine) {
-      map.remove(routeLine)
-    }
-
-    const path = locations.map((loc) => [loc.lon, loc.lat])
-
-    routeLine = new window.AMap.Polyline({
-      path,
-      strokeColor: '#3B82F6',
-      strokeWeight: 4,
-      strokeOpacity: 0.8,
-      strokeStyle: 'dashed',
-    })
-
-    map.add(routeLine)
   }
 
   function updateMap() {
