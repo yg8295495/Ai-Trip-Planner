@@ -1,12 +1,19 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useTripStore } from '@/store/tripStore'
 import { useMap } from '@/composables/useMap'
 import PinInfoCard from './PinInfoCard.vue'
 
 const store = useTripStore()
 const mapContainer = ref<HTMLElement | null>(null)
-useMap(mapContainer)
+const { updateMap } = useMap(mapContainer)
+
+watch(
+  () => [store.confirmedLocations.length, store.selectedLocationId],
+  () => {
+    updateMap()
+  }
+)
 
 function closeInfoCard() {
   store.setSelectedLocation(null)
