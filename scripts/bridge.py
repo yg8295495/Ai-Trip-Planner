@@ -89,18 +89,18 @@ class JSONLHandler(FileSystemEventHandler):
                 cmd,
                 capture_output=True,
                 text=True,
-                timeout=120
+                timeout=180  # 3 分钟超时
             )
 
             if result.returncode != 0:
                 print(f"Mimo error: {result.stderr}", flush=True)
                 return None
 
-            print(f"MiMo response received", flush=True)
+            print(f"MiMo response received ({len(result.stdout)} chars)", flush=True)
             return self.parse_ai_response(result.stdout)
 
         except subprocess.TimeoutExpired:
-            print("Mimo call timed out", flush=True)
+            print("Mimo call timed out (180s)", flush=True)
             return None
         except FileNotFoundError:
             print("Mimo CLI not found", flush=True)
