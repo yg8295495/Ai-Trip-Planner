@@ -159,17 +159,18 @@ export const useTripStore = defineStore('trip', () => {
     selectedLocationId.value = id
   }
 
-  // 搜索沿途景点（由组件调用）
+  // 搜索沿途景点（多边形搜索，1次API调用）
   async function searchPoisByRoute() {
-    if (!routeInfo.value || routeInfo.value.cities.length === 0) return
+    if (!routeInfo.value || routeInfo.value.polyline.length < 2) return
     
     isSearchingPois.value = true
     try {
-      const { searchPoisByCities, POI_TYPES } = await import('@/services/poiSearch')
-      const results = await searchPoisByCities(routeInfo.value.cities, POI_TYPES.all, 5)
-      const allPois: any[] = []
-      results.forEach((pois) => allPois.push(...pois))
-      candidatePois.value = allPois
+      const { generateCorridorPolygon, searchPoisByPolygon } = await import('@/services/poiSearch')
+      const polygon = generateCorridorPolygon(routeInfo.value.polyline, maxDeviation.value, 50)
+      if (polygon.length > 0) {
+        const pois = await searchPoisByPolygon(polygon, '110000', 25)
+        candidatePois.value = pois
+      }
     } finally {
       isSearchingPois.value = false
     }
