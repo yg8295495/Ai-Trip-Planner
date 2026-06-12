@@ -6,8 +6,9 @@ import PinInfoCard from './PinInfoCard.vue'
 
 const store = useTripStore()
 const mapContainer = ref<HTMLElement | null>(null)
-const { renderPoiMarkers, renderRouteByREST, setStrategy, fitView } = useMap(mapContainer)
+const { renderPoiMarkers, renderRouteByREST, setStrategy, fitView, toggleSatellite, zoomIn, zoomOut } = useMap(mapContainer)
 const selectedStrategy = ref(0)
+const isSatellite = ref(false)
 
 onMounted(async () => {
   if (store.params.origin && store.params.destination) {
@@ -54,18 +55,31 @@ function handleStrategyChange(strategy: number) {
 function handleFitView() {
   fitView()
 }
+
+function handleToggleSatellite() {
+  toggleSatellite()
+  isSatellite.value = !isSatellite.value
+}
+
+function handleZoomIn() {
+  zoomIn()
+}
+
+function handleZoomOut() {
+  zoomOut()
+}
 </script>
 
 <template>
   <div class="relative h-full w-full">
     <div ref="mapContainer" class="h-full w-full" />
 
-    <!-- 地图控制按钮 -->
+    <!-- 左侧控制按钮 -->
     <div class="absolute top-3 left-3 z-10 flex flex-col gap-2">
       <!-- 归位按钮 -->
       <button
         @click="handleFitView"
-        class="bg-white px-3 py-2 rounded-lg shadow-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors flex items-center gap-1.5"
+        class="bg-white px-3 py-2 rounded-lg shadow-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
       >
         📍 归位
       </button>
@@ -87,6 +101,36 @@ function handleFitView() {
           <span>{{ strategy.label }}</span>
         </button>
       </div>
+    </div>
+
+    <!-- 右侧控件：缩放 + 图层切换 -->
+    <div class="absolute top-3 right-3 z-10 flex flex-col gap-2">
+      <!-- 缩放控件 -->
+      <div class="bg-white rounded-lg shadow-md overflow-hidden">
+        <button
+          class="w-10 h-10 flex items-center justify-center text-lg font-bold text-gray-600 hover:bg-gray-50 transition-colors border-b border-gray-100"
+          @click="handleZoomIn"
+        >
+          +
+        </button>
+        <button
+          class="w-10 h-10 flex items-center justify-center text-lg font-bold text-gray-600 hover:bg-gray-50 transition-colors"
+          @click="handleZoomOut"
+        >
+          −
+        </button>
+      </div>
+
+      <!-- 图层切换 -->
+      <button
+        :class="[
+          'bg-white px-3 py-2 rounded-lg shadow-md text-sm font-medium transition-colors',
+          isSatellite ? 'text-blue-600 bg-blue-50' : 'text-gray-600 hover:bg-gray-50',
+        ]"
+        @click="handleToggleSatellite"
+      >
+        {{ isSatellite ? '🗺️ 普通' : '🛰️ 卫星' }}
+      </button>
     </div>
 
     <PinInfoCard

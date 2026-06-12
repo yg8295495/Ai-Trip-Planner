@@ -31,26 +31,42 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
   let routeLines: any[] = []
   let currentRouteInfo: RouteInfo | null = null
   let currentStrategy = 0
+  let isSatellite = false
+  let satelliteLayer: any = null
 
   function initMap() {
     if (!containerRef.value || !window.AMap) return
 
-    // 默认普通图，不加卫星图
+    // 创建卫星图层（默认不显示）
+    satelliteLayer = new window.AMap.TileLayer.Satellite()
+
     map = new window.AMap.Map(containerRef.value, {
       zoom: 7,
       center: [115, 30],
       viewMode: '2D',
+      layers: [new window.AMap.TileLayer()], // 只显示普通图层
     })
-
-    // 添加图层切换控件
-    try {
-      map.addControl(new window.AMap.MapType())
-    } catch (e) {
-      console.warn('MapType control failed:', e)
-    }
 
     renderPins()
     renderRouteByREST()
+  }
+
+  function toggleSatellite() {
+    if (!map) return
+    isSatellite = !isSatellite
+    if (isSatellite) {
+      map.addLayer(satelliteLayer)
+    } else {
+      map.removeLayer(satelliteLayer)
+    }
+  }
+
+  function zoomIn() {
+    if (map) map.zoomIn()
+  }
+
+  function zoomOut() {
+    if (map) map.zoomOut()
   }
 
   function setStrategy(strategy: number) {
@@ -213,5 +229,5 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
     setTimeout(initMap, 300)
   })
 
-  return { updateMap, renderPoiMarkers, getRouteInfo, renderRouteByREST, setStrategy, fitView, ROUTE_STRATEGIES }
+  return { updateMap, renderPoiMarkers, getRouteInfo, renderRouteByREST, setStrategy, fitView, toggleSatellite, zoomIn, zoomOut, isSatellite, ROUTE_STRATEGIES }
 }
