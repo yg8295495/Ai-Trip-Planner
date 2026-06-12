@@ -10,11 +10,19 @@ declare global {
 
 const AMAP_KEY = 'c866b4e29221cbc714a4fc78060f23b7'
 
+export interface RouteInfo {
+  distance: number
+  duration: number
+  cities: { code: string; name: string }[]
+  polyline: number[][]
+}
+
 export function useMap(containerRef: Ref<HTMLElement | null>) {
   const store = useTripStore()
   let map: any = null
   let markers: any[] = []
   let routeLines: any[] = []
+  let currentRouteInfo: RouteInfo | null = null
 
   function initMap() {
     if (!containerRef.value || !window.AMap) return
@@ -61,58 +69,110 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
     }
   }
 
-  async function renderRouteByREST() {
+  function renderPoiMarkers(pois: any[]) {
+    const poiMarkers = markers.filter((m) => m.getExtData()?.isPoi)
+    poiMarkers.forEach((m) => map.remove(m))
+    markers = markers.filter((m) => !m.getExtData()?.isPoi)
+
+    pois.forEach((poi) => {
+      const [lng, lat] = poi.location.split(',').map(Number)
+      const marker = new window.AMap.Marker({
+        position: [lng, lat],
+        title: poi.name,
+        label: {
+          content: `<div style="background:#3B82F6;color:white;padding:3px 6px;border-radius:3px;font-size:11px;white-space:nowrap;box-shadow:0 2px 4px rgba(0,0,0,0.2)">${poi.name}</div>`,
+          direction: 'top',
+          offset: new window.AMap.Pixel(0, -8),
+        },
+        extData: { isPoi: true, poi },
+      })
+
+      marker.on('click', () => {
+        store.setSelectedPoi(poi)
+      })
+
+      map.add(marker)
+      markers.push(marker)
+    })
+  }
+
+  async function renderRouteByREST(): Promise<RouteInfo | null> {
     routeLines.forEach((l) => map.remove(l))
     routeLines = []
 
     const confirmed = store.confirmedLocations
-    if (confirmed.length < 2) return
+    if (confirmed.length < 2) return null
 
-    for (let i = 0; i < confirmed.length - 1; i++) {
-      const from = confirmed[i]
-      const to = confirmed[i + 1]
+    const origin = `${confirmed[0].lon},${confirmed[0].lat}`
+    const destination = `${confirmed[confirmed.length - 1].lon},${confirmed[confirmed.length - 1].lat}`
+    const waypoints = confirmed.slice(1, -1).map((loc) => `${loc.lon},${loc.lat}`)
 
-      const origin = `${from.lon},${from.lat}`
-      const destination = `${to.lon},${to.lat}`
-
-      try {
-        const url = `https://restapi.amap.com/v3/direction/driving?origin=${origin}&destination=${destination}&key=${AMAP_KEY}&extensions=all`
-        const res = await fetch(url)
-        const data = await res.json()
-
-        if (data.status === '1' && data.route?.paths?.[0]?.steps) {
-          const steps = data.route.paths[0].steps
-          const path: number[][] = []
-
-          steps.forEach((step: any) => {
-            const polyline = step.polyline
-            if (polyline) {
-              polyline.split(';').forEach((point: string) => {
-                const [lng, lat] = point.split(',').map(Number)
-                path.push([lng, lat])
-              })
-            }
-          })
-
-          if (path.length > 0) {
-            const line = new window.AMap.Polyline({
-              path,
-              strokeColor: '#3B82F6',
-              strokeWeight: 6,
-              strokeOpacity: 0.9,
-            })
-            map.add(line)
-            routeLines.push(line)
-          }
-        }
-      } catch (err) {
-        console.warn(`Route ${from.name} -> ${to.name} failed:`, err)
+    try {
+      let url = `https://restapi.amap.com/v3/direction/driving?origin=${origin}&destination=${destination}&key=${AMAP_KEY}&extensions=all`
+      if (waypoints.length > 0) {
+        url += `&waypoints=${waypoints.join('|')}`
       }
+
+      const res = await fetch(url)
+      const data = await res.json()
+
+      if (data.status === '1' && data.route?.paths?.[0]) {
+        const path = data.route.paths[0]
+        const cities: { code: string; name: string }[] = []
+        const cityMap = new Map<string, string>()
+        const polylinePoints: number[][] = []
+
+        path.steps.forEach((step: any) => {
+          // 提取城市
+          if (step.cities) {
+            step.cities.forEach((city: any) => {
+              if (city.citycode && !cityMap.has(city.citycode)) {
+                cityMap.set(city.citycode, city.name)
+                cities.push({ code: city.citycode, name: city.name })
+              }
+            })
+          }
+
+          // 提取路线坐标
+          if (step.polyline) {
+            step.polyline.split(';').forEach((point: string) => {
+              const [lng, lat] = point.split(',').map(Number)
+              polylinePoints.push([lng, lat])
+            })
+          }
+        })
+
+        // 绘制路线
+        if (polylinePoints.length > 0) {
+          const line = new window.AMap.Polyline({
+            path: polylinePoints,
+            strokeColor: '#3B82F6',
+            strokeWeight: 6,
+            strokeOpacity: 0.9,
+          })
+          map.add(line)
+          routeLines.push(line)
+        }
+
+        currentRouteInfo = {
+          distance: Number(path.distance),
+          duration: Number(path.duration),
+          cities,
+          polyline: polylinePoints,
+        }
+
+        map.setFitView()
+        return currentRouteInfo
+      }
+    } catch (err) {
+      console.warn('Route calculation failed:', err)
     }
 
-    if (routeLines.length > 0) {
-      map.setFitView()
-    }
+    return null
+  }
+
+  function getRouteInfo(): RouteInfo | null {
+    return currentRouteInfo
   }
 
   function updateMap() {
@@ -125,5 +185,5 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
     setTimeout(initMap, 300)
   })
 
-  return { updateMap }
+  return { updateMap, renderPoiMarkers, getRouteInfo, renderRouteByREST }
 }
