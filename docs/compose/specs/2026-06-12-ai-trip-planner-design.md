@@ -1,5 +1,10 @@
 # AI Road Trip Planner — Design Spec
 
+> [!NOTE]
+> This document may not reflect the current implementation.
+> See the final report for up-to-date state:
+> [Final Report](../reports/ai-trip-planner-phase1.md)
+
 **Date:** 2026-06-12
 **Status:** Approved
 **Reference:** roadtrip-planner-architecture.md (original architecture by Claude)
