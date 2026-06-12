@@ -1,5 +1,10 @@
 # File Bridge Architecture Implementation Plan
 
+> [!NOTE]
+> This document may not reflect the current implementation.
+> See the final report for up-to-date state:
+> [Final Report](../reports/ai-trip-planner-file-bridge.md)
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use compose:subagent (recommended) or compose:execute to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Replace direct API calls with a JSONL file bridge architecture where the frontend writes user messages to files, a Python script monitors and calls AI, and responses are written back to files.
