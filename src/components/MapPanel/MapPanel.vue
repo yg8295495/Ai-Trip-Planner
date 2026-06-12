@@ -12,6 +12,19 @@ const { renderPoiMarkers, renderRouteByREST, setStrategy, fitView, toggleSatelli
 const selectedStrategy = ref(0)
 const isSatellite = ref(false)
 
+// 监听起点终点变化，触发路线计算
+watch(
+  () => [store.params.origin, store.params.destination],
+  async ([origin, dest]) => {
+    if (origin && dest) {
+      const routeInfo = await renderRouteByREST()
+      if (routeInfo) {
+        store.setRouteInfo(routeInfo)
+      }
+    }
+  }
+)
+
 // 监听路线信息变化，自动搜索沿途景点
 watch(
   () => store.routeInfo,
