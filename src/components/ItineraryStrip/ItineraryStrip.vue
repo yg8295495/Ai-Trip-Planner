@@ -20,7 +20,6 @@ const isFormComplete = computed(() => {
 function handleConfirmRoute() {
   if (!isFormComplete.value) return
 
-  // 设置起点终点
   store.params.origin = {
     query: originInput.value.trim(),
     lat: 0,
@@ -137,49 +136,81 @@ function handleSelectDay(dayNumber: number) {
       </button>
     </div>
 
+    <!-- 路线信息 -->
+    <div v-if="store.routeInfo" class="flex-shrink-0 px-4 py-3 border-b border-gray-100">
+      <div class="grid grid-cols-3 gap-2 text-center">
+        <div>
+          <p class="text-lg font-semibold text-blue-600">{{ (store.routeInfo.distance / 1000).toFixed(0) }}</p>
+          <p class="text-xs text-gray-400">公里</p>
+        </div>
+        <div>
+          <p class="text-lg font-semibold text-blue-600">{{ (store.routeInfo.duration / 3600).toFixed(1) }}</p>
+          <p class="text-xs text-gray-400">小时</p>
+        </div>
+        <div>
+          <p class="text-lg font-semibold text-blue-600">{{ store.routeInfo.cities.length }}</p>
+          <p class="text-xs text-gray-400">城市</p>
+        </div>
+      </div>
+    </div>
+
     <!-- AI 推荐景点 -->
-    <div v-if="store.locations.length > 0" class="flex-shrink-0 px-4 py-2 border-b border-gray-100">
-      <p class="text-xs text-gray-400">AI 推荐沿途景点</p>
+    <div class="flex-shrink-0 px-4 py-2 border-b border-gray-100">
+      <p class="text-xs text-gray-400">
+        {{ store.candidatePois.length > 0 ? `沿途景点 (${store.candidatePois.length})` : '沿途景点' }}
+      </p>
     </div>
 
     <div class="flex-1 overflow-y-auto px-4 py-2">
-      <div v-if="store.locations.length === 0" class="text-center py-8 text-gray-400 text-sm">
-        填写表单后，AI 将推荐沿途景点
+      <div v-if="store.isSearchingPois" class="text-center py-8">
+        <div class="inline-flex gap-1">
+          <span class="w-2 h-2 bg-blue-400 rounded-full animate-bounce"></span>
+          <span class="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style="animation-delay: 150ms"></span>
+          <span class="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style="animation-delay: 300ms"></span>
+        </div>
+        <p class="text-sm text-gray-500 mt-2">搜索中...</p>
+      </div>
+      <div v-else-if="store.candidatePois.length === 0" class="text-center py-8 text-gray-400 text-sm">
+        确认路线后自动搜索沿途景点
       </div>
       <div v-else class="space-y-2">
         <div
-          v-for="loc in store.locations"
-          :key="loc.id"
+          v-for="poi in store.candidatePois"
+          :key="poi.id"
           :class="[
             'p-3 rounded-lg border cursor-pointer transition-all',
-            loc.selected
+            store.selectedPois.some(p => p.id === poi.id)
               ? 'border-green-500 bg-green-50'
               : 'border-gray-200 bg-white hover:border-gray-300',
           ]"
-          @click="store.toggleLocation(loc.id)"
+          @click="store.togglePoiSelection(poi)"
         >
-          <div class="flex items-center justify-between">
-            <div class="flex-1">
+          <div class="flex items-center gap-3">
+            <div
+              v-if="poi.photos && poi.photos.length > 0"
+              class="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0"
+            >
+              <img :src="poi.photos[0].url" class="w-full h-full object-cover" />
+            </div>
+            <div v-else class="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
+              <span class="text-xl">📷</span>
+            </div>
+            <div class="flex-1 min-w-0">
               <div class="flex items-center gap-2">
-                <span class="text-sm font-medium text-gray-800">{{ loc.name }}</span>
-                <span
-                  :class="[
-                    'px-1.5 py-0.5 rounded text-xs',
-                    loc.selected ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500',
-                  ]"
-                >
-                  {{ loc.selected ? '已选' : '待选' }}
-                </span>
+                <span class="text-sm font-medium text-gray-800 truncate">{{ poi.name }}</span>
+                <span v-if="poi.rating" class="text-xs text-yellow-600">⭐{{ poi.rating }}</span>
               </div>
-              <p class="text-xs text-gray-500 mt-0.5">{{ loc.shortName }}</p>
+              <p class="text-xs text-gray-500 truncate">{{ poi.cityname }} {{ poi.adname }}</p>
             </div>
             <div
               :class="[
-                'w-5 h-5 rounded-full border-2 flex items-center justify-center',
-                loc.selected ? 'border-green-500 bg-green-500' : 'border-gray-300',
+                'w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0',
+                store.selectedPois.some(p => p.id === poi.id)
+                  ? 'border-green-500 bg-green-500'
+                  : 'border-gray-300',
               ]"
             >
-              <svg v-if="loc.selected" class="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg v-if="store.selectedPois.some(p => p.id === poi.id)" class="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
               </svg>
             </div>

@@ -1,43 +1,40 @@
 <script setup lang="ts">
-import { watch, onMounted } from 'vue'
+import { watch, ref } from 'vue'
 import { useTripStore } from '@/store/tripStore'
 import { useMap, ROUTE_STRATEGIES } from '@/composables/useMap'
+import { searchPoisByCities, POI_TYPES } from '@/services/poiSearch'
 import PinInfoCard from './PinInfoCard.vue'
 
 const store = useTripStore()
 const mapContainer = ref<HTMLElement | null>(null)
 const { renderPoiMarkers, renderRouteByREST, setStrategy, fitView, toggleSatellite, zoomIn, zoomOut } = useMap(mapContainer)
-import { ref } from 'vue'
 
 const selectedStrategy = ref(0)
 const isSatellite = ref(false)
 
-// 监听起点终点变化，只有都设置后才计算路线
+// 监听路线信息变化，自动搜索沿途景点
 watch(
-  () => [store.params.origin, store.params.destination],
-  async ([origin, dest]) => {
-    if (origin && dest) {
-      const routeInfo = await renderRouteByREST()
-      if (routeInfo) {
-        store.setRouteInfo(routeInfo)
-      }
+  () => store.routeInfo,
+  async (routeInfo) => {
+    if (routeInfo && routeInfo.cities.length > 0) {
+      // 自动搜索沿途景点
+      store.isSearchingPois = true
+      const types = POI_TYPES.all
+      const results = await searchPoisByCities(routeInfo.cities, types, 5)
+      
+      const allPois: any[] = []
+      results.forEach((pois) => {
+        allPois.push(...pois)
+      })
+      
+      store.setCandidatePois(allPois)
+      store.isSearchingPois = false
     }
-  }
+  },
+  { deep: true }
 )
 
-// 监听已确认地点变化，重新计算路线
-watch(
-  () => store.confirmedLocations.length,
-  async () => {
-    if (store.params.origin && store.params.destination) {
-      const routeInfo = await renderRouteByREST()
-      if (routeInfo) {
-        store.setRouteInfo(routeInfo)
-      }
-    }
-  }
-)
-
+// 监听候选 POI 变化，在地图上显示
 watch(
   () => store.candidatePois,
   () => {
@@ -48,6 +45,7 @@ watch(
   { deep: true }
 )
 
+// 监听选中的 POI，在地图上高亮
 watch(
   () => store.selectedPois,
   () => {
@@ -132,6 +130,14 @@ function handleZoomOut() {
       >
         {{ isSatellite ? '🗺️ 普通' : '🛰️ 卫星' }}
       </button>
+    </div>
+
+    <!-- 搜索中提示 -->
+    <div v-if="store.isSearchingPois" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white px-4 py-3 rounded-lg shadow-lg z-20">
+      <div class="flex items-center gap-2">
+        <div class="animate-spin w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full"></div>
+        <span class="text-sm text-gray-600">搜索沿途景点...</span>
+      </div>
     </div>
 
     <PinInfoCard
