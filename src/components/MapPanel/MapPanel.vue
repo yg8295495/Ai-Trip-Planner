@@ -6,7 +6,7 @@ import PinInfoCard from './PinInfoCard.vue'
 
 const store = useTripStore()
 const mapContainer = ref<HTMLElement | null>(null)
-const { renderPins, renderRoute } = useMap(mapContainer)
+useMap(mapContainer)
 
 function closeInfoCard() {
   store.setSelectedLocation(null)

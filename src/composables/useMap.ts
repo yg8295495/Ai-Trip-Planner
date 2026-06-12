@@ -1,4 +1,4 @@
-import { ref, onMounted, type Ref } from 'vue'
+import { onMounted, type Ref } from 'vue'
 import { useTripStore } from '@/store/tripStore'
 import { PIN_STATUS_COLORS } from '@/constants/categories'
 
