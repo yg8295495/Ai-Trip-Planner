@@ -8,11 +8,13 @@ declare global {
   }
 }
 
+const AMAP_KEY = 'c866b4e29221cbc714a4fc78060f23b7'
+
 export function useMap(containerRef: Ref<HTMLElement | null>) {
   const store = useTripStore()
   let map: any = null
   let markers: any[] = []
-  let driving: any = null
+  let routeLines: any[] = []
 
   function initMap() {
     if (!containerRef.value || !window.AMap) return
@@ -24,7 +26,7 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
     })
 
     renderPins()
-    setTimeout(renderDrivingRoute, 500)
+    renderRouteByREST()
   }
 
   function renderPins() {
@@ -59,65 +61,68 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
     }
   }
 
-  function renderDrivingRoute() {
-    if (driving) {
-      driving.clear()
-      driving = null
-    }
+  async function renderRouteByREST() {
+    routeLines.forEach((l) => map.remove(l))
+    routeLines = []
 
     const confirmed = store.confirmedLocations
     if (confirmed.length < 2) return
 
-    if (!window.AMap.Driving) {
-      console.warn('AMap.Driving not available')
-      return
+    for (let i = 0; i < confirmed.length - 1; i++) {
+      const from = confirmed[i]
+      const to = confirmed[i + 1]
+
+      const origin = `${from.lon},${from.lat}`
+      const destination = `${to.lon},${to.lat}`
+
+      try {
+        const url = `https://restapi.amap.com/v3/direction/driving?origin=${origin}&destination=${destination}&key=${AMAP_KEY}&extensions=all`
+        const res = await fetch(url)
+        const data = await res.json()
+
+        if (data.status === '1' && data.route?.paths?.[0]?.steps) {
+          const steps = data.route.paths[0].steps
+          const path: number[][] = []
+
+          steps.forEach((step: any) => {
+            const polyline = step.polyline
+            if (polyline) {
+              polyline.split(';').forEach((point: string) => {
+                const [lng, lat] = point.split(',').map(Number)
+                path.push([lng, lat])
+              })
+            }
+          })
+
+          if (path.length > 0) {
+            const line = new window.AMap.Polyline({
+              path,
+              strokeColor: '#3B82F6',
+              strokeWeight: 6,
+              strokeOpacity: 0.9,
+            })
+            map.add(line)
+            routeLines.push(line)
+          }
+        }
+      } catch (err) {
+        console.warn(`Route ${from.name} -> ${to.name} failed:`, err)
+      }
     }
 
-    const startLngLat = [confirmed[0].lon, confirmed[0].lat]
-    const endLngLat = [confirmed[confirmed.length - 1].lon, confirmed[confirmed.length - 1].lat]
-    const waypoints = confirmed.slice(1, -1).map((loc) => [loc.lon, loc.lat])
-
-    driving = new window.AMap.Driving({
-      map: map,
-      policy: 0,
-    })
-
-    driving.search(startLngLat, endLngLat, { waypoints }, (status: string, result: any) => {
-      if (status === 'complete') {
-        console.log('Route rendered')
-      } else {
-        console.warn('Route failed:', status)
-        renderFallbackRoute(confirmed)
-      }
-    })
-  }
-
-  function renderFallbackRoute(locations: any[]) {
-    const path = locations.map((loc) => [loc.lon, loc.lat])
-    const polyline = new window.AMap.Polyline({
-      path,
-      strokeColor: '#3B82F6',
-      strokeWeight: 4,
-      strokeOpacity: 0.8,
-      strokeStyle: 'dashed',
-    })
-    map.add(polyline)
+    if (routeLines.length > 0) {
+      map.setFitView()
+    }
   }
 
   function updateMap() {
     if (!map) return
     renderPins()
-    renderDrivingRoute()
+    renderRouteByREST()
   }
 
   onMounted(() => {
     setTimeout(initMap, 300)
-  })
-
-  onUnmounted(() => {
-    if (driving) {
-      driving.clear()
-    }
   })
 
   return { updateMap }
