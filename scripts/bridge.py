@@ -76,30 +76,15 @@ class JSONLHandler(FileSystemEventHandler):
 
     def call_mimo(self, session_id: str, user_message: str, system_prompt: str) -> dict | None:
         try:
-            # 检查是否有已存在的 session
-            existing_session = self.find_existing_session(session_id)
+            # 简化调用：直接用 mimo run + 模型参数
+            cmd = [
+                "mimo", "run",
+                "-m", "mimo/mimo-auto",
+                "--dangerously-skip-permissions",
+                user_message
+            ]
             
-            if existing_session:
-                # 后续轮：继续已有会话
-                cmd = [
-                    "mimo", "run", 
-                    "--session", existing_session,
-                    "--continue",
-                    "-m", "mimo/mimo-auto",
-                    "--dangerously-skip-permissions",
-                    user_message
-                ]
-            else:
-                # 第一轮：创建新会话
-                full_prompt = f"{system_prompt}\n\n用户消息：{user_message}"
-                cmd = [
-                    "mimo", "run",
-                    "-m", "mimo/mimo-auto",
-                    "--dangerously-skip-permissions",
-                    full_prompt
-                ]
-            
-            print(f"Calling MiMo: {' '.join(cmd[:5])}...")
+            print(f"Calling MiMo...", flush=True)
             result = subprocess.run(
                 cmd,
                 capture_output=True,
@@ -108,65 +93,18 @@ class JSONLHandler(FileSystemEventHandler):
             )
 
             if result.returncode != 0:
-                print(f"Mimo error: {result.stderr}")
+                print(f"Mimo error: {result.stderr}", flush=True)
                 return None
 
-            # 从输出中提取 session ID
-            new_session_id = self.extract_session_id(result.stdout)
-            if new_session_id:
-                print(f"Session ID: {new_session_id}")
-
+            print(f"MiMo response received", flush=True)
             return self.parse_ai_response(result.stdout)
 
         except subprocess.TimeoutExpired:
-            print("Mimo call timed out")
+            print("Mimo call timed out", flush=True)
             return None
         except FileNotFoundError:
-            print("Mimo CLI not found. Install MiMo Code first.")
+            print("Mimo CLI not found", flush=True)
             return None
-
-    def find_existing_session(self, session_id: str) -> str | None:
-        """查找已存在的 MiMo 会话"""
-        try:
-            result = subprocess.run(
-                ["mimo", "session", "list"],
-                capture_output=True,
-                text=True,
-                timeout=10
-            )
-            
-            if result.returncode != 0:
-                return None
-            
-            # 解析会话列表，查找匹配的 session
-            for line in result.stdout.split("\n"):
-                if session_id in line:
-                    # 提取 session ID（假设格式为 "ID - Title"）
-                    parts = line.split(" - ")
-                    if parts:
-                        return parts[0].strip()
-            
-            return None
-            
-        except Exception:
-            return None
-
-    def extract_session_id(self, output: str) -> str | None:
-        """从 MiMo 输出中提取 session ID"""
-        import re
-        # 尝试匹配 session ID 格式
-        patterns = [
-            r"Session[:\s]+([a-zA-Z0-9-]+)",
-            r"session[:\s]+([a-zA-Z0-9-]+)",
-            r"ID[:\s]+([a-zA-Z0-9-]+)",
-        ]
-        
-        for pattern in patterns:
-            match = re.search(pattern, output, re.IGNORECASE)
-            if match:
-                return match.group(1)
-        
-        return None
 
     def parse_ai_response(self, response: str) -> dict | None:
         try:
