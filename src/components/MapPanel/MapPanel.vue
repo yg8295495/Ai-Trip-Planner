@@ -16,13 +16,17 @@ const isSatellite = ref(false)
 watch(
   () => [store.params.origin, store.params.destination],
   async ([origin, dest]) => {
+    console.log('Origin/Destination changed:', origin?.query, dest?.query)
     if (origin && dest) {
+      console.log('Calculating route...')
       const routeInfo = await renderRouteByREST()
       if (routeInfo) {
+        console.log('Route calculated:', routeInfo.distance, 'km')
         store.setRouteInfo(routeInfo)
       }
     }
-  }
+  },
+  { deep: true }
 )
 
 // 监听路线信息变化，自动搜索沿途景点
