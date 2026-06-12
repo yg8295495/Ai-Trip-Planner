@@ -9,14 +9,16 @@ import ChatInput from './ChatInput.vue'
 const store = useTripStore()
 const { sendMessage, isPolling } = useAI()
 const { sessions, loadSession, refreshSessions, currentSessionId } = useSession()
-const messagesEnd = ref<HTMLElement>()
+const messagesContainer = ref<HTMLElement>()
 const showSessionList = ref(false)
 
 watch(
   () => store.messages.length,
   () => {
     nextTick(() => {
-      messagesEnd.value?.scrollIntoView({ behavior: 'smooth' })
+      if (messagesContainer.value) {
+        messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight
+      }
     })
   }
 )
@@ -46,9 +48,9 @@ function formatDate(ts: number): string {
 </script>
 
 <template>
-  <div class="flex flex-col h-full overflow-hidden">
-    <!-- Header - 固定不动 -->
-    <div class="flex-shrink-0 border-b border-gray-100 px-4 py-3 bg-white z-10">
+  <div class="h-full flex flex-col">
+    <!-- Header - 固定 -->
+    <div class="flex-none border-b border-gray-100 px-4 py-3 bg-white">
       <div class="flex items-center justify-between">
         <h2 class="text-base font-semibold text-gray-800">AI 旅行顾问</h2>
         <div class="relative">
@@ -61,7 +63,6 @@ function formatDate(ts: number): string {
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
             </svg>
           </button>
-          <!-- 会话下拉列表 -->
           <div
             v-if="showSessionList && sessions.length > 0"
             class="absolute right-0 top-full mt-1 w-64 bg-white rounded-lg shadow-lg border border-gray-200 z-50 max-h-64 overflow-y-auto"
@@ -94,8 +95,8 @@ function formatDate(ts: number): string {
       </p>
     </div>
 
-    <!-- Messages - 可滚动区域 -->
-    <div class="flex-1 min-h-0 overflow-y-auto px-4 py-3 space-y-3 scrollbar-thin">
+    <!-- Messages - 可滚动区域，占据所有剩余空间 -->
+    <div ref="messagesContainer" class="flex-1 overflow-y-auto px-4 py-3 space-y-3">
       <MessageBubble
         v-for="msg in store.messages"
         :key="msg.id"
@@ -110,11 +111,10 @@ function formatDate(ts: number): string {
           </span>
         </div>
       </div>
-      <div ref="messagesEnd" />
     </div>
 
-    <!-- Input - 固定不动 -->
-    <div class="flex-shrink-0">
+    <!-- Input - 固定在底部 -->
+    <div class="flex-none">
       <ChatInput @send="handleSend" :disabled="isPolling" />
     </div>
   </div>
