@@ -1,14 +1,17 @@
 #!/usr/bin/env python3
 """
-AI Road Trip Planner - File Bridge Script
-Monitors JSONL files and calls AI backend to generate responses.
+AI Road Trip Planner - Unified Bridge Script
+Combines HTTP API server + file watcher + AI caller in one process.
 """
 
 import os
 import json
 import time
 import subprocess
+import threading
 from pathlib import Path
+from http.server import HTTPServer, BaseHTTPRequestHandler
+from urllib.parse import urlparse, parse_qs
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
@@ -16,7 +19,124 @@ SESSIONS_DIR = Path("sessions/active")
 ARCHIVE_DIR = Path("sessions/archive")
 SYSTEM_PROMPT_PATH = Path("src/prompts/v1/role.txt")
 TIMEOUT_HOURS = 4
+API_PORT = 3001
 
+
+# ── HTTP API Server ──────────────────────────────────────────────
+
+class APIHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        parsed = urlparse(self.path)
+
+        if parsed.path == "/api/last-line":
+            self.handle_last_line(parsed)
+        elif parsed.path == "/api/read":
+            self.handle_read(parsed)
+        elif parsed.path == "/api/sessions/active":
+            self.handle_list_sessions()
+        else:
+            self.send_error(404)
+
+    def do_POST(self):
+        parsed = urlparse(self.path)
+
+        if parsed.path == "/api/append":
+            self.handle_append()
+        else:
+            self.send_error(404)
+
+    def do_OPTIONS(self):
+        self.send_response(200)
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        self.end_headers()
+
+    def handle_last_line(self, parsed):
+        params = parse_qs(parsed.query)
+        file_path = params.get("path", [None])[0]
+
+        if not file_path or not os.path.exists(file_path):
+            self.send_json({"line": None})
+            return
+
+        try:
+            with open(file_path, "r") as f:
+                lines = f.read().strip().split("\n")
+                last_line = lines[-1] if lines else None
+            self.send_json({"line": last_line})
+        except Exception as e:
+            self.send_json({"error": str(e)}, 500)
+
+    def handle_read(self, parsed):
+        params = parse_qs(parsed.query)
+        file_path = params.get("path", [None])[0]
+
+        if not file_path or not os.path.exists(file_path):
+            self.send_json({"lines": []})
+            return
+
+        try:
+            with open(file_path, "r") as f:
+                lines = f.read().strip().split("\n")
+            self.send_json({"lines": lines})
+        except Exception as e:
+            self.send_json({"error": str(e)}, 500)
+
+    def handle_list_sessions(self):
+        sessions = []
+
+        if SESSIONS_DIR.exists():
+            for f in SESSIONS_DIR.glob("*.jsonl"):
+                stat = f.stat()
+                with open(f, "r") as fh:
+                    line_count = sum(1 for _ in fh)
+                sessions.append({
+                    "id": f.stem,
+                    "filePath": str(f),
+                    "lastModified": stat.st_mtime,
+                    "messageCount": line_count,
+                })
+
+        self.send_json(sessions)
+
+    def handle_append(self):
+        content_length = int(self.headers["Content-Length"])
+        body = json.loads(self.rfile.read(content_length))
+
+        file_path = body.get("filePath")
+        line = body.get("line")
+
+        if not file_path or not line:
+            self.send_json({"error": "Missing filePath or line"}, 400)
+            return
+
+        try:
+            os.makedirs(os.path.dirname(file_path), exist_ok=True)
+            with open(file_path, "a") as f:
+                f.write(line)
+            self.send_json({"success": True})
+        except Exception as e:
+            self.send_json({"error": str(e)}, 500)
+
+    def send_json(self, data, status=200):
+        self.send_response(status)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.end_headers()
+        self.wfile.write(json.dumps(data, ensure_ascii=False).encode())
+
+    def log_message(self, format, *args):
+        pass  # Suppress default HTTP logs
+
+
+def start_api_server():
+    server = HTTPServer(("localhost", API_PORT), APIHandler)
+    print(f"API server running on http://localhost:{API_PORT}")
+    server.serve_forever()
+
+
+# ── File Watcher + AI Caller ─────────────────────────────────────
 
 class JSONLHandler(FileSystemEventHandler):
     def __init__(self):
@@ -94,7 +214,7 @@ class JSONLHandler(FileSystemEventHandler):
             print("Mimo call timed out")
             return None
         except FileNotFoundError:
-            print("Mimo CLI not found")
+            print("Mimo CLI not found. Install MiMo Code first.")
             return None
 
     def parse_ai_response(self, response: str) -> dict | None:
@@ -170,10 +290,7 @@ def check_timeouts():
                     print(f"Error checking timeout for {file_path}: {e}")
 
 
-def main():
-    SESSIONS_DIR.mkdir(parents=True, exist_ok=True)
-    ARCHIVE_DIR.mkdir(parents=True, exist_ok=True)
-
+def start_file_watcher():
     handler = JSONLHandler()
     observer = Observer()
     observer.schedule(handler, str(SESSIONS_DIR), recursive=False)
@@ -181,7 +298,6 @@ def main():
 
     print(f"Monitoring {SESSIONS_DIR} for JSONL changes...")
 
-    import threading
     timeout_thread = threading.Thread(target=check_timeouts, daemon=True)
     timeout_thread.start()
 
@@ -191,6 +307,25 @@ def main():
     except KeyboardInterrupt:
         observer.stop()
     observer.join()
+
+
+# ── Main ─────────────────────────────────────────────────────────
+
+def main():
+    SESSIONS_DIR.mkdir(parents=True, exist_ok=True)
+    ARCHIVE_DIR.mkdir(parents=True, exist_ok=True)
+
+    print("=" * 50)
+    print("AI Road Trip Planner - File Bridge")
+    print("=" * 50)
+    print(f"Sessions directory: {SESSIONS_DIR.absolute()}")
+    print(f"API endpoint: http://localhost:{API_PORT}")
+    print("=" * 50)
+
+    api_thread = threading.Thread(target=start_api_server, daemon=True)
+    api_thread.start()
+
+    start_file_watcher()
 
 
 if __name__ == "__main__":
