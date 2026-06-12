@@ -15,22 +15,15 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
   let driving: any = null
 
   function initMap() {
-    if (!containerRef.value || !window.AMap) {
-      console.error('AMap not loaded')
-      return
-    }
-
-    console.log('AMap loaded:', typeof window.AMap)
-    console.log('AMap.Driving:', typeof window.AMap.Driving)
+    if (!containerRef.value || !window.AMap) return
 
     map = new window.AMap.Map(containerRef.value, {
-      zoom: 6,
+      zoom: 7,
       center: [115, 30],
       viewMode: '2D',
     })
 
     renderPins()
-
     setTimeout(renderDrivingRoute, 500)
   }
 
@@ -47,9 +40,9 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
         position: [loc.lon, loc.lat],
         title: loc.name,
         label: {
-          content: `<div style="background:${color};color:white;padding:3px 6px;border-radius:3px;font-size:11px;white-space:nowrap">${loc.name}</div>`,
+          content: `<div style="background:${color};color:white;padding:4px 8px;border-radius:4px;font-size:12px;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,0.3)">${loc.name}</div>`,
           direction: 'top',
-          offset: new window.AMap.Pixel(0, -10),
+          offset: new window.AMap.Pixel(0, -8),
         },
       })
 
@@ -61,7 +54,7 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
       markers.push(marker)
     })
 
-    if (markers.length > 0) {
+    if (markers.length > 1) {
       map.setFitView()
     }
   }
@@ -73,8 +66,10 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
     }
 
     const confirmed = store.confirmedLocations
-    if (confirmed.length < 2) {
-      console.log('Not enough confirmed locations for route')
+    if (confirmed.length < 2) return
+
+    if (!window.AMap.Driving) {
+      console.warn('AMap.Driving not available')
       return
     }
 
@@ -82,24 +77,31 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
     const endLngLat = [confirmed[confirmed.length - 1].lon, confirmed[confirmed.length - 1].lat]
     const waypoints = confirmed.slice(1, -1).map((loc) => [loc.lon, loc.lat])
 
-    console.log('Route request:', { start: startLngLat, end: endLngLat, waypoints })
-
-    if (!window.AMap.Driving) {
-      console.error('AMap.Driving not available')
-      return
-    }
-
     driving = new window.AMap.Driving({
       map: map,
       policy: 0,
     })
 
     driving.search(startLngLat, endLngLat, { waypoints }, (status: string, result: any) => {
-      console.log('Driving status:', status)
-      if (result) {
-        console.log('Driving routes:', result.routes?.length)
+      if (status === 'complete') {
+        console.log('Route rendered')
+      } else {
+        console.warn('Route failed:', status)
+        renderFallbackRoute(confirmed)
       }
     })
+  }
+
+  function renderFallbackRoute(locations: any[]) {
+    const path = locations.map((loc) => [loc.lon, loc.lat])
+    const polyline = new window.AMap.Polyline({
+      path,
+      strokeColor: '#3B82F6',
+      strokeWeight: 4,
+      strokeOpacity: 0.8,
+      strokeStyle: 'dashed',
+    })
+    map.add(polyline)
   }
 
   function updateMap() {
