@@ -6,7 +6,7 @@ import PinInfoCard from './PinInfoCard.vue'
 
 const store = useTripStore()
 const mapContainer = ref<HTMLElement | null>(null)
-const { updateMap, renderPoiMarkers, getRouteInfo, renderRouteByREST } = useMap(mapContainer)
+const { renderPoiMarkers, renderRouteByREST } = useMap(mapContainer)
 
 // 初始化时计算路线并保存到 store
 onMounted(async () => {
@@ -32,9 +32,9 @@ watch(
 // 监听候选 POI 变化，在地图上显示
 watch(
   () => store.candidatePois,
-  (pois) => {
-    if (pois.length > 0) {
-      renderPoiMarkers(pois)
+  () => {
+    if (store.candidatePois.length > 0) {
+      renderPoiMarkers(store.candidatePois)
     }
   },
   { deep: true }
@@ -43,8 +43,7 @@ watch(
 // 监听选中的 POI，在地图上高亮
 watch(
   () => store.selectedPois,
-  (pois) => {
-    // 高亮选中的 POI
+  () => {
     renderPoiMarkers(store.candidatePois)
   },
   { deep: true }
