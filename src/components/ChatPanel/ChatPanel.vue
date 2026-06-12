@@ -49,7 +49,7 @@ function formatDate(ts: number): string {
 
 <template>
   <!-- 使用绝对定位实现固定头部和底部 -->
-  <div class="relative h-full w-full bg-white">
+  <div class="relative h-full w-full bg-white overflow-hidden">
     <!-- Header - 固定在顶部 -->
     <div class="absolute top-0 left-0 right-0 z-10 border-b border-gray-100 px-4 py-3 bg-white">
       <div class="flex items-center justify-between">
