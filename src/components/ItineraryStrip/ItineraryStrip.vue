@@ -11,6 +11,7 @@ const originInput = ref(store.params.origin?.query || '')
 const destinationInput = ref(store.params.destination?.query || '')
 const totalDays = ref(store.params.totalDays || 7)
 const dailyDrivingLimit = ref(store.params.dailyDrivingLimitHours || 5)
+const deviationDistance = ref(store.maxDeviation || 30)
 const selectedStrategy = ref(0)
 
 const isFormComplete = computed(() => {
@@ -36,6 +37,7 @@ function handleConfirmRoute() {
   }
   store.params.totalDays = totalDays.value
   store.params.dailyDrivingLimitHours = dailyDrivingLimit.value
+  store.setMaxDeviation(deviationDistance.value)
 }
 
 function handleSelectDay(dayNumber: number) {
@@ -101,6 +103,23 @@ function handleSelectDay(dayNumber: number) {
           />
           <span class="text-sm font-medium text-blue-600 w-10 text-right">{{ dailyDrivingLimit }}h</span>
         </div>
+      </div>
+
+      <!-- 绕路距离 -->
+      <div>
+        <label class="text-xs text-gray-400 mb-1 block">可接受绕路距离</label>
+        <div class="flex items-center gap-2">
+          <input
+            v-model.number="deviationDistance"
+            type="range"
+            min="10"
+            max="100"
+            step="10"
+            class="flex-1"
+          />
+          <span class="text-sm font-medium text-blue-600 w-12 text-right">{{ deviationDistance }}km</span>
+        </div>
+        <p class="text-xs text-gray-300 mt-0.5">偏离最优路线的最大距离</p>
       </div>
 
       <!-- 线路偏好 -->
