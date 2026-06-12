@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 """
-Simple API server for JSONL file operations.
-Provides endpoints for frontend to read/write JSONL files.
+AI Road Trip Planner - API Server
+Provides HTTP endpoints for frontend to read/write JSONL files.
 """
 
-from http.server import HTTPServer, SimpleHTTPRequestHandler
+from http.server import HTTPServer, BaseHTTPRequestHandler
 import json
 import os
 from urllib.parse import urlparse, parse_qs
 
 
-class JSONLHandler(SimpleHTTPRequestHandler):
+class JSONLHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         parsed = urlparse(self.path)
 
@@ -21,7 +21,7 @@ class JSONLHandler(SimpleHTTPRequestHandler):
         elif parsed.path == "/api/sessions/active":
             self.handle_list_sessions()
         else:
-            super().do_GET()
+            self.send_error(404)
 
     def do_POST(self):
         parsed = urlparse(self.path)
