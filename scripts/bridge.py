@@ -16,7 +16,6 @@ from watchdog.events import FileSystemEventHandler
 SESSIONS_DIR = Path("sessions/active")
 ARCHIVE_DIR = Path("sessions/archive")
 SYSTEM_PROMPT_PATH = Path("src/prompts/system.txt")
-NEW_SESSION_PROMPT_PATH = Path("src/prompts/new_session.txt")
 TIMEOUT_HOURS = 4
 SYSTEM_PROMPT_INTERVAL = 10
 
@@ -86,8 +85,7 @@ class JSONLHandler(FileSystemEventHandler):
         if inject_system:
             system_prompt = SYSTEM_PROMPT_PATH.read_text(encoding="utf-8")
             if turn == 0:
-                new_session_prompt = NEW_SESSION_PROMPT_PATH.read_text(encoding="utf-8")
-                full_message = f"{system_prompt}\n\n{new_session_prompt}\n\n用户消息：{text}"
+                full_message = f"{system_prompt}\n\n用户消息：{text}"
             else:
                 full_message = f"{system_prompt}\n\n用户消息：{text}"
         else:

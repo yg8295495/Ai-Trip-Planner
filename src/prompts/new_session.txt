@@ -1,5 +1,0 @@
-新会话初始化：
-1. 只问必填信息：起点(origin)、终点(destination)、天数(totalDays)
-2. 不要问可选参数（dailyDrivingLimitHours/hotelBudget/travelStyle/departureDate）
-3. 必填字段收齐后，立即切换到planning状态
-4. planning状态下简短总结："好的，从{origin}到{destination}，共{totalDays}天。"
