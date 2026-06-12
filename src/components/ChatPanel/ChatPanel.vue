@@ -48,17 +48,15 @@ function formatDate(ts: number): string {
 </script>
 
 <template>
-  <!-- 使用绝对定位实现固定头部和底部 -->
-  <div class="relative h-full w-full bg-white overflow-hidden">
-    <!-- Header - 固定在顶部 -->
-    <div class="absolute top-0 left-0 right-0 z-10 border-b border-gray-100 px-4 py-3 bg-white">
+  <div class="h-full flex flex-col overflow-hidden">
+    <!-- Header -->
+    <div class="flex-none border-b border-gray-100 px-4 py-3 bg-white">
       <div class="flex items-center justify-between">
         <h2 class="text-base font-semibold text-gray-800">AI 旅行顾问</h2>
         <div class="relative">
           <button
             @click="handleRefreshSessions"
             class="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
-            title="会话列表"
           >
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -74,10 +72,8 @@ function formatDate(ts: number): string {
                 v-for="session in sessions"
                 :key="session.id"
                 :class="[
-                  'w-full text-left px-3 py-2 rounded-lg text-sm transition-colors',
-                  session.id === currentSessionId
-                    ? 'bg-blue-50 text-blue-700'
-                    : 'hover:bg-gray-50 text-gray-700',
+                  'w-full text-left px-3 py-2 rounded-lg text-sm',
+                  session.id === currentSessionId ? 'bg-blue-50 text-blue-700' : 'hover:bg-gray-50',
                 ]"
                 @click="handleLoadSession(session.id)"
               >
@@ -85,7 +81,6 @@ function formatDate(ts: number): string {
                   <span class="truncate">{{ session.id.slice(0, 20) }}...</span>
                   <span class="text-xs text-gray-400 ml-2">{{ formatDate(session.lastModified) }}</span>
                 </div>
-                <p class="text-xs text-gray-400 mt-0.5">{{ session.messageCount }} 条消息</p>
               </button>
             </div>
           </div>
@@ -96,16 +91,10 @@ function formatDate(ts: number): string {
       </p>
     </div>
 
-    <!-- Input - 固定在底部 -->
-    <div class="absolute bottom-0 left-0 right-0 z-10">
-      <ChatInput @send="handleSend" :disabled="isPolling" />
-    </div>
-
-    <!-- Messages - 中间可滚动区域 -->
+    <!-- Messages - flex-1 占据所有剩余空间 -->
     <div
       ref="messagesContainer"
-      class="absolute top-[88px] bottom-[72px] left-0 right-0 overflow-y-auto px-4 py-3 space-y-3"
-      style="scrollbar-width: thin; scrollbar-color: #cbd5e1 transparent;"
+      class="flex-1 min-h-0 overflow-y-auto px-4 py-3 space-y-3"
     >
       <MessageBubble
         v-for="msg in store.messages"
@@ -115,29 +104,23 @@ function formatDate(ts: number): string {
       <div v-if="isPolling" class="flex justify-start">
         <div class="bg-gray-100 rounded-2xl px-4 py-2.5">
           <span class="inline-flex gap-1">
-            <span class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0ms"></span>
+            <span class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></span>
             <span class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 150ms"></span>
             <span class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 300ms"></span>
           </span>
         </div>
       </div>
     </div>
+
+    <!-- Input - flex-none 固定高度 -->
+    <div class="flex-none">
+      <ChatInput @send="handleSend" :disabled="isPolling" />
+    </div>
   </div>
 </template>
 
 <style scoped>
-/* WebKit 滚动条 */
-.overflow-y-auto::-webkit-scrollbar {
-  width: 6px;
-}
-.overflow-y-auto::-webkit-scrollbar-track {
-  background: transparent;
-}
-.overflow-y-auto::-webkit-scrollbar-thumb {
-  background-color: #cbd5e1;
-  border-radius: 3px;
-}
-.overflow-y-auto::-webkit-scrollbar-thumb:hover {
-  background-color: #94a3b8;
-}
+.overflow-y-auto::-webkit-scrollbar { width: 6px; }
+.overflow-y-auto::-webkit-scrollbar-track { background: transparent; }
+.overflow-y-auto::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 3px; }
 </style>
