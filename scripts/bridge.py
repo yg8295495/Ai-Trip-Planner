@@ -198,10 +198,10 @@ class JSONLHandler(FileSystemEventHandler):
         try:
             full_prompt = f"{system_prompt}\n\n用户消息：{user_message}"
             result = subprocess.run(
-                ["mimo", "run", "--session", session_id, "--prompt", full_prompt],
+                ["mimo", "run", "--session", session_id, "--dangerously-skip-permissions", full_prompt],
                 capture_output=True,
                 text=True,
-                timeout=60
+                timeout=120
             )
 
             if result.returncode != 0:
