@@ -17,12 +17,22 @@ export interface RouteInfo {
   polyline: number[][]
 }
 
+// 高德驾车策略：0-速度优先(高速), 1-距离最短, 2-避免收费, 3-不走高速, 7-高速优先
+export const ROUTE_STRATEGIES = [
+  { value: 0, label: '高速优先', icon: '🛣️' },
+  { value: 1, label: '距离最短', icon: '📏' },
+  { value: 3, label: '不走高速', icon: '🏔️' },
+  { value: 7, label: '高速+国道', icon: '🚗' },
+]
+
 export function useMap(containerRef: Ref<HTMLElement | null>) {
   const store = useTripStore()
   let map: any = null
   let markers: any[] = []
   let routeLines: any[] = []
   let currentRouteInfo: RouteInfo | null = null
+  let currentStrategy = 0
+  let layerSwitcher: any = null
 
   function initMap() {
     if (!containerRef.value || !window.AMap) return
@@ -31,9 +41,47 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
       zoom: 7,
       center: [115, 30],
       viewMode: '2D',
+      layers: [
+        new window.AMap.TileLayer(),
+        new window.AMap.TileLayer.Satellite(),
+      ],
     })
 
+    // 添加图层切换控件
+    addLayerControl()
+
+    // 添加归位按钮
+    addResetButton()
+
     renderPins()
+    renderRouteByREST()
+  }
+
+  function addLayerControl() {
+    // 高德自带图层切换
+    map.addControl(new window.AMap.MapType({
+      defaultType: 0,
+      showTraffic: false,
+      showRoad: false,
+    }))
+  }
+
+  function addResetButton() {
+    const button = document.createElement('div')
+    button.className = 'amap-reset-btn'
+    button.innerHTML = '<div style="background:white;padding:8px 12px;border-radius:6px;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.2);font-size:13px;color:#333">📍 归位</div>'
+    button.onclick = () => {
+      if (routeLines.length > 0) {
+        map.setFitView(routeLines)
+      } else if (markers.length > 0) {
+        map.setFitView()
+      }
+    }
+    map.addControl(button)
+  }
+
+  function setStrategy(strategy: number) {
+    currentStrategy = strategy
     renderRouteByREST()
   }
 
@@ -50,14 +98,14 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
         position: [loc.lon, loc.lat],
         title: loc.name,
         label: {
-          content: `<div style="background:${color};color:white;padding:4px 8px;border-radius:4px;font-size:12px;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,0.3)">${loc.name}</div>`,
+          content: `<div style="background:${color};color:white;padding:4px 8px;border-radius:4px;font-size:12px;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,0.3);cursor:pointer">${loc.name}</div>`,
           direction: 'top',
           offset: new window.AMap.Pixel(0, -8),
         },
       })
 
       marker.on('click', () => {
-        store.setSelectedLocation(loc.id)
+        store.toggleLocation(loc.id)
       })
 
       map.add(marker)
@@ -76,19 +124,22 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
 
     pois.forEach((poi) => {
       const [lng, lat] = poi.location.split(',').map(Number)
+      const hasPhoto = poi.photos && poi.photos.length > 0
+
+      const content = hasPhoto
+        ? `<div style="position:relative"><img src="${poi.photos[0].url}" style="width:40px;height:40px;border-radius:6px;object-fit:cover;border:2px solid white;box-shadow:0 2px 6px rgba(0,0,0,0.3)"/><div style="position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);background:#3B82F6;color:white;padding:1px 4px;border-radius:3px;font-size:10px;white-space:nowrap">${poi.name}</div></div>`
+        : `<div style="background:#3B82F6;color:white;padding:3px 6px;border-radius:3px;font-size:11px;white-space:nowrap;box-shadow:0 2px 4px rgba(0,0,0,0.2)">${poi.name}</div>`
+
       const marker = new window.AMap.Marker({
         position: [lng, lat],
         title: poi.name,
-        label: {
-          content: `<div style="background:#3B82F6;color:white;padding:3px 6px;border-radius:3px;font-size:11px;white-space:nowrap;box-shadow:0 2px 4px rgba(0,0,0,0.2)">${poi.name}</div>`,
-          direction: 'top',
-          offset: new window.AMap.Pixel(0, -8),
-        },
+        content: content,
+        offset: new window.AMap.Pixel(hasPhoto ? -20 : -30, hasPhoto ? -45 : -15),
         extData: { isPoi: true, poi },
       })
 
       marker.on('click', () => {
-        store.setSelectedPoi(poi)
+        store.togglePoiSelection(poi)
       })
 
       map.add(marker)
@@ -108,7 +159,7 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
     const waypoints = confirmed.slice(1, -1).map((loc) => `${loc.lon},${loc.lat}`)
 
     try {
-      let url = `https://restapi.amap.com/v3/direction/driving?origin=${origin}&destination=${destination}&key=${AMAP_KEY}&extensions=all`
+      let url = `https://restapi.amap.com/v3/direction/driving?origin=${origin}&destination=${destination}&key=${AMAP_KEY}&extensions=all&strategy=${currentStrategy}`
       if (waypoints.length > 0) {
         url += `&waypoints=${waypoints.join('|')}`
       }
@@ -123,7 +174,6 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
         const polylinePoints: number[][] = []
 
         path.steps.forEach((step: any) => {
-          // 提取城市
           if (step.cities) {
             step.cities.forEach((city: any) => {
               if (city.citycode && !cityMap.has(city.citycode)) {
@@ -132,8 +182,6 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
               }
             })
           }
-
-          // 提取路线坐标
           if (step.polyline) {
             step.polyline.split(';').forEach((point: string) => {
               const [lng, lat] = point.split(',').map(Number)
@@ -142,7 +190,6 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
           }
         })
 
-        // 绘制路线
         if (polylinePoints.length > 0) {
           const line = new window.AMap.Polyline({
             path: polylinePoints,
@@ -171,6 +218,14 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
     return null
   }
 
+  function fitView() {
+    if (routeLines.length > 0) {
+      map.setFitView(routeLines)
+    } else if (markers.length > 0) {
+      map.setFitView()
+    }
+  }
+
   function getRouteInfo(): RouteInfo | null {
     return currentRouteInfo
   }
@@ -185,5 +240,5 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
     setTimeout(initMap, 300)
   })
 
-  return { updateMap, renderPoiMarkers, getRouteInfo, renderRouteByREST }
+  return { updateMap, renderPoiMarkers, getRouteInfo, renderRouteByREST, setStrategy, fitView, ROUTE_STRATEGIES }
 }
