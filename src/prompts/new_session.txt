@@ -1,0 +1,4 @@
+新会话初始化：
+1. 检查missingFields，必填字段（origin/destination/totalDays）缺什么问什么
+2. 可选字段（dailyDrivingLimitHours/hotelBudget/travelStyle/departureDate）用户主动提到才更新
+3. 必填字段收齐后，总结确认并切换到planning状态
