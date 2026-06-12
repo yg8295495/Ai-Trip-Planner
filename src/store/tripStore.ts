@@ -63,6 +63,11 @@ export const useTripStore = defineStore('trip', () => {
   const selectedPoi = ref<PoiInfo | null>(null)
   const isSearchingPois = ref(false)
 
+  // 天气相关（adcode -> WeatherAll）
+  const weatherByAdcode = ref<Record<string, import('@/services/amapWeather').WeatherAll | null>>({})
+  const isLoadingWeather = ref(false)
+  const departureDate = ref<Date | null>(null)
+
   const confirmedLocations = computed(() =>
     locations.value.filter((l) => l.selected)
   )
@@ -94,6 +99,36 @@ export const useTripStore = defineStore('trip', () => {
     } else {
       selectedPois.value.push(poi)
     }
+  }
+
+  function removeCandidatePoi(id: string) {
+    candidatePois.value = candidatePois.value.filter(p => p.id !== id)
+    // 如果已选中也清掉
+    selectedPois.value = selectedPois.value.filter(p => p.id !== id)
+  }
+
+  function removeSelectedPoi(id: string) {
+    selectedPois.value = selectedPois.value.filter(p => p.id !== id)
+  }
+
+  function moveSelectedPoi(id: string, direction: 'up' | 'down') {
+    const idx = selectedPois.value.findIndex(p => p.id === id)
+    if (idx < 0) return
+    const target = direction === 'up' ? idx - 1 : idx + 1
+    if (target < 0 || target >= selectedPois.value.length) return
+    const arr = selectedPois.value
+    ;[arr[idx], arr[target]] = [arr[target], arr[idx]]
+  }
+
+  function clearAllCandidatePois() {
+    candidatePois.value = []
+    selectedPois.value = []
+  }
+
+  function addCandidatePoi(poi: PoiInfo) {
+    // 去重
+    if (candidatePois.value.some(p => p.id === poi.id)) return
+    candidatePois.value.unshift(poi)
   }
 
   function setSelectedPoi(poi: PoiInfo | null) {
@@ -162,7 +197,7 @@ export const useTripStore = defineStore('trip', () => {
   // 搜索沿途景点（多边形搜索，1次API调用）
   async function searchPoisByRoute() {
     if (!routeInfo.value || routeInfo.value.polyline.length < 2) return
-    
+
     isSearchingPois.value = true
     try {
       const { generateCorridorPolygon, searchPoisByPolygon } = await import('@/services/poiSearch')
@@ -174,6 +209,15 @@ export const useTripStore = defineStore('trip', () => {
     } finally {
       isSearchingPois.value = false
     }
+  }
+
+  // 天气
+  function setWeather(adcode: string, data: import('@/services/amapWeather').WeatherAll | null) {
+    weatherByAdcode.value[adcode] = data
+  }
+
+  function setDepartureDate(d: Date | null) {
+    departureDate.value = d
   }
 
   return {
@@ -194,10 +238,18 @@ export const useTripStore = defineStore('trip', () => {
     selectedPoi,
     isSearchingPois,
     filteredCities,
+    weatherByAdcode,
+    isLoadingWeather,
+    departureDate,
     setRouteInfo,
     setMaxDeviation,
     setCandidatePois,
     togglePoiSelection,
+    removeCandidatePoi,
+    removeSelectedPoi,
+    moveSelectedPoi,
+    clearAllCandidatePois,
+    addCandidatePoi,
     setSelectedPoi,
     clearSelectedPois,
     confirmPoisAsWaypoints,
@@ -208,5 +260,7 @@ export const useTripStore = defineStore('trip', () => {
     setSelectedDay,
     setSelectedLocation,
     searchPoisByRoute,
+    setWeather,
+    setDepartureDate,
   }
 })

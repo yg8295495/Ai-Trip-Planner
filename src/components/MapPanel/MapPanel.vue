@@ -3,13 +3,31 @@ import { watch, ref } from 'vue'
 import { useTripStore } from '@/store/tripStore'
 import { useMap, ROUTE_STRATEGIES } from '@/composables/useMap'
 import PinInfoCard from './PinInfoCard.vue'
+import MapClickPopup from './MapClickPopup.vue'
 
 const store = useTripStore()
 const mapContainer = ref<HTMLElement | null>(null)
-const { renderPoiMarkers, renderRouteByREST, setStrategy, fitView, toggleSatellite, zoomIn, zoomOut, updateMap } = useMap(mapContainer)
+const { renderPoiMarkers, renderRouteByREST, setStrategy, fitView, toggleSatellite, zoomIn, zoomOut, updateMap, onMapClick, getMap, addTempMarker } = useMap(mapContainer)
 
 const selectedStrategy = ref(0)
 const isSatellite = ref(false)
+const clickPos = ref<{ lng: number; lat: number } | null>(null)
+const tempMarker = ref<any>(null)
+
+// 地图点击 -> 弹浮层 + 在地图上画临时 marker
+onMapClick((lng, lat) => {
+  const m = getMap()
+  if (tempMarker.value && m) m.remove(tempMarker.value)
+  clickPos.value = { lng, lat }
+  tempMarker.value = addTempMarker(lng, lat, '#EF4444')
+})
+
+function closePopup() {
+  const m = getMap()
+  if (tempMarker.value && m) m.remove(tempMarker.value)
+  tempMarker.value = null
+  clickPos.value = null
+}
 
 // 监听路线信息变化，刷新地图
 watch(
@@ -81,6 +99,14 @@ function handleZoomOut() {
   <div class="relative h-full w-full">
     <div ref="mapContainer" class="h-full w-full" />
 
+    <!-- 地图点击浮层 -->
+    <MapClickPopup
+      v-if="clickPos"
+      :lng="clickPos.lng"
+      :lat="clickPos.lat"
+      @close="closePopup"
+    />
+
     <!-- 左侧控制按钮 -->
     <div class="absolute top-3 left-3 z-10 flex flex-col gap-2">
       <button
@@ -105,6 +131,10 @@ function handleZoomOut() {
           <span>{{ strategy.icon }}</span>
           <span>{{ strategy.label }}</span>
         </button>
+      </div>
+
+      <div class="bg-white rounded-lg shadow-md p-2 text-xs text-gray-500 max-w-[200px]">
+        💡 点击地图任意位置可添加该地点或查找附近景点/酒店/美食
       </div>
     </div>
 

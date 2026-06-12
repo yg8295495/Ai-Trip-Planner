@@ -10,7 +10,6 @@
 - [`docs/PROJECT-STATUS.md`](docs/PROJECT-STATUS.md) — 当前状态 & 待办
 - [`docs/compose/specs/`](docs/compose/specs/) — 设计规格
 - [`docs/compose/plans/`](docs/compose/plans/) — 实施计划
-- [`roadtrip-planner-architecture.md`](roadtrip-planner-architecture.md) — 原始架构文档
 
 ---
 

@@ -38,47 +38,15 @@ export async function searchPoisByPolygon(
   }
 }
 
-// IP定位：获取当前位置
-export async function getCurrentPosition(): Promise<{ lat: number; lon: number; city: string } | null> {
-  try {
-    const url = `https://restapi.amap.com/v3/ip?key=${AMAP_KEY}`
-    const res = await fetch(url)
-    const data = await res.json()
-    if (data.status === '1' && data.rectangle) {
-      const [lon1, lat1] = data.rectangle.split(';')[0].split(',').map(Number)
-      return { lat: lat1, lon: lon1, city: data.city || '' }
-    }
-  } catch (err) {
-    console.error('IP定位失败:', err)
-  }
-  return null
-}
-
-// 输入提示
-export async function getInputTips(keyword: string): Promise<any[]> {
-  if (!keyword || keyword.length < 2) return []
-  try {
-    const url = `https://restapi.amap.com/v3/assistant/inputtips?keywords=${encodeURIComponent(keyword)}&datatype=all&city=全国&key=${AMAP_KEY}`
-    const res = await fetch(url)
-    const data = await res.json()
-    if (data.status === '1' && data.tips) {
-      return data.tips.filter((t: any) => t.location)
-    }
-  } catch (err) {
-    console.error('Input tips failed:', err)
-  }
-  return []
-}
-
-// 地理编码
-export async function geocodeAddress(address: string): Promise<{ lat: number; lon: number } | null> {
+// 地理编码：文本 → 坐标
+export async function geocodeAddress(address: string): Promise<{ lat: number; lon: number; adcode?: string; level?: string } | null> {
   try {
     const url = `https://restapi.amap.com/v3/geocode/geo?address=${encodeURIComponent(address)}&key=${AMAP_KEY}`
     const res = await fetch(url)
     const data = await res.json()
     if (data.status === '1' && data.geocodes?.[0]) {
       const [lon, lat] = data.geocodes[0].location.split(',').map(Number)
-      return { lat, lon }
+      return { lat, lon, adcode: data.geocodes[0].adcode, level: data.geocodes[0].level }
     }
   } catch (err) {
     console.error('Geocode failed:', err)
@@ -153,7 +121,7 @@ function offsetPoint(lat: number, lon: number, bearing: number, distanceKm: numb
   const R = 6371
   const d = distanceKm / R
   const phi1 = (lat * Math.PI) / 180
-  const lam1 = (lon * Math.PI) / 180
+  const lam1 = ((lon * Math.PI) / 180)
   const brng = (bearing * Math.PI) / 180
 
   const phi2 = Math.asin(Math.sin(phi1) * Math.cos(d) + Math.cos(phi1) * Math.sin(d) * Math.cos(brng))

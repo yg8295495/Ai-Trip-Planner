@@ -33,6 +33,8 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
   let currentStrategy = 0
   let isSatellite = false
   let satelliteLayer: any = null
+  // 地图点击回调（外部注入）
+  const clickHandlers: Array<(lng: number, lat: number) => void> = []
 
   function initMap() {
     if (!containerRef.value || !window.AMap) return
@@ -45,7 +47,18 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
       viewMode: '2D',
     })
 
+    // 监听地图点击 -> 触发所有 clickHandlers
+    map.on('click', (e: any) => {
+      const lng = e.lnglat.getLng()
+      const lat = e.lnglat.getLat()
+      clickHandlers.forEach(h => h(lng, lat))
+    })
+
     renderPins()
+  }
+
+  function onMapClick(handler: (lng: number, lat: number) => void) {
+    clickHandlers.push(handler)
   }
 
   function toggleSatellite() {
@@ -220,7 +233,36 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
     renderRouteByREST()
   }
 
+  function getMap() {
+    return map
+  }
+
+  function panTo(lng: number, lat: number, zoom?: number) {
+    if (!map) return
+    if (zoom !== undefined) {
+      map.setZoomAndCenter(zoom, [lng, lat])
+    } else {
+      map.panTo([lng, lat])
+    }
+  }
+
+  function addTempMarker(lng: number, lat: number, color: string = '#EF4444') {
+    if (!map) return null
+    const m = new window.AMap.Marker({
+      position: [lng, lat],
+      content: `<div style="width:14px;height:14px;background:${color};border:2px solid white;border-radius:50%;box-shadow:0 0 0 2px ${color}40"></div>`,
+      offset: new window.AMap.Pixel(-7, -7),
+    })
+    map.add(m)
+    return m
+  }
+
   onMounted(() => { setTimeout(initMap, 300) })
 
-  return { updateMap, renderPoiMarkers, getRouteInfo, renderRouteByREST, setStrategy, fitView, toggleSatellite, zoomIn, zoomOut, ROUTE_STRATEGIES }
+  return {
+    updateMap, renderPoiMarkers, getRouteInfo, renderRouteByREST,
+    setStrategy, fitView, toggleSatellite, zoomIn, zoomOut,
+    onMapClick, getMap, panTo, addTempMarker,
+    ROUTE_STRATEGIES,
+  }
 }
