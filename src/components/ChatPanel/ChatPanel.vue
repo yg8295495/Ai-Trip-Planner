@@ -48,9 +48,10 @@ function formatDate(ts: number): string {
 </script>
 
 <template>
-  <div class="h-full flex flex-col">
-    <!-- Header - 固定 -->
-    <div class="flex-none border-b border-gray-100 px-4 py-3 bg-white">
+  <!-- 使用绝对定位实现固定头部和底部 -->
+  <div class="relative h-full w-full bg-white">
+    <!-- Header - 固定在顶部 -->
+    <div class="absolute top-0 left-0 right-0 z-10 border-b border-gray-100 px-4 py-3 bg-white">
       <div class="flex items-center justify-between">
         <h2 class="text-base font-semibold text-gray-800">AI 旅行顾问</h2>
         <div class="relative">
@@ -95,8 +96,17 @@ function formatDate(ts: number): string {
       </p>
     </div>
 
-    <!-- Messages - 可滚动区域，占据所有剩余空间 -->
-    <div ref="messagesContainer" class="flex-1 overflow-y-auto px-4 py-3 space-y-3">
+    <!-- Input - 固定在底部 -->
+    <div class="absolute bottom-0 left-0 right-0 z-10">
+      <ChatInput @send="handleSend" :disabled="isPolling" />
+    </div>
+
+    <!-- Messages - 中间可滚动区域 -->
+    <div
+      ref="messagesContainer"
+      class="absolute top-[88px] bottom-[72px] left-0 right-0 overflow-y-auto px-4 py-3 space-y-3"
+      style="scrollbar-width: thin; scrollbar-color: #cbd5e1 transparent;"
+    >
       <MessageBubble
         v-for="msg in store.messages"
         :key="msg.id"
@@ -112,10 +122,22 @@ function formatDate(ts: number): string {
         </div>
       </div>
     </div>
-
-    <!-- Input - 固定在底部 -->
-    <div class="flex-none">
-      <ChatInput @send="handleSend" :disabled="isPolling" />
-    </div>
   </div>
 </template>
+
+<style scoped>
+/* WebKit 滚动条 */
+.overflow-y-auto::-webkit-scrollbar {
+  width: 6px;
+}
+.overflow-y-auto::-webkit-scrollbar-track {
+  background: transparent;
+}
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 3px;
+}
+.overflow-y-auto::-webkit-scrollbar-thumb:hover {
+  background-color: #94a3b8;
+}
+</style>
