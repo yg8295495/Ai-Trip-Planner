@@ -36,15 +36,14 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
         ? PIN_STATUS_COLORS.confirmed
         : PIN_STATUS_COLORS.suggested
 
-      const content = `
-        <div style="background:${color};color:white;padding:4px 8px;border-radius:4px;font-size:12px;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,0.3)">${loc.name}</div>
-      `
-
       const marker = new window.AMap.Marker({
         position: [loc.lon, loc.lat],
-        content: content,
-        offset: new window.AMap.Pixel(-40, -30),
-        anchor: 'bottom-center',
+        title: loc.name,
+        label: {
+          content: `<div style="background:${color};color:white;padding:3px 6px;border-radius:3px;font-size:11px;white-space:nowrap">${loc.name}</div>`,
+          direction: 'top',
+          offset: new window.AMap.Pixel(0, -10),
+        },
       })
 
       marker.on('click', () => {
@@ -54,6 +53,10 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
       map.add(marker)
       markers.push(marker)
     })
+
+    if (markers.length > 0) {
+      map.setFitView()
+    }
   }
 
   function renderDrivingRoute() {
@@ -67,26 +70,20 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
 
     const startLngLat = [confirmed[0].lon, confirmed[0].lat]
     const endLngLat = [confirmed[confirmed.length - 1].lon, confirmed[confirmed.length - 1].lat]
-
     const waypoints = confirmed.slice(1, -1).map((loc) => [loc.lon, loc.lat])
+
+    console.log('Rendering route:', { start: startLngLat, end: endLngLat, waypoints })
 
     window.AMap.plugin('AMap.Driving', () => {
       driving = new window.AMap.Driving({
         map: map,
-        policy: window.AMap.DrivingPolicy.LEAST_TIME,
-        hideMarkers: true,
+        policy: 0,
       })
 
-      const opts = {
-        waypoints: waypoints,
-      }
+      const opts = { waypoints }
 
-      driving.search(startLngLat, endLngLat, opts, (status: string) => {
-        if (status === 'complete') {
-          console.log('Driving route rendered')
-        } else {
-          console.warn('Driving route failed:', status)
-        }
+      driving.search(startLngLat, endLngLat, opts, (status: string, result: any) => {
+        console.log('Driving result:', status, result)
       })
     })
   }
@@ -98,7 +95,7 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
   }
 
   onMounted(() => {
-    setTimeout(initMap, 200)
+    setTimeout(initMap, 300)
   })
 
   onUnmounted(() => {
