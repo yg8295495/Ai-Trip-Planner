@@ -15,7 +15,13 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
   let driving: any = null
 
   function initMap() {
-    if (!containerRef.value || !window.AMap) return
+    if (!containerRef.value || !window.AMap) {
+      console.error('AMap not loaded')
+      return
+    }
+
+    console.log('AMap loaded:', typeof window.AMap)
+    console.log('AMap.Driving:', typeof window.AMap.Driving)
 
     map = new window.AMap.Map(containerRef.value, {
       zoom: 6,
@@ -24,7 +30,8 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
     })
 
     renderPins()
-    renderDrivingRoute()
+
+    setTimeout(renderDrivingRoute, 500)
   }
 
   function renderPins() {
@@ -66,25 +73,32 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
     }
 
     const confirmed = store.confirmedLocations
-    if (confirmed.length < 2) return
+    if (confirmed.length < 2) {
+      console.log('Not enough confirmed locations for route')
+      return
+    }
 
     const startLngLat = [confirmed[0].lon, confirmed[0].lat]
     const endLngLat = [confirmed[confirmed.length - 1].lon, confirmed[confirmed.length - 1].lat]
     const waypoints = confirmed.slice(1, -1).map((loc) => [loc.lon, loc.lat])
 
-    console.log('Rendering route:', { start: startLngLat, end: endLngLat, waypoints })
+    console.log('Route request:', { start: startLngLat, end: endLngLat, waypoints })
 
-    window.AMap.plugin('AMap.Driving', () => {
-      driving = new window.AMap.Driving({
-        map: map,
-        policy: 0,
-      })
+    if (!window.AMap.Driving) {
+      console.error('AMap.Driving not available')
+      return
+    }
 
-      const opts = { waypoints }
+    driving = new window.AMap.Driving({
+      map: map,
+      policy: 0,
+    })
 
-      driving.search(startLngLat, endLngLat, opts, (status: string, result: any) => {
-        console.log('Driving result:', status, result)
-      })
+    driving.search(startLngLat, endLngLat, { waypoints }, (status: string, result: any) => {
+      console.log('Driving status:', status)
+      if (result) {
+        console.log('Driving routes:', result.routes?.length)
+      }
     })
   }
 
