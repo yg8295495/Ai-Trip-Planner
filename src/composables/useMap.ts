@@ -1,6 +1,7 @@
 import { onMounted, type Ref } from 'vue'
 import { useTripStore } from '@/store/tripStore'
 import { PIN_STATUS_COLORS } from '@/constants/categories'
+import type { GeocodedPlace } from '@/types'
 
 declare global {
   interface Window {
@@ -15,14 +16,15 @@ export interface RouteInfo {
   duration: number
   cities: { code: string; name: string }[]
   polyline: number[][]
+  strategy: number
 }
 
 export const ROUTE_STRATEGIES = [
-  { value: 0, label: '高速优先', icon: '🛣️' },
-  { value: 1, label: '距离最短', icon: '📏' },
-  { value: 3, label: '不走高速', icon: '🏔️' },
-  { value: 7, label: '高速+国道', icon: '🚗' },
-]
+  { value: 0, label: '高速优先', icon: '🛣️', desc: '优先高速，里程和时间均衡' },
+  { value: 1, label: '距离最短', icon: '📏', desc: '走最短路径，可能经过小路' },
+  { value: 3, label: '不走高速', icon: '🏔️', desc: '全程国道/省道，免费但慢' },
+  { value: 7, label: '高速+国道', icon: '🚗', desc: '高速优先但允许走一段国道' },
+] as const
 
 export function useMap(containerRef: Ref<HTMLElement | null>) {
   const store = useTripStore()
@@ -30,10 +32,10 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
   let markers: any[] = []
   let routeLines: any[] = []
   let currentRouteInfo: RouteInfo | null = null
-  let currentStrategy = 0
   let isSatellite = false
   let satelliteLayer: any = null
-  // 地图点击回调（外部注入）
+  let originMarker: any = null
+  let destMarker: any = null
   const clickHandlers: Array<(lng: number, lat: number) => void> = []
 
   function initMap() {
@@ -73,7 +75,6 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
 
   function zoomIn() { if (map) map.zoomIn() }
   function zoomOut() { if (map) map.zoomOut() }
-  function setStrategy(strategy: number) { currentStrategy = strategy; renderRouteByREST() }
 
   function renderPins() {
     markers.forEach((m) => map.remove(m))
@@ -124,14 +125,14 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
   }
 
   // 地理编码：文本 → 坐标
-  async function geocode(address: string): Promise<{ lat: number; lon: number } | null> {
+  async function geocode(address: string): Promise<{ lat: number; lon: number; level?: string; formatted?: string } | null> {
     try {
       const url = `https://restapi.amap.com/v3/geocode/geo?address=${encodeURIComponent(address)}&key=${AMAP_KEY}`
       const res = await fetch(url)
       const data = await res.json()
       if (data.status === '1' && data.geocodes?.[0]) {
         const [lon, lat] = data.geocodes[0].location.split(',').map(Number)
-        return { lat, lon }
+        return { lat, lon, level: data.geocodes[0].level, formatted: data.geocodes[0].formatted_address }
       }
     } catch (err) {
       console.error('Geocode failed:', err)
@@ -139,29 +140,34 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
     return null
   }
 
-  // 计算路线
-  async function renderRouteByREST(): Promise<RouteInfo | null> {
-    routeLines.forEach((l) => map.remove(l))
-    routeLines = []
+  // 单条策略路线（内部用）
+  async function computeSingleRoute(
+    origin: GeocodedPlace,
+    dest: GeocodedPlace,
+    strategy: number
+  ): Promise<RouteInfo | null> {
+    if (!map) return null
 
-    const originText = store.params.origin?.query
-    const destText = store.params.destination?.query
-    if (!originText || !destText) return null
+    let originLoc = `${origin.lon},${origin.lat}`
+    let destLoc = `${dest.lon},${dest.lat}`
 
-    // 地理编码获取坐标
-    const originCoord = await geocode(originText)
-    const destCoord = await geocode(destText)
-    if (!originCoord || !destCoord) return null
+    // 缺坐标才 geocode（避免覆盖已有精确坐标）
+    if (origin.lat == null || origin.lon == null) {
+      const oc = await geocode(origin.query)
+      if (!oc) return null
+      originLoc = `${oc.lon},${oc.lat}`
+    }
+    if (dest.lat == null || dest.lon == null) {
+      const dc = await geocode(dest.query)
+      if (!dc) return null
+      destLoc = `${dc.lon},${dc.lat}`
+    }
 
-    const origin = `${originCoord.lon},${originCoord.lat}`
-    const destination = `${destCoord.lon},${destCoord.lat}`
-
-    // 途经点（已确认的地点）
     const confirmed = store.confirmedLocations
     const waypoints = confirmed.map((loc) => `${loc.lon},${loc.lat}`)
 
     try {
-      let url = `https://restapi.amap.com/v3/direction/driving?origin=${origin}&destination=${destination}&key=${AMAP_KEY}&extensions=all&strategy=${currentStrategy}`
+      let url = `https://restapi.amap.com/v3/direction/driving?origin=${originLoc}&destination=${destLoc}&key=${AMAP_KEY}&extensions=all&strategy=${strategy}`
       if (waypoints.length > 0) {
         url += `&waypoints=${waypoints.join('|')}`
       }
@@ -192,32 +198,59 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
           }
         })
 
-        if (polylinePoints.length > 0) {
-          const line = new window.AMap.Polyline({
-            path: polylinePoints,
-            strokeColor: '#3B82F6',
-            strokeWeight: 6,
-            strokeOpacity: 0.9,
-          })
-          map.add(line)
-          routeLines.push(line)
-        }
-
-        currentRouteInfo = {
+        return {
           distance: Number(path.distance),
           duration: Number(path.duration),
           cities,
           polyline: polylinePoints,
+          strategy,
         }
-
-        map.setFitView()
-        return currentRouteInfo
       }
     } catch (err) {
-      console.error('Route calculation failed:', err)
+      console.error(`Route compute failed (strategy ${strategy}):`, err)
     }
-
     return null
+  }
+
+  // 渲染路线到地图（清旧画新）
+  function renderRoutePolyline(routeInfo: RouteInfo) {
+    routeLines.forEach((l) => map.remove(l))
+    routeLines = []
+    if (routeInfo.polyline.length === 0) return
+    const line = new window.AMap.Polyline({
+      path: routeInfo.polyline,
+      strokeColor: '#3B82F6',
+      strokeWeight: 6,
+      strokeOpacity: 0.9,
+    })
+    map.add(line)
+    routeLines.push(line)
+  }
+
+  // 计算 + 渲染 + 落 store（新签名：传参）
+  async function renderRouteByREST(
+    origin: GeocodedPlace,
+    dest: GeocodedPlace,
+    strategy: number
+  ): Promise<RouteInfo | null> {
+    if (!map) return null
+    const info = await computeSingleRoute(origin, dest, strategy)
+    if (!info) return null
+    currentRouteInfo = info
+    renderRoutePolyline(info)
+    return info
+  }
+
+  // 并发计算多个策略（用于对比预览）
+  async function prefetchStrategies(
+    origin: GeocodedPlace,
+    dest: GeocodedPlace,
+    strategies: readonly number[] = [0, 1, 3, 7]
+  ): Promise<RouteInfo[]> {
+    const results = await Promise.all(
+      strategies.map(s => computeSingleRoute(origin, dest, s))
+    )
+    return results.filter((r): r is RouteInfo => r !== null)
   }
 
   function fitView() {
@@ -230,7 +263,11 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
   function updateMap() {
     if (!map) return
     renderPins()
-    renderRouteByREST()
+    const o = store.params.origin
+    const d = store.params.destination
+    if (o && d) {
+      renderRouteByREST(o, d, store.currentStrategy)
+    }
   }
 
   function getMap() {
@@ -257,12 +294,36 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
     return m
   }
 
+  // 标记起点/终点（持久 marker，不被清除）
+  function setEndpointMarker(kind: 'origin' | 'dest', lng: number, lat: number, label: string) {
+    if (!map) return
+    if (kind === 'origin' && originMarker) map.remove(originMarker)
+    if (kind === 'dest' && destMarker) map.remove(destMarker)
+    const color = kind === 'origin' ? '#10B981' : '#EF4444'
+    const m = new window.AMap.Marker({
+      position: [lng, lat],
+      content: `<div style="position:relative"><div style="width:18px;height:18px;background:${color};border:3px solid white;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,0.4)"></div><div style="position:absolute;left:50%;top:-22px;transform:translateX(-50%);background:${color};color:white;padding:2px 6px;border-radius:4px;font-size:11px;white-space:nowrap;font-weight:500">${label}</div></div>`,
+      offset: new window.AMap.Pixel(-9, -9),
+    })
+    map.add(m)
+    if (kind === 'origin') originMarker = m
+    else destMarker = m
+  }
+
+  function clearEndpointMarkers() {
+    if (originMarker) { map.remove(originMarker); originMarker = null }
+    if (destMarker) { map.remove(destMarker); destMarker = null }
+  }
+
   onMounted(() => { setTimeout(initMap, 300) })
 
   return {
     updateMap, renderPoiMarkers, getRouteInfo, renderRouteByREST,
-    setStrategy, fitView, toggleSatellite, zoomIn, zoomOut,
+    prefetchStrategies, computeSingleRoute,
+    fitView, toggleSatellite, zoomIn, zoomOut,
     onMapClick, getMap, panTo, addTempMarker,
+    setEndpointMarker, clearEndpointMarkers,
+    geocode,
     ROUTE_STRATEGIES,
   }
 }

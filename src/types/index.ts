@@ -1,7 +1,7 @@
 export interface GeocodedPlace {
   query: string
-  lat: number
-  lon: number
+  lat: number | null
+  lon: number | null
   shortName: string
   fullName: string
 }

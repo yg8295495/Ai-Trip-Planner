@@ -7,19 +7,23 @@ import MapClickPopup from './MapClickPopup.vue'
 
 const store = useTripStore()
 const mapContainer = ref<HTMLElement | null>(null)
-const { renderPoiMarkers, renderRouteByREST, setStrategy, fitView, toggleSatellite, zoomIn, zoomOut, updateMap, onMapClick, getMap, addTempMarker } = useMap(mapContainer)
+const {
+  renderPoiMarkers, renderRouteByREST,
+  fitView, toggleSatellite, zoomIn, zoomOut,
+  onMapClick, getMap, addTempMarker,
+  setEndpointMarker,
+} = useMap(mapContainer)
 
-const selectedStrategy = ref(0)
 const isSatellite = ref(false)
 const clickPos = ref<{ lng: number; lat: number } | null>(null)
 const tempMarker = ref<any>(null)
 
-// 地图点击 -> 弹浮层 + 在地图上画临时 marker
+// 地图点击 -> 弹浮层 + 画临时 marker
 onMapClick((lng, lat) => {
   const m = getMap()
   if (tempMarker.value && m) m.remove(tempMarker.value)
   clickPos.value = { lng, lat }
-  tempMarker.value = addTempMarker(lng, lat, '#EF4444')
+  tempMarker.value = addTempMarker(lng, lat, '#F59E0B')
 })
 
 function closePopup() {
@@ -29,30 +33,63 @@ function closePopup() {
   clickPos.value = null
 }
 
-// 监听路线信息变化，刷新地图
+// ============ 起点 / 终点 / 路线 联动 ============
+
+// 起点变化：放 marker + 地图跟随
+watch(
+  () => store.params.origin,
+  (origin) => {
+    if (!origin || origin.lat == null || origin.lon == null) return
+    setEndpointMarker('origin', origin.lon, origin.lat, origin.shortName || '起点')
+    // 不立刻 fitView，留给终点/路线
+  },
+  { immediate: true, deep: true }
+)
+
+// 终点变化：放 marker + 地图跟随
+watch(
+  () => store.params.destination,
+  (dest) => {
+    if (!dest || dest.lat == null || dest.lon == null) return
+    setEndpointMarker('dest', dest.lon, dest.lat, dest.shortName || '终点')
+  },
+  { immediate: true, deep: true }
+)
+
+// 策略变化：重算当前路线
+watch(
+  () => store.currentStrategy,
+  async (strategy) => {
+    const o = store.params.origin
+    const d = store.params.destination
+    if (!o || !d || o.lat == null || d.lat == null) return
+    store.isComputingRoute = true
+    try {
+      const info = await renderRouteByREST(o, d, strategy)
+      if (info) {
+        store.setRouteInfo(info)
+        // fitView 让整条路线可见
+        setTimeout(() => fitView(), 100)
+      }
+    } finally {
+      store.isComputingRoute = false
+    }
+  }
+)
+
+// 监听路线信息变化，画 polyline
 watch(
   () => store.routeInfo,
-  () => {
-    updateMap()
-  },
-  { deep: true }
-)
-
-// 监听起点终点变化，触发路线计算
-watch(
-  () => [store.params.origin, store.params.destination],
-  async ([origin, dest]) => {
-    if (origin && dest) {
-      const routeInfo = await renderRouteByREST()
-      if (routeInfo) {
-        store.setRouteInfo(routeInfo)
-      }
+  (info) => {
+    if (info && info.polyline && info.polyline.length > 0) {
+      // renderRouteByREST 已经画了，这里 fitView
+      setTimeout(() => fitView(), 100)
     }
   },
-  { deep: true }
+  { deep: true, immediate: false }
 )
 
-// 监听候选 POI 变化，在地图上显示
+// 监听候选 POI / 选中 POI 变化，在地图上显示
 watch(
   () => store.candidatePois,
   () => {
@@ -62,8 +99,6 @@ watch(
   },
   { deep: true }
 )
-
-// 监听选中的 POI，在地图上高亮
 watch(
   () => store.selectedPois,
   () => {
@@ -72,9 +107,21 @@ watch(
   { deep: true }
 )
 
-function handleStrategyChange(strategy: number) {
-  selectedStrategy.value = strategy
-  setStrategy(strategy)
+// 地图左上角策略按钮：预览但不切换（不修改 currentStrategy，除非点了"应用"）
+const previewingStrategy = ref<number | null>(null)
+async function handleStrategyPreview(strategy: number) {
+  const o = store.params.origin
+  const d = store.params.destination
+  if (!o || !d || o.lat == null || d.lat == null) return
+  previewingStrategy.value = strategy
+  try {
+    const info = await renderRouteByREST(o, d, strategy)
+    if (info) {
+      store.setRouteInfo(info)
+    }
+  } finally {
+    previewingStrategy.value = null
+  }
 }
 
 function handleFitView() {
@@ -86,13 +133,8 @@ function handleToggleSatellite() {
   isSatellite.value = !isSatellite.value
 }
 
-function handleZoomIn() {
-  zoomIn()
-}
-
-function handleZoomOut() {
-  zoomOut()
-}
+function handleZoomIn() { zoomIn() }
+function handleZoomOut() { zoomOut() }
 </script>
 
 <template>
@@ -107,6 +149,14 @@ function handleZoomOut() {
       @close="closePopup"
     />
 
+    <!-- 路线计算中 -->
+    <div v-if="store.isComputingRoute || store.isComputingStrategies" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white px-4 py-3 rounded-lg shadow-lg z-20 flex items-center gap-2">
+      <div class="animate-spin w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full"></div>
+      <span class="text-sm text-gray-600">
+        {{ store.isComputingStrategies ? '计算 4 种策略路线中...' : '计算路线中...' }}
+      </span>
+    </div>
+
     <!-- 左侧控制按钮 -->
     <div class="absolute top-3 left-3 z-10 flex flex-col gap-2">
       <button
@@ -116,24 +166,34 @@ function handleZoomOut() {
         📍 归位
       </button>
 
-      <div class="bg-white rounded-lg shadow-md overflow-hidden">
+      <!-- 线路策略预览按钮（仅在两端都设了位置时显示） -->
+      <div v-if="store.params.origin && store.params.destination" class="bg-white rounded-lg shadow-md overflow-hidden">
+        <div class="px-3 py-1.5 text-xs text-gray-500 bg-gray-50 border-b border-gray-100">
+          🛣️ 线路策略预览
+        </div>
         <button
           v-for="strategy in ROUTE_STRATEGIES"
           :key="strategy.value"
           :class="[
             'w-full px-3 py-2 text-sm text-left transition-colors flex items-center gap-2',
-            selectedStrategy === strategy.value
+            store.currentStrategy === strategy.value
               ? 'bg-blue-50 text-blue-700 font-medium'
               : 'text-gray-600 hover:bg-gray-50',
           ]"
-          @click="handleStrategyChange(strategy.value)"
+          :disabled="previewingStrategy !== null"
+          @click="handleStrategyPreview(strategy.value)"
+          :title="strategy.desc"
         >
           <span>{{ strategy.icon }}</span>
-          <span>{{ strategy.label }}</span>
+          <div class="flex-1">
+            <div>{{ strategy.label }}</div>
+            <div class="text-xs text-gray-400 font-normal">{{ strategy.desc }}</div>
+          </div>
+          <span v-if="store.currentStrategy === strategy.value" class="text-blue-500 text-xs">✓</span>
         </button>
       </div>
 
-      <div class="bg-white rounded-lg shadow-md p-2 text-xs text-gray-500 max-w-[200px]">
+      <div class="bg-white rounded-lg shadow-md p-2 text-xs text-gray-500 max-w-[220px]">
         💡 点击地图任意位置可添加该地点或查找附近景点/酒店/美食
       </div>
     </div>

@@ -25,6 +25,18 @@ export interface DistrictFlat {
 
 let flatCache: DistrictFlat | null = null
 let loadingPromise: Promise<DistrictFlat> | null = null
+const listeners = new Set<(loaded: boolean) => void>()
+
+/** 订阅缓存加载状态 */
+export function onDistrictCacheChange(cb: (loaded: boolean) => void): () => void {
+  listeners.add(cb)
+  cb(flatCache !== null)
+  return () => listeners.delete(cb)
+}
+
+function notify(loaded: boolean) {
+  listeners.forEach(cb => cb(loaded))
+}
 
 /** 从 localStorage 读缓存 */
 function readCache(): DistrictFlat | null {
@@ -102,19 +114,29 @@ export async function loadDistrictCache(force = false): Promise<DistrictFlat> {
     const cached = readCache()
     if (cached) {
       flatCache = cached
+      notify(true)
       return cached
     }
   }
   if (loadingPromise) return loadingPromise
   loadingPromise = (async () => {
-    const tree = await fetchDistrict()
-    const flat = flattenTree(tree)
-    flatCache = flat
-    writeCache(flat)
-    loadingPromise = null
-    return flat
+    try {
+      const tree = await fetchDistrict()
+      const flat = flattenTree(tree)
+      flatCache = flat
+      writeCache(flat)
+      return flat
+    } finally {
+      loadingPromise = null
+      notify(flatCache !== null)
+    }
   })()
   return loadingPromise
+}
+
+/** 是否已加载（同步） */
+export function isDistrictCacheReady(): boolean {
+  return flatCache !== null
 }
 
 /** 客户端模糊匹配（支持前缀/包含） */

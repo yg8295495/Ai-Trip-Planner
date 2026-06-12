@@ -130,25 +130,25 @@ function addPoi(p: RegeoPoi) {
 
 function addAsOrigin() {
   if (!nearest.value) return
-  store.params.origin = {
+  store.setOrigin({
     query: nearest.value.name,
     lat: nearest.value.lat,
     lon: nearest.value.lng,
     shortName: nearest.value.name,
     fullName: nearest.value.address,
-  }
+  })
   emit('close')
 }
 
 function addAsDestination() {
   if (!nearest.value) return
-  store.params.destination = {
+  store.setDestination({
     query: nearest.value.name,
     lat: nearest.value.lat,
     lon: nearest.value.lng,
     shortName: nearest.value.name,
     fullName: nearest.value.address,
-  }
+  })
   emit('close')
 }
 </script>

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import type { TripParams, Location, DrivingLeg, ItineraryDay, ConversationMessage } from '@/types'
+import type { TripParams, Location, DrivingLeg, ItineraryDay, ConversationMessage, GeocodedPlace } from '@/types'
 import { DAILY_LIMIT_DEFAULT, HOTEL_BUDGET_DEFAULT } from '@/constants/defaults'
 
 export interface PoiInfo {
@@ -30,6 +30,7 @@ export interface RouteInfo {
   duration: number
   cities: CityInfo[]
   polyline: number[][]
+  strategy: number
 }
 
 export const useTripStore = defineStore('trip', () => {
@@ -55,6 +56,10 @@ export const useTripStore = defineStore('trip', () => {
 
   // 路线信息
   const routeInfo = ref<RouteInfo | null>(null)
+  const currentStrategy = ref<number>(0)            // 当前选中的策略
+  const availableRoutes = ref<RouteInfo[]>([])      // 4 策略对比数据
+  const isComputingRoute = ref(false)
+  const isComputingStrategies = ref(false)
 
   // POI 相关
   const maxDeviation = ref<number>(30) // 默认偏离距离 30km
@@ -81,6 +86,22 @@ export const useTripStore = defineStore('trip', () => {
   // 路线操作
   function setRouteInfo(info: RouteInfo | null) {
     routeInfo.value = info
+  }
+
+  function setOrigin(place: GeocodedPlace | null) {
+    params.value.origin = place
+  }
+
+  function setDestination(place: GeocodedPlace | null) {
+    params.value.destination = place
+  }
+
+  function setCurrentStrategy(s: number) {
+    currentStrategy.value = s
+  }
+
+  function setAvailableRoutes(routes: RouteInfo[]) {
+    availableRoutes.value = routes
   }
 
   // POI 操作
@@ -211,6 +232,81 @@ export const useTripStore = defineStore('trip', () => {
     }
   }
 
+  // 单条驾车路线（store 内部用，不依赖地图实例）
+  async function computeSingleRouteStatic(
+    origin: GeocodedPlace,
+    dest: GeocodedPlace,
+    strategy: number
+  ): Promise<RouteInfo | null> {
+    if (origin.lat == null || dest.lat == null) return null
+    const key = 'c866b4e29221cbc714a4fc78060f23b7'
+    const originLoc = `${origin.lon},${origin.lat}`
+    const destLoc = `${dest.lon},${dest.lat}`
+
+    const url = `https://restapi.amap.com/v3/direction/driving?` +
+      `origin=${originLoc}&destination=${destLoc}&key=${key}&extensions=all&strategy=${strategy}`
+
+    try {
+      const res = await fetch(url)
+      const data = await res.json()
+      if (data.status !== '1' || !data.route?.paths?.[0]) return null
+      const path = data.route.paths[0]
+      const cities: { code: string; name: string }[] = []
+      const cityMap = new Map<string, string>()
+      const polylinePoints: number[][] = []
+
+      path.steps.forEach((step: any) => {
+        if (step.cities) {
+          step.cities.forEach((city: any) => {
+            if (city.citycode && !cityMap.has(city.citycode)) {
+              cityMap.set(city.citycode, city.name)
+              cities.push({ code: city.citycode, name: city.name })
+            }
+          })
+        }
+        if (step.polyline) {
+          step.polyline.split(';').forEach((point: string) => {
+            const [lng, lat] = point.split(',').map(Number)
+            polylinePoints.push([lng, lat])
+          })
+        }
+      })
+
+      return {
+        distance: Number(path.distance),
+        duration: Number(path.duration),
+        cities,
+        polyline: polylinePoints,
+        strategy,
+      }
+    } catch (err) {
+      console.error(`Route compute failed (strategy ${strategy}):`, err)
+      return null
+    }
+  }
+
+  // 并发计算多种策略路线（用于预览对比）
+  async function prefetchRoutes(
+    origin: GeocodedPlace,
+    dest: GeocodedPlace,
+    strategies: number[] = [0, 1, 3, 7]
+  ): Promise<RouteInfo[]> {
+    isComputingStrategies.value = true
+    try {
+      const results = await Promise.all(
+        strategies.map(s => computeSingleRouteStatic(origin, dest, s))
+      )
+      const valid: RouteInfo[] = []
+      for (const r of results) {
+        if (r !== null) valid.push(r)
+      }
+      availableRoutes.value = valid
+      return valid
+    } finally {
+      isComputingStrategies.value = false
+    }
+  }
+
   // 天气
   function setWeather(adcode: string, data: import('@/services/amapWeather').WeatherAll | null) {
     weatherByAdcode.value[adcode] = data
@@ -232,6 +328,10 @@ export const useTripStore = defineStore('trip', () => {
     planningStatus,
     confirmedLocations,
     routeInfo,
+    currentStrategy,
+    availableRoutes,
+    isComputingRoute,
+    isComputingStrategies,
     maxDeviation,
     candidatePois,
     selectedPois,
@@ -242,6 +342,10 @@ export const useTripStore = defineStore('trip', () => {
     isLoadingWeather,
     departureDate,
     setRouteInfo,
+    setOrigin,
+    setDestination,
+    setCurrentStrategy,
+    setAvailableRoutes,
     setMaxDeviation,
     setCandidatePois,
     togglePoiSelection,
@@ -260,6 +364,7 @@ export const useTripStore = defineStore('trip', () => {
     setSelectedDay,
     setSelectedLocation,
     searchPoisByRoute,
+    prefetchRoutes,
     setWeather,
     setDepartureDate,
   }
