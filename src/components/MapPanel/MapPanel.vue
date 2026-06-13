@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { watch, ref, onMounted } from 'vue'
+import { watch, ref, onMounted, onUnmounted } from 'vue'
+import { Icon } from '@iconify/vue'
 import { useTripStore } from '@/store/tripStore'
 import { useMap, ROUTE_STRATEGIES } from '@/composables/useMap'
 import PinInfoCard from './PinInfoCard.vue'
@@ -19,9 +20,22 @@ const clickPos = ref<{ lng: number; lat: number } | null>(null)
 const tempMarker = ref<any>(null)
 const strategyPanelOpen = ref(false)  // 默认折叠
 
-// 注入 panTo 到 store，让 ItineraryStrip 可以聚焦地图
+let resizeObserver: ResizeObserver | null = null
+
+// 注入 panTo 到 store + 监听容器 resize
 onMounted(() => {
   store.setMapControls({ panTo })
+  if (mapContainer.value) {
+    resizeObserver = new ResizeObserver(() => {
+      const m = getMap()
+      if (m) m.resize()
+    })
+    resizeObserver.observe(mapContainer.value)
+  }
+})
+
+onUnmounted(() => {
+  resizeObserver?.disconnect()
 })
 
 // 地图点击 -> 弹浮层 + 画临时 marker
@@ -144,10 +158,10 @@ async function handleMapStrategyClick(s: number) {
     />
 
     <!-- 路线计算中 -->
-    <div v-if="store.isComputingRoute || store.isComputingStrategies" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white px-4 py-3 rounded-lg shadow-lg z-20 flex items-center gap-2">
-      <div class="animate-spin w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full"></div>
-      <span class="text-sm text-gray-600">
-        {{ store.isComputingStrategies ? '计算 3 种策略路线中...' : '计算路线中...' }}
+    <div v-if="store.isComputingRoute || store.isComputingStrategies" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white px-4 py-3 rounded-xl shadow-lg z-20 flex items-center gap-2">
+      <div class="animate-spin w-4 h-4 border-2 border-[#C66B3D] border-t-transparent rounded-full"></div>
+      <span class="text-sm text-[#2D2A26]">
+        {{ store.isComputingStrategies ? '计算策略路线中...' : '计算路线中...' }}
       </span>
     </div>
 
@@ -156,87 +170,86 @@ async function handleMapStrategyClick(s: number) {
       <div class="flex gap-2">
         <button
           @click="handleFitView"
-          class="bg-white px-3 py-2 rounded-lg shadow-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+          class="bg-white w-9 h-9 rounded-xl shadow-md flex items-center justify-center text-[#2D2A26] hover:bg-[#F5F0E8] transition-colors"
+          title="归位"
         >
-          📍 归位
+          <Icon icon="ph:crosshair" :width="18" :height="18" />
         </button>
-        <!-- 策略切换器：默认折叠 -->
         <button
           v-if="store.params.origin && store.params.destination && !strategyPanelOpen"
           @click="strategyPanelOpen = true"
-          class="bg-white px-3 py-2 rounded-lg shadow-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
-          title="展开线路策略"
+          class="bg-white w-9 h-9 rounded-xl shadow-md flex items-center justify-center text-[#2D2A26] hover:bg-[#F5F0E8] transition-colors"
+          title="线路策略"
         >
-          🛣️ 策略
+          <Icon icon="ph:git-branch" :width="18" :height="18" />
         </button>
       </div>
 
       <!-- 展开后的策略面板 -->
-      <div v-if="strategyPanelOpen && store.params.origin && store.params.destination" class="bg-white rounded-lg shadow-md overflow-hidden w-[220px]">
-        <div class="px-3 py-1.5 text-xs text-gray-500 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
-          <span>🛣️ 线路策略（地图端备选）</span>
-          <button class="text-gray-400 hover:text-gray-700" @click="strategyPanelOpen = false" title="折叠">×</button>
+      <div v-if="strategyPanelOpen && store.params.origin && store.params.destination" class="bg-white rounded-xl shadow-md overflow-hidden w-[220px]">
+        <div class="px-3 py-1.5 text-[11px] text-[#8B8578] bg-[#F5F0E8] border-b border-[#E8DCC7] flex items-center justify-between">
+          <span>线路策略</span>
+          <button class="text-[#8B8578] hover:text-[#C66B3D]" @click="strategyPanelOpen = false" title="折叠">&times;</button>
         </div>
         <button
           v-for="strategy in ROUTE_STRATEGIES"
           :key="strategy.value"
           :class="[
-            'w-full px-3 py-2 text-sm text-left transition-colors flex items-start gap-2',
+            'w-full px-3 py-2 text-sm text-left transition-colors flex items-center gap-2',
             store.currentStrategy === strategy.value
-              ? 'bg-blue-50 text-blue-700 font-medium'
-              : 'text-gray-600 hover:bg-gray-50',
+              ? 'bg-[#FDF2EC] text-[#C66B3D] font-medium'
+              : 'text-[#2D2A26] hover:bg-[#F5F0E8]',
           ]"
           :title="strategy.desc"
           @click="handleMapStrategyClick(strategy.value)"
         >
-          <span class="mt-0.5">{{ strategy.icon }}</span>
-          <div class="flex-1">
-            <div class="flex items-center gap-1">
-              {{ strategy.label }}
-              <span v-if="store.currentStrategy === strategy.value" class="text-blue-500 text-xs">✓</span>
-            </div>
-            <div class="text-xs text-gray-400 font-normal">{{ strategy.desc }}</div>
-          </div>
+          <span>{{ strategy.label }}</span>
+          <span v-if="store.currentStrategy === strategy.value" class="text-[#C66B3D] text-xs ml-auto">&#10003;</span>
         </button>
-        <div class="px-3 py-1.5 text-[10px] text-gray-400 bg-gray-50 border-t border-gray-100">
-          提示：右栏已内嵌策略切换器，此处为备选
+        <div class="px-3 py-1.5 text-[10px] text-[#B0A99F] bg-[#F5F0E8] border-t border-[#E8DCC7]">
+          右栏已内嵌策略切换器
         </div>
       </div>
 
-      <div class="bg-white rounded-lg shadow-md p-2 text-xs text-gray-500 max-w-[220px]">
-        💡 点击地图任意位置可添加该地点或查找附近景点/酒店/美食
+      <div class="bg-white rounded-xl shadow-md p-2 text-[11px] text-[#8B8578] max-w-[220px]">
+        点击地图可添加地点或查找附近景点
       </div>
     </div>
 
     <!-- 右侧控件 -->
     <div class="absolute top-3 right-3 z-10 flex flex-col gap-2">
-      <div class="bg-white rounded-lg shadow-md overflow-hidden">
+      <div class="bg-white rounded-xl shadow-md overflow-hidden">
         <button
-          class="w-10 h-10 flex items-center justify-center text-lg font-bold text-gray-600 hover:bg-gray-50 transition-colors border-b border-gray-100"
+          class="w-9 h-9 flex items-center justify-center text-[#2D2A26] hover:bg-[#F5F0E8] transition-colors border-b border-[#E8DCC7]"
           @click="handleZoomIn"
-        >+</button>
+        >
+          <Icon icon="ph:plus" :width="16" :height="16" />
+        </button>
         <button
-          class="w-10 h-10 flex items-center justify-center text-lg font-bold text-gray-600 hover:bg-gray-50 transition-colors"
+          class="w-9 h-9 flex items-center justify-center text-[#2D2A26] hover:bg-[#F5F0E8] transition-colors"
           @click="handleZoomOut"
-        >−</button>
+        >
+          <Icon icon="ph:minus" :width="16" :height="16" />
+        </button>
       </div>
 
       <button
         :class="[
-          'bg-white px-3 py-2 rounded-lg shadow-md text-sm font-medium transition-colors',
-          isSatellite ? 'text-blue-600 bg-blue-50' : 'text-gray-600 hover:bg-gray-50',
+          'bg-white w-9 h-9 rounded-xl shadow-md flex items-center justify-center transition-colors',
+          isSatellite ? 'text-[#7EB8DA] bg-[#F0F7FB]' : 'text-[#2D2A26] hover:bg-[#F5F0E8]',
         ]"
         @click="handleToggleSatellite"
+        :title="isSatellite ? '普通地图' : '卫星地图'"
       >
-        {{ isSatellite ? '🗺️ 普通' : '🛰️ 卫星' }}
+        <Icon :icon="isSatellite ? 'ph:map-trifold' : 'ph:globe'" :width="18" :height="18" />
       </button>
     </div>
 
     <!-- 搜索中提示 -->
-    <div v-if="store.isSearchingPois" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white px-4 py-3 rounded-lg shadow-lg z-20">
+    <div v-if="store.isSearchingPois" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white px-4 py-3 rounded-xl shadow-lg z-20">
       <div class="flex items-center gap-2">
-        <div class="animate-spin w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full"></div>
-        <span class="text-sm text-gray-600">搜索沿途景点...</span>
+        <div class="animate-spin w-4 h-4 border-2 border-[#C66B3D] border-t-transparent rounded-full"></div>
+        <span class="text-sm text-[#2D2A26]">搜索沿途景点...</span>
       </div>
     </div>
 

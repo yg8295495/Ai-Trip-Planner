@@ -267,8 +267,6 @@ export const useTripStore = defineStore('trip', () => {
     const cityMap = new Map<string, string>()
     const polylinePoints: number[][] = []
     const mainRoadsSet = new Set<string>()
-    let tollDistance = 0
-    let trafficLights = 0
     let highwayDistance = 0
 
     path.steps.forEach((step: any) => {
@@ -286,8 +284,6 @@ export const useTripStore = defineStore('trip', () => {
           polylinePoints.push([lng, lat])
         })
       }
-      if (step.toll_distance) tollDistance += Number(step.toll_distance)
-      if (step.traffic_lights) trafficLights += Number(step.traffic_lights)
       if (step.road && /高速|高架|快速路/.test(step.road) && step.distance) {
         highwayDistance += Number(step.distance)
         if (step.road.length >= 3 && step.road.length <= 12) mainRoadsSet.add(step.road)
@@ -302,9 +298,9 @@ export const useTripStore = defineStore('trip', () => {
       cities,
       polyline: polylinePoints,
       strategy,
-      tollDistance: tollDistance || undefined,
+      tollDistance: path.toll_distance ? Number(path.toll_distance) : undefined,
       tolls: path.tolls ? Number(path.tolls) : undefined,
-      trafficLights: trafficLights || undefined,
+      trafficLights: path.traffic_lights != null ? Number(path.traffic_lights) : undefined,
       highwayDistance: highwayDistance || undefined,
       mainRoads: Array.from(mainRoadsSet).slice(0, 8),
     }
