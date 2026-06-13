@@ -38,15 +38,36 @@ export async function searchPoisByPolygon(
   }
 }
 
-// 地理编码：文本 → 坐标
-export async function geocodeAddress(address: string): Promise<{ lat: number; lon: number; adcode?: string; level?: string } | null> {
+// 地理编码：文本 → 坐标（返回所有候选）
+export interface GeocodeResult {
+  lat: number
+  lon: number
+  adcode?: string
+  level?: string
+  formattedAddress?: string
+  province?: string
+  city?: string
+  district?: string
+}
+
+export async function geocodeAddress(address: string): Promise<GeocodeResult[] | null> {
   try {
     const url = `https://restapi.amap.com/v3/geocode/geo?address=${encodeURIComponent(address)}&key=${AMAP_KEY}`
     const res = await fetch(url)
     const data = await res.json()
-    if (data.status === '1' && data.geocodes?.[0]) {
-      const [lon, lat] = data.geocodes[0].location.split(',').map(Number)
-      return { lat, lon, adcode: data.geocodes[0].adcode, level: data.geocodes[0].level }
+    if (data.status === '1' && data.geocodes?.length) {
+      return data.geocodes.map((g: any) => {
+        const [lon, lat] = g.location.split(',').map(Number)
+        return {
+          lat, lon,
+          adcode: g.adcode,
+          level: g.level,
+          formattedAddress: g.formatted_address,
+          province: g.province,
+          city: g.city,
+          district: g.district,
+        }
+      })
     }
   } catch (err) {
     console.error('Geocode failed:', err)

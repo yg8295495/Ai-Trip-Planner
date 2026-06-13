@@ -4,8 +4,9 @@
  * 后续做地名联想 / autocomplete 完全走客户端匹配，0 API 调用。
  */
 
-const AMAP_KEY = 'c866b4e29221cbc714a4fc78060f23b7'
-const CACHE_KEY = 'adcode_cache_v2'   // bump: 旧 v1 缓存可能为空
+import { AMAP_KEY } from '@/config/amap'
+
+const CACHE_KEY = 'adcode_cache_v3'
 const CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1000  // 7 天过期
 
 export interface DistrictNode {
@@ -14,12 +15,22 @@ export interface DistrictNode {
   level: 'country' | 'province' | 'city' | 'district' | 'street'
   // center 可能是字符串 "lng,lat"（district API 返回） 或 [lng, lat] 元组
   center?: string | [number, number] | unknown
-  children?: DistrictNode[]
+  districts?: DistrictNode[]
+}
+
+export interface DistrictItem {
+  adcode: string
+  name: string
+  level: 'province' | 'city' | 'district' | 'street'
+  center: [number, number]
+  path: string  // 如 "湖南 > 长沙" 或 "湖南 > 长沙 > 开福"
+  parentAdcode?: string
 }
 
 export interface DistrictFlat {
-  byAdcode: Record<string, { name: string; level: string; center: [number, number] }>
-  byName: Record<string, { adcode: string; name: string; level: string; center: [number, number] }[]>
+  byAdcode: Record<string, DistrictItem>
+  byName: Record<string, DistrictItem[]>
+  byParent: Record<string, DistrictItem[]>  // parentAdcode → children
   loadedAt: number
 }
 
@@ -44,7 +55,19 @@ function readCache(): DistrictFlat | null {
     const raw = localStorage.getItem(CACHE_KEY)
     if (!raw) return null
     const parsed = JSON.parse(raw) as DistrictFlat
+    
+    // 校验数据完整性
     if (Date.now() - parsed.loadedAt > CACHE_TTL_MS) return null
+    if (Object.keys(parsed.byAdcode).length < 300) return null
+    
+    // 校验数据结构（必须有 path 和 byParent）
+    const sampleItem = Object.values(parsed.byAdcode)[0]
+    if (!sampleItem || !('path' in sampleItem) || !('byParent' in parsed)) {
+      console.log('缓存格式过旧，重新加载')
+      localStorage.removeItem(CACHE_KEY)
+      return null
+    }
+    
     return parsed
   } catch {
     return null
@@ -86,30 +109,66 @@ function parseCenter(c: unknown): [number, number] | null {
   return null
 }
 
-/** 递归遍历所有节点，构造扁平索引 */
+/** 递归遍历所有节点，构造扁平索引（带父级路径） */
 function flattenTree(roots: DistrictNode[]): DistrictFlat {
   const byAdcode: DistrictFlat['byAdcode'] = {}
   const byName: DistrictFlat['byName'] = {}
+  const byParent: DistrictFlat['byParent'] = {}
 
-  const walk = (node: DistrictNode) => {
-    if (node.adcode && node.center) {
-      const center = parseCenter(node.center)
-      if (!center) return
-      const meta = { name: node.name, level: node.level, center }
-      byAdcode[node.adcode] = meta
-      if (!byName[node.name]) byName[node.name] = []
-      byName[node.name].push({ adcode: node.adcode, ...meta })
+  const walk = (node: DistrictNode, parentAdcode?: string, parentPath?: string) => {
+    if (!node.adcode || !node.center) return
+    
+    const center = parseCenter(node.center)
+    if (!center) return
+    
+    // 构建路径：父级路径 + 当前名称
+    const path = parentPath ? `${parentPath} > ${node.name}` : node.name
+    
+    const item: DistrictItem = {
+      adcode: node.adcode,
+      name: node.name,
+      level: node.level as DistrictItem['level'],
+      center,
+      path,
+      parentAdcode
     }
-    node.children?.forEach(walk)
+    
+    byAdcode[node.adcode] = item
+    
+    // byName 索引
+    if (!byName[node.name]) byName[node.name] = []
+    byName[node.name].push(item)
+    
+    // byParent 索引（跳过省级，因为省级没有父级）
+    if (parentAdcode) {
+      if (!byParent[parentAdcode]) byParent[parentAdcode] = []
+      byParent[parentAdcode].push(item)
+    }
+    
+    // 递归子节点
+    node.districts?.forEach(child => walk(child, node.adcode, path))
   }
-  roots.forEach(walk)
+  
+  roots.forEach(root => walk(root))
 
-  return { byAdcode, byName, loadedAt: Date.now() }
+  return { byAdcode, byName, byParent, loadedAt: Date.now() }
+}
+
+/** 首次启动清理旧版本缓存 */
+function cleanupOldCaches() {
+  const oldKeys = ['adcode_cache_v1', 'adcode_cache_v2']
+  oldKeys.forEach(k => {
+    if (localStorage.getItem(k)) {
+      console.log(`清理旧缓存: ${k}`)
+      localStorage.removeItem(k)
+    }
+  })
 }
 
 /** 加载/获取缓存（首次会网络请求） */
 export async function loadDistrictCache(force = false): Promise<DistrictFlat> {
   if (!force && flatCache) return flatCache
+  if (!flatCache) cleanupOldCaches()
   if (!force) {
     const cached = readCache()
     if (cached) {
@@ -139,17 +198,16 @@ export function isDistrictCacheReady(): boolean {
   return flatCache !== null
 }
 
-/** 客户端模糊匹配（支持前缀/包含） */
-export function searchDistrict(query: string, limit = 10): { adcode: string; name: string; level: string; center: [number, number] }[] {
+/** 客户端模糊匹配（市级优先，返回带路径的结果） */
+export function searchDistrict(query: string, limit = 8): DistrictItem[] {
   if (!query || !flatCache) return []
   const q = query.trim()
   if (!q) return []
 
-  const results: { adcode: string; name: string; level: string; center: [number, number]; score: number }[] = []
+  const results: (DistrictItem & { score: number })[] = []
   const qLower = q.toLowerCase()
 
   for (const name in flatCache.byName) {
-    if (results.length >= limit * 3) break
     const nLower = name.toLowerCase()
     let score = 0
     if (nLower === qLower) score = 100
@@ -158,7 +216,9 @@ export function searchDistrict(query: string, limit = 10): { adcode: string; nam
 
     if (score > 0) {
       flatCache.byName[name].forEach(item => {
-        results.push({ ...item, score })
+        // 市级优先加权：city +20, district +10, province -10
+        const levelBonus = item.level === 'city' ? 20 : item.level === 'district' ? 10 : item.level === 'province' ? -10 : 0
+        results.push({ ...item, score: score + levelBonus })
       })
     }
   }
@@ -173,6 +233,57 @@ export function searchDistrict(query: string, limit = 10): { adcode: string; nam
     })
     .slice(0, limit)
     .map(({ score, ...rest }) => rest)
+}
+
+/** 获取某节点的子级（本地缓存） */
+export function getChildren(parentAdcode: string): DistrictItem[] {
+  if (!flatCache) return []
+  return flatCache.byParent[parentAdcode] || []
+}
+
+/** 按需加载乡镇数据（调高德 API，带内存缓存） */
+const streetsCache = new Map<string, DistrictItem[]>()
+
+export async function fetchStreets(districtAdcode: string): Promise<DistrictItem[]> {
+  // 命中缓存直接返回
+  if (streetsCache.has(districtAdcode)) {
+    return streetsCache.get(districtAdcode)!
+  }
+
+  const parent = flatCache?.byAdcode[districtAdcode]
+  if (!parent) throw new Error('District not found: ' + districtAdcode)
+
+  const url = `https://restapi.amap.com/v3/config/district?keywords=${encodeURIComponent(parent.name)}&subdistrict=1&extensions=base&key=${AMAP_KEY}`
+  const res = await fetch(url)
+  const data = await res.json()
+  
+  if (data.status !== '1' || !data.districts?.length) {
+    throw new Error('Fetch streets failed: ' + data.info)
+  }
+
+  // 找到匹配的区县节点
+  const target = data.districts.find((d: DistrictNode) => d.adcode === districtAdcode)
+  if (!target?.districts) {
+    streetsCache.set(districtAdcode, [])
+    return []
+  }
+
+  const streets = target.districts.map((street: DistrictNode) => {
+    const center = parseCenter(street.center)
+    if (!center) return null
+    return {
+      adcode: street.adcode,
+      name: street.name,
+      level: 'street' as const,
+      center,
+      path: `${parent.path} > ${street.name}`,
+      parentAdcode: districtAdcode
+    }
+  }).filter((s: DistrictItem | null): s is DistrictItem => s !== null)
+
+  // 写入缓存
+  streetsCache.set(districtAdcode, streets)
+  return streets
 }
 
 /** 通过 adcode 取节点信息 */

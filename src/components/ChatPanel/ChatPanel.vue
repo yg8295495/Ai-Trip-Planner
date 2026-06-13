@@ -56,11 +56,12 @@ function formatDate(ts: number): string {
         <div class="relative">
           <button
             @click="handleRefreshSessions"
-            class="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+            class="flex items-center gap-1 px-2 py-1 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors text-xs"
           >
-            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
             </svg>
+            <span>历史会话</span>
           </button>
           <div
             v-if="showSessionList && sessions.length > 0"

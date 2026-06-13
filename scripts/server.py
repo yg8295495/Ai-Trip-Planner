@@ -7,6 +7,7 @@ Provides HTTP endpoints for frontend to read/write JSONL files.
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import json
 import os
+import time
 from urllib.parse import urlparse, parse_qs
 
 
@@ -72,12 +73,17 @@ class JSONLHandler(BaseHTTPRequestHandler):
     def handle_list_sessions(self):
         sessions_dir = "sessions/active"
         sessions = []
+        current_time = time.time()
+        four_hours = 4 * 60 * 60  # 4小时 = 14400秒
 
         if os.path.exists(sessions_dir):
             for f in os.listdir(sessions_dir):
                 if f.endswith(".jsonl"):
                     file_path = os.path.join(sessions_dir, f)
                     stat = os.stat(file_path)
+                    # 检查是否超过4小时未更新
+                    if current_time - stat.st_mtime > four_hours:
+                        continue  # 跳过过期会话
                     with open(file_path, "r") as fh:
                         line_count = sum(1 for _ in fh)
                     sessions.append({

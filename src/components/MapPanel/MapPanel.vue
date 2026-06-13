@@ -8,7 +8,7 @@ import MapClickPopup from './MapClickPopup.vue'
 const store = useTripStore()
 const mapContainer = ref<HTMLElement | null>(null)
 const {
-  renderPoiMarkers, renderRouteByREST,
+  renderPoiMarkers, renderRoutePolyline,
   fitView, toggleSatellite, zoomIn, zoomOut,
   onMapClick, getMap, addTempMarker, panTo,
   setEndpointMarker,
@@ -63,7 +63,7 @@ watch(
   { immediate: true, deep: true }
 )
 
-// 策略变化：重算路线 + 重搜景点
+// 策略变化：重算路线（不自动搜 POI，用户手动点按钮搜）
 watch(
   () => store.currentStrategy,
   async (strategy) => {
@@ -72,14 +72,12 @@ watch(
     if (!o || !d || o.lat == null || d.lat == null) return
     store.isComputingRoute = true
     try {
-      const info = await renderRouteByREST(o, d, strategy)
-      if (info) {
-        store.setRouteInfo(info)
-        // 策略变了，corridor polygon 变了，重新搜沿途景点
-        if (store.candidatePois.length > 0) {
-          store.clearAllCandidatePois()
-        }
-        await store.searchPoisByRoute()
+      const routes = await store.computeRoutes(o, d, strategy)
+      if (routes.length > 0) {
+        store.setRouteAlternatives(routes)
+        store.setRouteInfo(routes[0])
+      } else {
+        store.setRouteAlternatives([])
       }
     } finally {
       store.isComputingRoute = false
@@ -87,11 +85,13 @@ watch(
   }
 )
 
-// 监听 routeInfo -> fitView
+// 监听 routeInfo -> 画线 + fitView
 watch(
   () => store.routeInfo,
   (info) => {
     if (info && info.polyline && info.polyline.length > 0) {
+      // 直接用已有 polyline 画线，不重新调 API
+      renderRoutePolyline(info)
       setTimeout(() => fitView(), 200)
     }
   },
@@ -147,7 +147,7 @@ async function handleMapStrategyClick(s: number) {
     <div v-if="store.isComputingRoute || store.isComputingStrategies" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white px-4 py-3 rounded-lg shadow-lg z-20 flex items-center gap-2">
       <div class="animate-spin w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full"></div>
       <span class="text-sm text-gray-600">
-        {{ store.isComputingStrategies ? '计算 4 种策略路线中...' : '计算路线中...' }}
+        {{ store.isComputingStrategies ? '计算 3 种策略路线中...' : '计算路线中...' }}
       </span>
     </div>
 
@@ -199,7 +199,7 @@ async function handleMapStrategyClick(s: number) {
           </div>
         </button>
         <div class="px-3 py-1.5 text-[10px] text-gray-400 bg-gray-50 border-t border-gray-100">
-          提示：主右栏已内嵌 4 策略切换器，此处为备选
+          提示：右栏已内嵌策略切换器，此处为备选
         </div>
       </div>
 

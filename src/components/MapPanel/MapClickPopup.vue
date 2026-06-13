@@ -187,7 +187,7 @@ function addAsDestination() {
             class="px-3 py-1.5 bg-blue-500 text-white text-xs rounded-lg hover:bg-blue-600"
             @click="addNearest"
           >
-            + 添加到这里
+            + 添加为途经点
           </button>
           <button
             class="px-3 py-1.5 bg-green-500 text-white text-xs rounded-lg hover:bg-green-600"

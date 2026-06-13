@@ -14,10 +14,9 @@ const AMAP_KEY = 'c866b4e29221cbc714a4fc78060f23b7'
 export type RouteInfo = StoreRouteInfo
 
 export const ROUTE_STRATEGIES = [
-  { value: 0, label: '高速优先', icon: '🛣️', desc: '优先高速，里程和时间均衡' },
-  { value: 1, label: '距离最短', icon: '📏', desc: '走最短路径，可能经过小路' },
-  { value: 3, label: '不走高速', icon: '🏔️', desc: '全程国道/省道，免费但慢' },
-  { value: 7, label: '高速+国道', icon: '🚗', desc: '高速优先但允许走一段国道' },
+  { value: 2, label: '高速-最短距离', icon: '🛣️', desc: '综合最快，高速路线中选距离最短' },
+  { value: 13, label: '不走高速', icon: '🏔️', desc: '全程国道/省道，返回多条备选' },
+  { value: 10, label: '智能推荐', icon: '🌐', desc: '高德默认策略，躲避拥堵+路程较短' },
 ] as const
 
 export function useMap(containerRef: Ref<HTMLElement | null>) {
@@ -332,7 +331,7 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
 
   return {
     updateMap, renderPoiMarkers, getRouteInfo, renderRouteByREST,
-    computeSingleRoute,
+    computeSingleRoute, renderRoutePolyline,
     fitView, toggleSatellite, zoomIn, zoomOut,
     onMapClick, getMap, panTo, addTempMarker,
     setEndpointMarker, clearEndpointMarkers,

@@ -62,8 +62,9 @@ function selectCustomLocation(item: { name: string; adcode: string; center: [num
 
 async function handleAddCustomLocation() {
   if (!customLocationInput.value.trim()) return
-  const coord = await geocodeAddress(customLocationInput.value.trim())
-  if (coord) {
+  const results = await geocodeAddress(customLocationInput.value.trim())
+  if (results && results.length > 0) {
+    const coord = results[0]
     const p: PoiInfo = {
       id: `custom_${Date.now()}`,
       name: customLocationInput.value.trim(),

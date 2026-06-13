@@ -62,8 +62,9 @@ export const useTripStore = defineStore('trip', () => {
 
   // 路线信息
   const routeInfo = ref<RouteInfo | null>(null)
-  const currentStrategy = ref<number>(0)            // 当前选中的策略
-  const availableRoutes = ref<RouteInfo[]>([])      // 4 策略对比数据
+  const currentStrategy = ref<number>(2)            // 当前选中的策略
+  const availableRoutes = ref<RouteInfo[]>([])      // 策略对比数据
+  const routeAlternatives = ref<RouteInfo[]>([])    // 同一策略下的多条备选路线（10/13 系列）
   const isComputingRoute = ref(false)
   const isComputingStrategies = ref(false)
 
@@ -120,6 +121,16 @@ export const useTripStore = defineStore('trip', () => {
 
   function setAvailableRoutes(routes: RouteInfo[]) {
     availableRoutes.value = routes
+  }
+
+  function setRouteAlternatives(routes: RouteInfo[]) {
+    routeAlternatives.value = routes
+  }
+
+  function selectAlternative(index: number) {
+    if (routeAlternatives.value[index]) {
+      routeInfo.value = routeAlternatives.value[index]
+    }
   }
 
   // POI 操作
@@ -250,13 +261,62 @@ export const useTripStore = defineStore('trip', () => {
     }
   }
 
-  // 单条驾车路线（store 内部用，不依赖地图实例）
-  async function computeSingleRouteStatic(
+  // 解析单条 path 为 RouteInfo
+  function parsePath(path: any, strategy: number): RouteInfo {
+    const cities: { code: string; name: string }[] = []
+    const cityMap = new Map<string, string>()
+    const polylinePoints: number[][] = []
+    const mainRoadsSet = new Set<string>()
+    let tollDistance = 0
+    let trafficLights = 0
+    let highwayDistance = 0
+
+    path.steps.forEach((step: any) => {
+      if (step.cities) {
+        step.cities.forEach((city: any) => {
+          if (city.citycode && !cityMap.has(city.citycode)) {
+            cityMap.set(city.citycode, city.name)
+            cities.push({ code: city.citycode, name: city.name })
+          }
+        })
+      }
+      if (step.polyline) {
+        step.polyline.split(';').forEach((point: string) => {
+          const [lng, lat] = point.split(',').map(Number)
+          polylinePoints.push([lng, lat])
+        })
+      }
+      if (step.toll_distance) tollDistance += Number(step.toll_distance)
+      if (step.traffic_lights) trafficLights += Number(step.traffic_lights)
+      if (step.road && /高速|高架|快速路/.test(step.road) && step.distance) {
+        highwayDistance += Number(step.distance)
+        if (step.road.length >= 3 && step.road.length <= 12) mainRoadsSet.add(step.road)
+      } else if (step.road && /[GH]?\d{1,3}|国道|省道|高速/.test(step.road) && step.road.length <= 12) {
+        mainRoadsSet.add(step.road)
+      }
+    })
+
+    return {
+      distance: Number(path.distance),
+      duration: Number(path.duration),
+      cities,
+      polyline: polylinePoints,
+      strategy,
+      tollDistance: tollDistance || undefined,
+      tolls: path.tolls ? Number(path.tolls) : undefined,
+      trafficLights: trafficLights || undefined,
+      highwayDistance: highwayDistance || undefined,
+      mainRoads: Array.from(mainRoadsSet).slice(0, 8),
+    }
+  }
+
+  // 驾车路线请求：返回所有备选路径
+  async function computeRoutes(
     origin: GeocodedPlace,
     dest: GeocodedPlace,
     strategy: number
-  ): Promise<RouteInfo | null> {
-    if (origin.lat == null || dest.lat == null) return null
+  ): Promise<RouteInfo[]> {
+    if (origin.lat == null || dest.lat == null) return []
     const key = 'c866b4e29221cbc714a4fc78060f23b7'
     const originLoc = `${origin.lon},${origin.lat}`
     const destLoc = `${dest.lon},${dest.lat}`
@@ -267,80 +327,28 @@ export const useTripStore = defineStore('trip', () => {
     try {
       const res = await fetch(url)
       const data = await res.json()
-      if (data.status !== '1' || !data.route?.paths?.[0]) return null
-      const path = data.route.paths[0]
-      const cities: { code: string; name: string }[] = []
-      const cityMap = new Map<string, string>()
-      const polylinePoints: number[][] = []
-      const mainRoadsSet = new Set<string>()
-
-      let tollDistance = 0
-      let trafficLights = 0
-      let highwayDistance = 0
-
-      path.steps.forEach((step: any) => {
-        if (step.cities) {
-          step.cities.forEach((city: any) => {
-            if (city.citycode && !cityMap.has(city.citycode)) {
-              cityMap.set(city.citycode, city.name)
-              cities.push({ code: city.citycode, name: city.name })
-            }
-          })
-        }
-        if (step.polyline) {
-          step.polyline.split(';').forEach((point: string) => {
-            const [lng, lat] = point.split(',').map(Number)
-            polylinePoints.push([lng, lat])
-          })
-        }
-        // 累计收费 / 红绿灯 / 高速
-        if (step.toll_distance) tollDistance += Number(step.toll_distance)
-        if (step.traffic_lights) trafficLights += Number(step.traffic_lights)
-        // road 含"高速"视为高速路段（含'高速'/'高架'/'快速路'）
-        if (step.road && /高速|高架|快速路/.test(step.road) && step.distance) {
-          highwayDistance += Number(step.distance)
-          // 收集主要道路名（去重，长度 4-12 字的高速/国道名）
-          if (step.road.length >= 3 && step.road.length <= 12) {
-            mainRoadsSet.add(step.road)
-          }
-        } else if (step.road && /[GH]?\d{1,3}|国道|省道|高速/.test(step.road) && step.road.length <= 12) {
-          // 收集国道/省道/数字编号道路
-          mainRoadsSet.add(step.road)
-        }
-      })
-
-      return {
-        distance: Number(path.distance),
-        duration: Number(path.duration),
-        cities,
-        polyline: polylinePoints,
-        strategy,
-        tollDistance: tollDistance || undefined,
-        tolls: path.tolls ? Number(path.tolls) : undefined,
-        trafficLights: trafficLights || undefined,
-        highwayDistance: highwayDistance || undefined,
-        mainRoads: Array.from(mainRoadsSet).slice(0, 8),  // 最多 8 条
-      }
+      if (data.status !== '1' || !data.route?.paths?.length) return []
+      return data.route.paths.map((p: any) => parsePath(p, strategy))
     } catch (err) {
       console.error(`Route compute failed (strategy ${strategy}):`, err)
-      return null
+      return []
     }
   }
 
-  // 并发计算多种策略路线（用于预览对比）
+  // 预计算策略路线（取每条策略的第一条路线做对比）
   async function prefetchRoutes(
     origin: GeocodedPlace,
     dest: GeocodedPlace,
-    strategies: number[] = [0, 1, 3, 7]
+    strategies: number[] = [2, 13, 10]
   ): Promise<RouteInfo[]> {
     isComputingStrategies.value = true
     try {
       const results = await Promise.all(
-        strategies.map(s => computeSingleRouteStatic(origin, dest, s))
+        strategies.map(s => computeRoutes(origin, dest, s))
       )
       const valid: RouteInfo[] = []
-      for (const r of results) {
-        if (r !== null) valid.push(r)
+      for (const routes of results) {
+        if (routes.length > 0) valid.push(routes[0])
       }
       availableRoutes.value = valid
       return valid
@@ -372,6 +380,7 @@ export const useTripStore = defineStore('trip', () => {
     routeInfo,
     currentStrategy,
     availableRoutes,
+    routeAlternatives,
     isComputingRoute,
     isComputingStrategies,
     maxDeviation,
@@ -410,7 +419,10 @@ export const useTripStore = defineStore('trip', () => {
     setSelectedDay,
     setSelectedLocation,
     searchPoisByRoute,
+    computeRoutes,
     prefetchRoutes,
+    setRouteAlternatives,
+    selectAlternative,
     setWeather,
     setDepartureDate,
   }

@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:all": "bash scripts/start-dev.sh",
     "build": "vue-tsc -b && vite build",
     "preview": "vite preview"
   },

@@ -165,3 +165,59 @@ location.reload()
 - `docs/compose/reports/` — 第 1-3 阶段完成报告
 
 这些是历史决策记录，**新会话勿要参考其架构设计**（已被本文件 v2.3 架构取代），但可作为"为什么改成现在这样"的背景。
+
+---
+
+## 10. 🧪 Playwright 自动化测试
+
+### 环境配置
+
+**Chrome 浏览器路径**（`~/.cache/puppeteer`）：
+```bash
+# 完整版 Chrome for Testing（推荐用于可视化调试）
+/Users/LiYuan/.cache/puppeteer/chrome/mac-148.0.7778.97/chrome-mac-x64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing
+
+# 精简版 headless shell（推荐用于 CI/自动化）
+/Users/LiYuan/.cache/puppeteer/chrome-headless-shell/mac-149.0.7827.22/chrome-headless-shell-mac-x64/chrome-headless-shell
+```
+
+**Playwright 版本**：
+- 项目已安装 `playwright` 和 `playwright-core`（在 `node_modules/`）
+- 无需额外安装，直接使用
+
+### 使用示例
+
+```javascript
+import { chromium } from 'playwright';
+
+const browser = await chromium.launch({
+  headless: false,  // 可视化调试用 false，CI 用 true
+  executablePath: '/Users/LiYuan/.cache/puppeteer/chrome/mac-148.0.7778.97/chrome-mac-x64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing'
+});
+
+const page = await browser.newPage();
+await page.goto('http://localhost:5173');
+
+// 测试逻辑...
+
+await browser.close();
+```
+
+### 运行测试
+
+```bash
+# 启动开发服务器（如果未启动）
+npm run dev
+
+# 运行测试脚本（必须使用完整路径，沙箱环境没有 node 命令）
+/Users/LiYuan/.nvm/versions/node/v24.15.0/bin/node test-xxx.mjs
+```
+
+**注意**：沙箱环境 PATH 中没有 node/npm，必须使用完整路径 `/Users/LiYuan/.nvm/versions/node/v24.15.0/bin/node`。
+
+### 注意事项
+
+- 测试脚本使用 `.mjs` 扩展名（ES Module）
+- 确保开发服务器在 `localhost:5173` 运行
+- 使用 `headless: false` 可以看到浏览器操作过程
+- 使用 `chrome-headless-shell` 时只能用 `headless: true`
