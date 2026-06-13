@@ -587,7 +587,7 @@ const showAllRoads = ref(false)
             <p class="text-[11px] text-[#8B8578]">途经路线</p>
             <span class="text-[8px] text-[#C66B3D] transition-transform" :class="showAllRoads ? 'rotate-90' : ''">&#9654;</span>
           </button>
-          <div v-if="showAllRoads" class="mt-1.5 space-y-0.5">
+          <div v-if="showAllRoads" class="mt-1.5 space-y-0.5 max-h-32 overflow-y-auto">
             <p v-for="(road, idx) in currentRouteInfo.mainRoads" :key="idx" class="text-[11px] text-[#2D2A26] leading-relaxed">
               {{ road }}
             </p>

@@ -60,7 +60,7 @@ class JSONLHandler(FileSystemEventHandler):
 
             ai_response = self.call_ai(file_path, last_line)
             if ai_response:
-                self.append_response(file_path, ai_response)
+                self.append_response(file_path, ai_response, last_line.get("provider", "codebuddy"))
 
         except Exception as e:
             print(f"Error processing {file_path}: {e}")
@@ -84,10 +84,7 @@ class JSONLHandler(FileSystemEventHandler):
 
         if inject_system:
             system_prompt = SYSTEM_PROMPT_PATH.read_text(encoding="utf-8")
-            if turn == 0:
-                full_message = f"{system_prompt}\n\n用户消息：{text}"
-            else:
-                full_message = f"{system_prompt}\n\n用户消息：{text}"
+            full_message = f"{system_prompt}\n\n用户消息：{text}"
         else:
             full_message = text
 
@@ -189,8 +186,7 @@ class JSONLHandler(FileSystemEventHandler):
                 "missingFields": []
             }
 
-    def append_response(self, file_path: Path, response: dict):
-        provider = "codebuddy"
+    def append_response(self, file_path: Path, response: dict, provider: str = "codebuddy"):
         message = {
             "ts": time.strftime("%Y-%m-%dT%H:%M:%S"),
             "role": "ai",
