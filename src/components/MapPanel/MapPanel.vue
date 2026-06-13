@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { watch, ref } from 'vue'
+import { watch, ref, onMounted } from 'vue'
 import { useTripStore } from '@/store/tripStore'
 import { useMap, ROUTE_STRATEGIES } from '@/composables/useMap'
 import PinInfoCard from './PinInfoCard.vue'
@@ -17,6 +17,12 @@ const {
 const isSatellite = ref(false)
 const clickPos = ref<{ lng: number; lat: number } | null>(null)
 const tempMarker = ref<any>(null)
+const strategyPanelOpen = ref(false)  // 默认折叠
+
+// 注入 panTo 到 store，让 ItineraryStrip 可以聚焦地图
+onMounted(() => {
+  store.setMapControls({ panTo })
+})
 
 // 地图点击 -> 弹浮层 + 画临时 marker
 onMapClick((lng, lat) => {
@@ -147,17 +153,29 @@ async function handleMapStrategyClick(s: number) {
 
     <!-- 左侧控制按钮 -->
     <div class="absolute top-3 left-3 z-10 flex flex-col gap-2">
-      <button
-        @click="handleFitView"
-        class="bg-white px-3 py-2 rounded-lg shadow-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
-      >
-        📍 归位
-      </button>
+      <div class="flex gap-2">
+        <button
+          @click="handleFitView"
+          class="bg-white px-3 py-2 rounded-lg shadow-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+        >
+          📍 归位
+        </button>
+        <!-- 策略切换器：默认折叠 -->
+        <button
+          v-if="store.params.origin && store.params.destination && !strategyPanelOpen"
+          @click="strategyPanelOpen = true"
+          class="bg-white px-3 py-2 rounded-lg shadow-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+          title="展开线路策略"
+        >
+          🛣️ 策略
+        </button>
+      </div>
 
-      <!-- 策略切换器（仅在两端都设了位置时显示） -->
-      <div v-if="store.params.origin && store.params.destination" class="bg-white rounded-lg shadow-md overflow-hidden">
-        <div class="px-3 py-1.5 text-xs text-gray-500 bg-gray-50 border-b border-gray-100">
-          🛣️ 线路策略
+      <!-- 展开后的策略面板 -->
+      <div v-if="strategyPanelOpen && store.params.origin && store.params.destination" class="bg-white rounded-lg shadow-md overflow-hidden w-[220px]">
+        <div class="px-3 py-1.5 text-xs text-gray-500 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
+          <span>🛣️ 线路策略（地图端备选）</span>
+          <button class="text-gray-400 hover:text-gray-700" @click="strategyPanelOpen = false" title="折叠">×</button>
         </div>
         <button
           v-for="strategy in ROUTE_STRATEGIES"
@@ -180,6 +198,9 @@ async function handleMapStrategyClick(s: number) {
             <div class="text-xs text-gray-400 font-normal">{{ strategy.desc }}</div>
           </div>
         </button>
+        <div class="px-3 py-1.5 text-[10px] text-gray-400 bg-gray-50 border-t border-gray-100">
+          提示：主右栏已内嵌 4 策略切换器，此处为备选
+        </div>
       </div>
 
       <div class="bg-white rounded-lg shadow-md p-2 text-xs text-gray-500 max-w-[220px]">

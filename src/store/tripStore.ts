@@ -31,6 +31,12 @@ export interface RouteInfo {
   cities: CityInfo[]
   polyline: number[][]
   strategy: number
+  // === 决策辅助数据（高德 extensions=all 返回） ===
+  tollDistance?: number          // 收费路段长度 (m)
+  tolls?: number                 // 收费金额 (元)
+  trafficLights?: number         // 红绿灯数
+  highwayDistance?: number       // 高速路段长度 (m)
+  mainRoads?: string[]           // 主要道路（高速/国道名）
 }
 
 export const useTripStore = defineStore('trip', () => {
@@ -60,6 +66,18 @@ export const useTripStore = defineStore('trip', () => {
   const availableRoutes = ref<RouteInfo[]>([])      // 4 策略对比数据
   const isComputingRoute = ref(false)
   const isComputingStrategies = ref(false)
+
+  // 地图控件（MapPanel 在 onMounted 时注入，ItineraryStrip 调）
+  const mapControls = ref<{ panTo: (lng: number, lat: number, zoom?: number) => void } | null>(null)
+  function setMapControls(c: typeof mapControls.value) {
+    mapControls.value = c
+  }
+
+  // POI 抽屉
+  const poiDrawerOpen = ref(false)
+  function setPoiDrawerOpen(open: boolean) {
+    poiDrawerOpen.value = open
+  }
 
   // POI 相关
   const maxDeviation = ref<number>(30) // 默认偏离距离 30km
@@ -254,6 +272,11 @@ export const useTripStore = defineStore('trip', () => {
       const cities: { code: string; name: string }[] = []
       const cityMap = new Map<string, string>()
       const polylinePoints: number[][] = []
+      const mainRoadsSet = new Set<string>()
+
+      let tollDistance = 0
+      let trafficLights = 0
+      let highwayDistance = 0
 
       path.steps.forEach((step: any) => {
         if (step.cities) {
@@ -270,6 +293,20 @@ export const useTripStore = defineStore('trip', () => {
             polylinePoints.push([lng, lat])
           })
         }
+        // 累计收费 / 红绿灯 / 高速
+        if (step.toll_distance) tollDistance += Number(step.toll_distance)
+        if (step.traffic_lights) trafficLights += Number(step.traffic_lights)
+        // road 含"高速"视为高速路段（含'高速'/'高架'/'快速路'）
+        if (step.road && /高速|高架|快速路/.test(step.road) && step.distance) {
+          highwayDistance += Number(step.distance)
+          // 收集主要道路名（去重，长度 4-12 字的高速/国道名）
+          if (step.road.length >= 3 && step.road.length <= 12) {
+            mainRoadsSet.add(step.road)
+          }
+        } else if (step.road && /[GH]?\d{1,3}|国道|省道|高速/.test(step.road) && step.road.length <= 12) {
+          // 收集国道/省道/数字编号道路
+          mainRoadsSet.add(step.road)
+        }
       })
 
       return {
@@ -278,6 +315,11 @@ export const useTripStore = defineStore('trip', () => {
         cities,
         polyline: polylinePoints,
         strategy,
+        tollDistance: tollDistance || undefined,
+        tolls: path.tolls ? Number(path.tolls) : undefined,
+        trafficLights: trafficLights || undefined,
+        highwayDistance: highwayDistance || undefined,
+        mainRoads: Array.from(mainRoadsSet).slice(0, 8),  // 最多 8 条
       }
     } catch (err) {
       console.error(`Route compute failed (strategy ${strategy}):`, err)
@@ -341,6 +383,10 @@ export const useTripStore = defineStore('trip', () => {
     weatherByAdcode,
     isLoadingWeather,
     departureDate,
+    mapControls,
+    poiDrawerOpen,
+    setMapControls,
+    setPoiDrawerOpen,
     setRouteInfo,
     setOrigin,
     setDestination,

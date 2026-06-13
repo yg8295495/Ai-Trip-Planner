@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  <div class="h-screen w-screen grid grid-cols-[340px_1fr_380px] grid-rows-[1fr] overflow-hidden bg-gray-50">
+  <div class="h-screen w-screen grid grid-cols-[340px_1fr_260px] grid-rows-[1fr] overflow-hidden bg-gray-50">
     <!-- 左侧聊天 -->
     <aside class="flex flex-col h-full bg-white shadow-sm overflow-hidden">
       <slot name="chat" />
@@ -13,7 +13,7 @@
       <slot name="map" />
     </main>
 
-    <!-- 右侧行程/POI -->
+    <!-- 右侧行程规划（窄） -->
     <aside class="flex flex-col h-full bg-white shadow-sm overflow-hidden">
       <slot name="itinerary" />
     </aside>

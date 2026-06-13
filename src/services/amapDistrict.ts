@@ -5,7 +5,7 @@
  */
 
 const AMAP_KEY = 'c866b4e29221cbc714a4fc78060f23b7'
-const CACHE_KEY = 'adcode_cache_v1'
+const CACHE_KEY = 'adcode_cache_v2'   // bump: 旧 v1 缓存可能为空
 const CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1000  // 7 天过期
 
 export interface DistrictNode {

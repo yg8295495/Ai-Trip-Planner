@@ -3,6 +3,7 @@ import AppLayout from './components/Layout/AppLayout.vue'
 import ChatPanel from './components/ChatPanel/ChatPanel.vue'
 import MapPanel from './components/MapPanel/MapPanel.vue'
 import ItineraryStrip from './components/ItineraryStrip/ItineraryStrip.vue'
+import PoiDrawer from './components/PoiDrawer/PoiDrawer.vue'
 </script>
 
 <template>
@@ -17,4 +18,5 @@ import ItineraryStrip from './components/ItineraryStrip/ItineraryStrip.vue'
       <ItineraryStrip />
     </template>
   </AppLayout>
+  <PoiDrawer />
 </template>

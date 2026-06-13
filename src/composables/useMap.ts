@@ -1,5 +1,5 @@
 import { onMounted, type Ref } from 'vue'
-import { useTripStore } from '@/store/tripStore'
+import { useTripStore, type RouteInfo as StoreRouteInfo } from '@/store/tripStore'
 import { PIN_STATUS_COLORS } from '@/constants/categories'
 import type { GeocodedPlace } from '@/types'
 
@@ -11,13 +11,7 @@ declare global {
 
 const AMAP_KEY = 'c866b4e29221cbc714a4fc78060f23b7'
 
-export interface RouteInfo {
-  distance: number
-  duration: number
-  cities: { code: string; name: string }[]
-  polyline: number[][]
-  strategy: number
-}
+export type RouteInfo = StoreRouteInfo
 
 export const ROUTE_STRATEGIES = [
   { value: 0, label: '高速优先', icon: '🛣️', desc: '优先高速，里程和时间均衡' },
@@ -180,6 +174,10 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
         const cities: { code: string; name: string }[] = []
         const cityMap = new Map<string, string>()
         const polylinePoints: number[][] = []
+        const mainRoadsSet = new Set<string>()
+        let tollDistance = 0
+        let trafficLights = 0
+        let highwayDistance = 0
 
         path.steps.forEach((step: any) => {
           if (step.cities) {
@@ -196,6 +194,14 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
               polylinePoints.push([lng, lat])
             })
           }
+          if (step.toll_distance) tollDistance += Number(step.toll_distance)
+          if (step.traffic_lights) trafficLights += Number(step.traffic_lights)
+          if (step.road && /高速|高架|快速路/.test(step.road) && step.distance) {
+            highwayDistance += Number(step.distance)
+            if (step.road.length >= 3 && step.road.length <= 12) mainRoadsSet.add(step.road)
+          } else if (step.road && /国道|省道/.test(step.road) && step.road.length <= 12) {
+            mainRoadsSet.add(step.road)
+          }
         })
 
         return {
@@ -204,6 +210,11 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
           cities,
           polyline: polylinePoints,
           strategy,
+          tollDistance: tollDistance || undefined,
+          tolls: path.tolls ? Number(path.tolls) : undefined,
+          trafficLights: trafficLights || undefined,
+          highwayDistance: highwayDistance || undefined,
+          mainRoads: Array.from(mainRoadsSet).slice(0, 8),
         }
       }
     } catch (err) {
