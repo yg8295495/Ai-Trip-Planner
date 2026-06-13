@@ -20,6 +20,7 @@ const customLocationInput = ref('')
 
 // 地名匹配相关
 const districtReady = ref(isDistrictCacheReady())
+const districtBannerVisible = ref(!isDistrictCacheReady())   // 顶部 banner 持续显示
 const originSuggestions = ref<{ name: string; adcode: string; center: [number, number]; level: string }[]>([])
 const destSuggestions = ref<{ name: string; adcode: string; center: [number, number]; level: string }[]>([])
 const customSuggestions = ref<{ name: string; adcode: string; center: [number, number]; level: string }[]>([])
@@ -29,20 +30,21 @@ const showCustomSuggestions = ref(false)
 
 const originValid = ref<'idle' | 'loading' | 'valid' | 'invalid'>('idle')
 const destValid = ref<'idle' | 'loading' | 'valid' | 'invalid'>('idle')
-const originLevel = ref<string>('')  // city/district/province - 来自 geocode
+const originLevel = ref<string>('')
 const destLevel = ref<string>('')
 
-// 策略预览：4 策略分别计算，结果存这里
-const previewRoutes = ref<RouteInfo[]>([])
-const isPreviewingStrategies = ref(false)
-const previewError = ref<string | null>(null)
-
-// 流程阶段
-const stage = ref<'input' | 'preview' | 'confirmed'>('input')
+// 流程阶段：直接 2 段，没有 preview 卡顿
+const stage = ref<'input' | 'confirmed'>('input')
 const isConfirmed = computed(() => stage.value === 'confirmed')
 
-// 表单是否可"预览线路"
-const canPreview = computed(() => {
+// 进入规划中的 loading 状态
+const isEnteringPlanning = ref(false)
+const enterError = ref<string | null>(null)
+
+// 搜索途中状态
+const isSwitchingStrategy = ref(false)
+
+const canEnterPlanning = computed(() => {
   return originValid.value === 'valid' &&
     destValid.value === 'valid' &&
     totalDays.value > 0 &&
@@ -56,12 +58,18 @@ onMounted(async () => {
     try {
       await loadDistrictCache()
       districtReady.value = true
+      // 完成后 1.8s 内保持 banner，给用户看的机会
+      setTimeout(() => { districtBannerVisible.value = false }, 1800)
     } catch (e) {
       console.warn('District cache load failed:', e)
+      districtBannerVisible.value = false
     }
   }
   onDistrictCacheChange((loaded) => {
     districtReady.value = loaded
+    if (loaded) {
+      setTimeout(() => { districtBannerVisible.value = false }, 1800)
+    }
   })
 })
 
@@ -82,7 +90,7 @@ watch(originInput, (val) => {
       return
     }
     originSuggestions.value = searchDistrict(val.trim(), 8)
-    showOriginSuggestions.value = originSuggestions.value.length > 0
+    showOriginSuggestions.value = true   // 总是显示，让 "无匹配" 也可见
   }, 200)
 })
 
@@ -102,7 +110,7 @@ watch(destinationInput, (val) => {
       return
     }
     destSuggestions.value = searchDistrict(val.trim(), 8)
-    showDestSuggestions.value = destSuggestions.value.length > 0
+    showDestSuggestions.value = true
   }, 200)
 })
 
@@ -121,9 +129,37 @@ watch(customLocationInput, (val) => {
       return
     }
     customSuggestions.value = searchDistrict(val.trim(), 8)
-    showCustomSuggestions.value = customSuggestions.value.length > 0
+    showCustomSuggestions.value = true
   }, 200)
 })
+
+// ============ 焦点时主动触发下拉 ============
+function onOriginFocus() {
+  const v = originInput.value.trim()
+  if (!v) {
+    showOriginSuggestions.value = false
+    return
+  }
+  if (districtReady.value) {
+    originSuggestions.value = searchDistrict(v, 8)
+  } else {
+    originSuggestions.value = []
+  }
+  showOriginSuggestions.value = true
+}
+function onDestFocus() {
+  const v = destinationInput.value.trim()
+  if (!v) {
+    showDestSuggestions.value = false
+    return
+  }
+  if (districtReady.value) {
+    destSuggestions.value = searchDistrict(v, 8)
+  } else {
+    destSuggestions.value = []
+  }
+  showDestSuggestions.value = true
+}
 
 // ============ 选中下拉项 ============
 function selectOrigin(item: { name: string; adcode: string; center: [number, number]; level: string }) {
@@ -133,7 +169,7 @@ function selectOrigin(item: { name: string; adcode: string; center: [number, num
   originLevel.value = item.level
   store.setOrigin({
     query: item.name,
-    lat: item.center[1],  // center: [lng, lat]
+    lat: item.center[1],
     lon: item.center[0],
     shortName: item.name,
     fullName: item.name,
@@ -178,7 +214,6 @@ function selectCustomLocation(item: { name: string; adcode: string; center: [num
 async function validateOrigin() {
   if (!originInput.value.trim()) return
   showOriginSuggestions.value = false
-  // 如果 store 里已有精确 lat/lon（之前选过下拉或定位），不再 geocode
   if (store.params.origin?.query === originInput.value.trim() && store.params.origin.lat != null) {
     originValid.value = 'valid'
     originLevel.value = 'selected'
@@ -193,7 +228,7 @@ async function validateOrigin() {
       query: originInput.value.trim(),
       lat: r.lat,
       lon: r.lon,
-      shortName: r.level === '城市' || r.level === '市' ? originInput.value.trim() : originInput.value.trim(),
+      shortName: originInput.value.trim(),
       fullName: originInput.value.trim(),
     })
   } else {
@@ -301,48 +336,57 @@ function swapOriginDest() {
   store.setDestination(tp)
 }
 
-// ============ 策略预览 ============
-async function handlePreviewStrategies() {
-  if (!canPreview.value) return
-  store.params.totalDays = totalDays.value
-  store.params.dailyDrivingLimitHours = dailyDrivingLimit.value
-  store.setMaxDeviation(deviationDistance.value)
-  isPreviewingStrategies.value = true
-  previewError.value = null
-  previewRoutes.value = []
-  stage.value = 'preview'
+// ============ 进入规划（单页，删除 preview） ============
+async function handleEnterPlanning() {
+  if (!canEnterPlanning.value) return
+  isEnteringPlanning.value = true
+  enterError.value = null
   try {
+    // 写入 store
+    store.params.totalDays = totalDays.value
+    store.params.dailyDrivingLimitHours = dailyDrivingLimit.value
+    store.setMaxDeviation(deviationDistance.value)
+    // 默认策略 0（高速优先）
+    store.setCurrentStrategy(0)
     const o = store.params.origin!
     const d = store.params.destination!
-    const result = await store.prefetchRoutes(o, d, [0, 1, 3, 7])
-    previewRoutes.value = result
-    if (result.length === 0) previewError.value = '未取到任何路线'
+    // 计算默认策略路线（触发 MapPanel watch）
+    const routes = await store.prefetchRoutes(o, d, [0])
+    if (routes.length > 0) {
+      store.setRouteInfo(routes[0])
+    }
+    // 切到 stage 2
+    stage.value = 'confirmed'
+    searchCount.value = 0
+    // 自动搜 POI（基于默认策略 0 的多边形）
+    await store.searchPoisByRoute()
   } catch (e: any) {
-    previewError.value = e?.message || '计算失败'
+    enterError.value = e?.message || '进入规划失败'
   } finally {
-    isPreviewingStrategies.value = false
+    isEnteringPlanning.value = false
   }
-}
-
-function selectStrategy(route: RouteInfo) {
-  store.setCurrentStrategy(route.strategy)
-  store.setRouteInfo(route)
-  stage.value = 'confirmed'
-  searchCount.value = 0
 }
 
 function handleBackToForm() {
   stage.value = 'input'
   store.setRouteInfo(null)
   store.setAvailableRoutes([])
-  previewRoutes.value = []
   store.setCurrentStrategy(0)
   searchCount.value = 0
 }
 
-function handleBackToPreview() {
-  stage.value = 'preview'
-  store.setRouteInfo(null)
+// ============ 策略切换（仅切 currentStrategy，MapPanel 自动重算+重搜） ============
+async function handleStrategyClick(s: number) {
+  if (s === store.currentStrategy) return
+  isSwitchingStrategy.value = true
+  try {
+    store.setCurrentStrategy(s)
+    // MapPanel watch currentStrategy 会自动 renderRouteByREST + searchPoisByRoute
+    // 这里只是给用户视觉反馈：转圈
+  } finally {
+    // 1.5s 后取消 loading 状态（实际渲染可能更久/更短）
+    setTimeout(() => { isSwitchingStrategy.value = false }, 1500)
+  }
 }
 
 function handleSearch() {
@@ -374,28 +418,46 @@ function formatDuration(s: number) {
   const m = Math.floor((s % 3600) / 60)
   return h > 0 ? `${h}h${m > 0 ? `${m}m` : ''}` : `${m}m`
 }
+
+// 从 availableRoutes 中找当前 strategy 的信息（如果存在）
+const currentRouteInfo = computed<RouteInfo | null>(() => {
+  if (store.routeInfo) return store.routeInfo
+  return store.availableRoutes.find(r => r.strategy === store.currentStrategy) || null
+})
 </script>
 
 <template>
   <div class="flex flex-col h-full" @click="closeSuggestions">
+    <!-- 顶部持久 banner：加载地名数据状态 -->
+    <div
+      v-if="districtBannerVisible"
+      class="flex-shrink-0 px-4 py-2 text-xs flex items-center gap-2 border-b transition-colors"
+      :class="districtReady ? 'bg-green-50 text-green-700 border-green-200' : 'bg-blue-50 text-blue-700 border-blue-200'"
+    >
+      <span
+        class="inline-block w-3 h-3 border-2 border-t-transparent rounded-full"
+        :class="districtReady ? 'border-green-500' : 'border-blue-500 animate-spin'"
+      ></span>
+      <span>
+        <template v-if="districtReady">✓ 全国地名数据已就绪（共 {{ store.candidatePois.length === 0 ? '约 3000' : '' }} 个行政区划缓存）</template>
+        <template v-else>正在加载全国地名数据（仅 1 次 API 调用，后续 0 消耗）...</template>
+      </span>
+    </div>
+
+    <!-- 标题栏 -->
     <div class="flex-shrink-0 border-b border-gray-100 px-4 py-3 bg-white">
       <div class="flex items-center justify-between">
-        <h2 class="text-base font-semibold text-gray-800">行程规划</h2>
+        <h2 class="text-base font-semibold text-gray-800">
+          {{ isConfirmed ? '🛣️ 行程规划' : '🚗 行程规划' }}
+        </h2>
         <div class="flex gap-2">
-          <button v-if="stage === 'preview'" class="text-sm text-gray-500 hover:text-gray-700" @click.stop="handleBackToForm">← 重选地点</button>
-          <button v-if="isConfirmed" class="text-sm text-blue-500 hover:text-blue-700" @click.stop="handleBackToPreview">← 重新选策略</button>
+          <button v-if="isConfirmed" class="text-sm text-gray-500 hover:text-gray-700" @click.stop="handleBackToForm">← 返回修改</button>
         </div>
       </div>
     </div>
 
     <!-- ========== 阶段 1: 表单输入 ========== -->
     <div v-if="stage === 'input'" class="flex-shrink-0 px-4 py-4 border-b border-gray-100 space-y-4 overflow-y-auto">
-      <!-- 地名数据加载中提示 -->
-      <div v-if="!districtReady" class="text-xs text-gray-400 flex items-center gap-1.5">
-        <span class="inline-block animate-spin w-3 h-3 border-2 border-blue-500 border-t-transparent rounded-full"></span>
-        正在加载全国地名数据（仅 1 次，后续 0 调用）
-      </div>
-
       <div class="flex items-center gap-3">
         <div class="flex flex-col items-center">
           <div class="w-3 h-3 rounded-full bg-green-500"></div>
@@ -412,6 +474,7 @@ function formatDuration(s: number) {
                 :class="originValid === 'invalid' ? 'border-red-300 focus:border-red-500' : 'border-gray-300 focus:border-blue-500'"
                 @click.stop
                 @input.stop
+                @focus="onOriginFocus"
                 @blur="validateOrigin"
               />
               <div class="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
@@ -426,11 +489,19 @@ function formatDuration(s: number) {
                 >{{ isLocating ? '⌛' : '📍' }}</button>
               </div>
               <!-- 下拉 -->
-              <div v-if="showOriginSuggestions" class="absolute left-0 right-0 top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-20 max-h-48 overflow-y-auto">
-                <div v-if="!districtReady" class="px-3 py-2 text-sm text-gray-400">加载地名数据中...</div>
-                <div v-else-if="originSuggestions.length === 0" class="px-3 py-2 text-sm text-gray-400">无匹配，输入完成后失焦将自动验证</div>
-                <div v-for="s in originSuggestions" :key="s.adcode" class="px-3 py-2 text-sm cursor-pointer hover:bg-gray-50 border-b border-gray-100 last:border-0" @mousedown.prevent.stop="selectOrigin(s)">
-                  <p class="font-medium">{{ s.name }} <span class="text-xs text-gray-400">{{ s.level === 'city' ? '市' : s.level === 'district' ? '区/县' : s.level === 'province' ? '省' : '' }}</span></p>
+              <div v-if="showOriginSuggestions" class="absolute left-0 right-0 top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-20 max-h-56 overflow-y-auto">
+                <div v-if="!districtReady" class="px-3 py-2 text-sm text-blue-500 flex items-center gap-2">
+                  <span class="inline-block animate-spin w-3 h-3 border-2 border-blue-500 border-t-transparent rounded-full"></span>
+                  正在加载地名数据...
+                </div>
+                <div v-else-if="originSuggestions.length === 0" class="px-3 py-2 text-sm text-gray-400">无匹配，输入完成后失焦将自动验证坐标</div>
+                <div v-for="s in originSuggestions" :key="s.adcode" class="px-3 py-2 text-sm cursor-pointer hover:bg-blue-50 border-b border-gray-100 last:border-0" @mousedown.prevent.stop="selectOrigin(s)">
+                  <p class="font-medium">
+                    {{ s.name }}
+                    <span class="text-xs text-gray-400 ml-1">
+                      {{ s.level === 'city' ? '·市' : s.level === 'district' ? '·区/县' : s.level === 'province' ? '·省' : '' }}
+                    </span>
+                  </p>
                 </div>
               </div>
             </div>
@@ -443,29 +514,41 @@ function formatDuration(s: number) {
                 :class="destValid === 'invalid' ? 'border-red-300 focus:border-red-500' : 'border-gray-300 focus:border-blue-500'"
                 @click.stop
                 @input.stop
+                @focus="onDestFocus"
                 @blur="validateDest"
               />
               <span v-if="destValid === 'loading'" class="absolute right-2 top-1/2 -translate-y-1/2 inline-block animate-spin w-3 h-3 border-2 border-blue-500 border-t-transparent rounded-full"></span>
               <span v-else-if="destValid === 'valid'" class="absolute right-2 top-1/2 -translate-y-1/2 text-green-500 text-xs">✓</span>
               <span v-else-if="destValid === 'invalid'" class="absolute right-2 top-1/2 -translate-y-1/2 text-red-500 text-xs">⚠</span>
-              <div v-if="showDestSuggestions" class="absolute left-0 right-0 top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-20 max-h-48 overflow-y-auto">
-                <div v-if="!districtReady" class="px-3 py-2 text-sm text-gray-400">加载地名数据中...</div>
-                <div v-else-if="destSuggestions.length === 0" class="px-3 py-2 text-sm text-gray-400">无匹配，输入完成后失焦将自动验证</div>
-                <div v-for="s in destSuggestions" :key="s.adcode" class="px-3 py-2 text-sm cursor-pointer hover:bg-gray-50 border-b border-gray-100 last:border-0" @mousedown.prevent.stop="selectDest(s)">
-                  <p class="font-medium">{{ s.name }} <span class="text-xs text-gray-400">{{ s.level === 'city' ? '市' : s.level === 'district' ? '区/县' : s.level === 'province' ? '省' : '' }}</span></p>
+              <div v-if="showDestSuggestions" class="absolute left-0 right-0 top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-20 max-h-56 overflow-y-auto">
+                <div v-if="!districtReady" class="px-3 py-2 text-sm text-blue-500 flex items-center gap-2">
+                  <span class="inline-block animate-spin w-3 h-3 border-2 border-blue-500 border-t-transparent rounded-full"></span>
+                  正在加载地名数据...
+                </div>
+                <div v-else-if="destSuggestions.length === 0" class="px-3 py-2 text-sm text-gray-400">无匹配，输入完成后失焦将自动验证坐标</div>
+                <div v-for="s in destSuggestions" :key="s.adcode" class="px-3 py-2 text-sm cursor-pointer hover:bg-blue-50 border-b border-gray-100 last:border-0" @mousedown.prevent.stop="selectDest(s)">
+                  <p class="font-medium">
+                    {{ s.name }}
+                    <span class="text-xs text-gray-400 ml-1">
+                      {{ s.level === 'city' ? '·市' : s.level === 'district' ? '·区/县' : s.level === 'province' ? '·省' : '' }}
+                    </span>
+                  </p>
                 </div>
               </div>
             </div>
           </div>
-          <!-- 解析后的级别提示 -->
           <div v-if="originValid === 'valid' && originLevel" class="text-xs text-gray-500">
-            📍 已定位：<span class="text-blue-600">{{ store.params.origin?.shortName || originInput }}</span>
-            <span v-if="originLevel === '城市' || originLevel === 'city'" class="text-yellow-600"> · 市级坐标，可能不精确</span>
-            <span v-else-if="originLevel === 'gps'" class="text-green-600"> · GPS</span>
+            📍 已定位：<span class="text-blue-600 font-medium">{{ store.params.origin?.shortName || originInput }}</span>
+            <span v-if="originLevel === '城市' || originLevel === 'city'" class="text-yellow-600 ml-1">· 市级坐标，可能不精确</span>
+            <span v-else-if="originLevel === 'gps'" class="text-green-600 ml-1">· GPS</span>
+            <span v-else-if="originLevel === 'district'" class="text-blue-600 ml-1">· 区/县级</span>
+            <span v-else-if="originLevel === 'selected'" class="text-green-600 ml-1">· 已选下拉</span>
           </div>
           <div v-if="destValid === 'valid' && destLevel" class="text-xs text-gray-500">
-            📍 已定位：<span class="text-blue-600">{{ store.params.destination?.shortName || destinationInput }}</span>
-            <span v-if="destLevel === '城市' || destLevel === 'city'" class="text-yellow-600"> · 市级坐标，可能不精确（建议在地图上点选）</span>
+            📍 已定位：<span class="text-blue-600 font-medium">{{ store.params.destination?.shortName || destinationInput }}</span>
+            <span v-if="destLevel === '城市' || destLevel === 'city'" class="text-yellow-600 ml-1">· 市级坐标，可能不精确（建议在地图上点选）</span>
+            <span v-else-if="destLevel === 'district'" class="text-blue-600 ml-1">· 区/县级</span>
+            <span v-else-if="destLevel === 'selected'" class="text-green-600 ml-1">· 已选下拉</span>
           </div>
         </div>
       </div>
@@ -487,113 +570,82 @@ function formatDuration(s: number) {
         </div>
       </div>
 
-      <div>
-        <label class="text-xs text-gray-400 mb-1 block">线路偏好（下一步预览可对比 4 种）</label>
+      <button
+        :disabled="!canEnterPlanning || isEnteringPlanning"
+        class="w-full py-2.5 rounded-lg text-sm font-medium flex items-center justify-center gap-2"
+        :class="canEnterPlanning && !isEnteringPlanning ? 'bg-blue-500 text-white hover:bg-blue-600' : 'bg-gray-100 text-gray-400'"
+        @click="handleEnterPlanning"
+      >
+        <template v-if="isEnteringPlanning">
+          <span class="inline-block animate-spin w-3 h-3 border-2 border-white border-t-transparent rounded-full"></span>
+          正在计算路线并搜索沿途景点...
+        </template>
+        <template v-else>
+          进入规划 →
+        </template>
+      </button>
+      <p v-if="enterError" class="text-xs text-red-500 text-center">{{ enterError }}</p>
+    </div>
+
+    <!-- ========== 阶段 2: 已确认路线（含 4 策略切换器） ========== -->
+    <div v-if="isConfirmed" class="flex-shrink-0 px-4 py-3 border-b border-gray-100 bg-gradient-to-br from-blue-50/50 to-white">
+      <!-- 顶部：当前路线信息 -->
+      <div v-if="currentRouteInfo" class="mb-3">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="text-base font-semibold text-gray-800">
+            {{ ROUTE_STRATEGIES.find(s => s.value === currentRouteInfo!.strategy)?.icon }}
+            {{ ROUTE_STRATEGIES.find(s => s.value === currentRouteInfo!.strategy)?.label }}
+            <span v-if="isSwitchingStrategy" class="ml-1 inline-block animate-spin w-3 h-3 border-2 border-blue-500 border-t-transparent rounded-full align-middle"></span>
+          </span>
+          <span class="ml-auto text-xs text-gray-400">已锁定路线</span>
+        </div>
+        <div class="grid grid-cols-3 gap-2 text-center">
+          <div class="bg-white rounded p-2">
+            <p class="text-base font-semibold text-blue-600">{{ formatDistance(currentRouteInfo.distance) }}</p>
+            <p class="text-xs text-gray-400">距离</p>
+          </div>
+          <div class="bg-white rounded p-2">
+            <p class="text-base font-semibold text-blue-600">{{ formatDuration(currentRouteInfo.duration) }}</p>
+            <p class="text-xs text-gray-400">时长</p>
+          </div>
+          <div class="bg-white rounded p-2">
+            <p class="text-base font-semibold text-blue-600">{{ currentRouteInfo.cities.length }}</p>
+            <p class="text-xs text-gray-400">途经城市</p>
+          </div>
+        </div>
+        <p v-if="currentRouteInfo.cities.length > 0" class="text-xs text-gray-500 mt-2 truncate">
+          途经：{{ currentRouteInfo.cities.map(c => c.name).join(' → ') }}
+        </p>
+      </div>
+      <div v-else class="text-center py-3 text-sm text-gray-400">
+        <span class="inline-block animate-spin w-3 h-3 border-2 border-blue-500 border-t-transparent rounded-full mr-1 align-middle"></span>
+        正在加载路线...
+      </div>
+
+      <!-- 4 策略 inline 切换器 -->
+      <div class="mt-3">
+        <p class="text-xs text-gray-500 mb-1.5">🛣️ 切换线路策略（点击下方 4 个标签，会自动重算路线 + 重搜沿途景点）</p>
         <div class="grid grid-cols-4 gap-1.5">
           <button
             v-for="s in ROUTE_STRATEGIES"
             :key="s.value"
             :title="s.desc"
-            class="px-2 py-1.5 rounded text-xs border border-gray-200 text-gray-600 hover:bg-gray-50"
-          >{{ s.icon }} {{ s.label }}</button>
+            :disabled="isSwitchingStrategy"
+            :class="[
+              'px-1.5 py-1.5 rounded text-xs border transition-all',
+              store.currentStrategy === s.value
+                ? 'border-blue-500 bg-blue-500 text-white shadow-sm'
+                : 'border-gray-200 bg-white text-gray-600 hover:border-blue-300 hover:bg-blue-50',
+              isSwitchingStrategy ? 'opacity-60 cursor-not-allowed' : '',
+            ]"
+            @click="handleStrategyClick(s.value)"
+          >
+            <div class="text-base leading-none">{{ s.icon }}</div>
+            <div class="mt-0.5 truncate">{{ s.label }}</div>
+          </button>
         </div>
+        <p v-if="store.currentStrategy === 0 && !isSwitchingStrategy" class="text-xs text-blue-500 mt-1">默认：高速优先（推荐先看这条）</p>
       </div>
-
-      <button
-        :disabled="!canPreview"
-        class="w-full py-2.5 rounded-lg text-sm font-medium"
-        :class="canPreview ? 'bg-blue-500 text-white hover:bg-blue-600' : 'bg-gray-100 text-gray-400'"
-        @click="handlePreviewStrategies"
-      >
-        下一步：预览 4 种线路 →
-      </button>
-    </div>
-
-    <!-- ========== 阶段 2: 策略预览 ========== -->
-    <div v-if="stage === 'preview'" class="flex-shrink-0 px-4 py-4 border-b border-gray-100">
-      <p class="text-sm font-medium text-gray-700 mb-2">🛣️ 选择一种线路策略（已计算 4 条）</p>
-      <p class="text-xs text-gray-400 mb-3">点击卡片可查看大图，再选一条作为主线</p>
-
-      <div v-if="isPreviewingStrategies && previewRoutes.length === 0" class="text-center py-8">
-        <div class="inline-block animate-spin w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full mb-2"></div>
-        <p class="text-sm text-gray-500">正在计算 4 种策略路线...</p>
-      </div>
-
-      <div v-else-if="previewError" class="text-center py-6 text-sm text-red-500">
-        {{ previewError }}
-      </div>
-
-      <div v-else class="space-y-2">
-        <div
-          v-for="route in previewRoutes"
-          :key="route.strategy"
-          :class="[
-            'p-3 rounded-lg border-2 cursor-pointer transition-colors',
-            store.currentStrategy === route.strategy
-              ? 'border-blue-500 bg-blue-50'
-              : 'border-gray-200 bg-white hover:border-blue-300',
-          ]"
-          @click="selectStrategy(route)"
-        >
-          <div class="flex items-center gap-2 mb-1">
-            <span class="text-lg">
-              {{ ROUTE_STRATEGIES.find(s => s.value === route.strategy)?.icon || '🛣️' }}
-            </span>
-            <span class="text-sm font-semibold text-gray-800">
-              {{ ROUTE_STRATEGIES.find(s => s.value === route.strategy)?.label || `策略${route.strategy}` }}
-            </span>
-            <span v-if="store.currentStrategy === route.strategy" class="ml-auto text-blue-500 text-xs">✓ 已选</span>
-          </div>
-          <p class="text-xs text-gray-500 mb-2">
-            {{ ROUTE_STRATEGIES.find(s => s.value === route.strategy)?.desc || '' }}
-          </p>
-          <div class="grid grid-cols-3 gap-2 text-center">
-            <div>
-              <p class="text-base font-semibold text-blue-600">{{ formatDistance(route.distance) }}</p>
-              <p class="text-xs text-gray-400">距离</p>
-            </div>
-            <div>
-              <p class="text-base font-semibold text-blue-600">{{ formatDuration(route.duration) }}</p>
-              <p class="text-xs text-gray-400">时长</p>
-            </div>
-            <div>
-              <p class="text-base font-semibold text-blue-600">{{ route.cities.length }}</p>
-              <p class="text-xs text-gray-400">城市</p>
-            </div>
-          </div>
-          <p v-if="route.cities.length > 0" class="text-xs text-gray-500 mt-2 truncate">
-            途经：{{ route.cities.map(c => c.name).join(' → ') }}
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- ========== 阶段 3: 已确认路线 ========== -->
-    <div v-if="isConfirmed && store.routeInfo" class="flex-shrink-0 px-4 py-3 border-b border-gray-100">
-      <div class="flex items-center justify-between mb-2">
-        <span class="text-sm font-medium text-gray-700">
-          {{ ROUTE_STRATEGIES.find(s => s.value === store.routeInfo!.strategy)?.icon }}
-          {{ ROUTE_STRATEGIES.find(s => s.value === store.routeInfo!.strategy)?.label }}
-        </span>
-        <span class="text-xs text-gray-400">已确认</span>
-      </div>
-      <div class="grid grid-cols-3 gap-2 text-center">
-        <div>
-          <p class="text-lg font-semibold text-blue-600">{{ formatDistance(store.routeInfo.distance) }}</p>
-          <p class="text-xs text-gray-400">距离</p>
-        </div>
-        <div>
-          <p class="text-lg font-semibold text-blue-600">{{ formatDuration(store.routeInfo.duration) }}</p>
-          <p class="text-xs text-gray-400">时长</p>
-        </div>
-        <div>
-          <p class="text-lg font-semibold text-blue-600">{{ store.routeInfo.cities.length }}</p>
-          <p class="text-xs text-gray-400">城市</p>
-        </div>
-      </div>
-      <p v-if="store.routeInfo.cities.length > 0" class="text-xs text-gray-500 mt-2 truncate">
-        途经：{{ store.routeInfo.cities.map(c => c.name).join(' → ') }}
-      </p>
     </div>
 
     <WeatherPanel v-if="isConfirmed" />
@@ -604,20 +656,26 @@ function formatDuration(s: number) {
         <button :disabled="!customLocationInput.trim()" class="px-3 py-2 bg-green-500 text-white text-sm rounded-lg hover:bg-green-600 disabled:opacity-50" @click.stop="handleAddCustomLocation">添加</button>
       </div>
       <div v-if="showCustomSuggestions" class="mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-32 overflow-y-auto">
-        <div v-if="!districtReady" class="px-3 py-2 text-sm text-gray-400">加载地名数据中...</div>
+        <div v-if="!districtReady" class="px-3 py-2 text-sm text-blue-500 flex items-center gap-2">
+          <span class="inline-block animate-spin w-3 h-3 border-2 border-blue-500 border-t-transparent rounded-full"></span>
+          正在加载地名数据...
+        </div>
         <div v-else-if="customSuggestions.length === 0" class="px-3 py-2 text-sm text-gray-400">无匹配</div>
-        <div v-for="s in customSuggestions" :key="s.adcode" class="px-3 py-2 text-sm cursor-pointer hover:bg-gray-50 border-b border-gray-100 last:border-0" @mousedown.prevent.stop="selectCustomLocation(s)">
-          <p class="font-medium">{{ s.name }} <span class="text-xs text-gray-400">{{ s.level === 'city' ? '市' : s.level === 'district' ? '区/县' : '' }}</span></p>
+        <div v-for="s in customSuggestions" :key="s.adcode" class="px-3 py-2 text-sm cursor-pointer hover:bg-blue-50 border-b border-gray-100 last:border-0" @mousedown.prevent.stop="selectCustomLocation(s)">
+          <p class="font-medium">{{ s.name }} <span class="text-xs text-gray-400">{{ s.level === 'city' ? '·市' : s.level === 'district' ? '·区/县' : '' }}</span></p>
         </div>
       </div>
     </div>
 
     <div v-if="isConfirmed" class="flex-1 overflow-y-auto px-4 py-2">
-      <div v-if="store.isSearchingPois" class="text-center py-8"><p class="text-sm text-gray-500">搜索中...</p></div>
+      <div v-if="store.isSearchingPois" class="text-center py-8">
+        <span class="inline-block animate-spin w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full mr-2 align-middle"></span>
+        <span class="text-sm text-gray-500">正在搜索沿途景点...</span>
+      </div>
       <div v-else-if="store.candidatePois.length === 0" class="text-center py-8 text-gray-400 text-sm">点击下方按钮搜索沿途景点</div>
       <div v-else>
         <div class="flex items-center justify-between mb-2">
-          <p class="text-xs text-gray-400">找到 {{ store.candidatePois.length }} 个景点</p>
+          <p class="text-xs text-gray-400">找到 {{ store.candidatePois.length }} 个景点（基于当前策略）</p>
           <button class="text-xs text-red-500 hover:text-red-700" @click="clearAllPois">清空</button>
         </div>
         <div class="space-y-2">
@@ -669,7 +727,7 @@ function formatDuration(s: number) {
         :class="searchCount >= 3 ? 'bg-gray-300 text-gray-500' : 'bg-blue-500 text-white hover:bg-blue-600'"
         @click.stop="handleSearch"
       >{{ store.isSearchingPois ? '搜索中...' : searchCount >= 3 ? '搜索次数已用完' : '搜索沿途景点' }}</button>
-      <p v-if="searchCount >= 3" class="text-xs text-red-500 mt-1 text-center">搜索次数已用完，重新搜索请返回修改路线</p>
+      <p v-if="searchCount >= 3" class="text-xs text-red-500 mt-1 text-center">搜索次数已用完，可切换策略或返回修改</p>
     </div>
   </div>
 </template>

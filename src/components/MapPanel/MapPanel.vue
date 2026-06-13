@@ -10,7 +10,7 @@ const mapContainer = ref<HTMLElement | null>(null)
 const {
   renderPoiMarkers, renderRouteByREST,
   fitView, toggleSatellite, zoomIn, zoomOut,
-  onMapClick, getMap, addTempMarker,
+  onMapClick, getMap, addTempMarker, panTo,
   setEndpointMarker,
 } = useMap(mapContainer)
 
@@ -33,30 +33,31 @@ function closePopup() {
   clickPos.value = null
 }
 
-// ============ 起点 / 终点 / 路线 联动 ============
+// ============ 起点 / 终点变化 -> 自动地图跟随 ============
 
-// 起点变化：放 marker + 地图跟随
+// 起点：放 marker + panTo zoom 10
 watch(
   () => store.params.origin,
   (origin) => {
     if (!origin || origin.lat == null || origin.lon == null) return
     setEndpointMarker('origin', origin.lon, origin.lat, origin.shortName || '起点')
-    // 不立刻 fitView，留给终点/路线
+    panTo(origin.lon, origin.lat, 10)
   },
   { immediate: true, deep: true }
 )
 
-// 终点变化：放 marker + 地图跟随
+// 终点：放 marker + panTo zoom 10
 watch(
   () => store.params.destination,
   (dest) => {
     if (!dest || dest.lat == null || dest.lon == null) return
     setEndpointMarker('dest', dest.lon, dest.lat, dest.shortName || '终点')
+    panTo(dest.lon, dest.lat, 10)
   },
   { immediate: true, deep: true }
 )
 
-// 策略变化：重算当前路线
+// 策略变化：重算路线 + 重搜景点
 watch(
   () => store.currentStrategy,
   async (strategy) => {
@@ -68,8 +69,11 @@ watch(
       const info = await renderRouteByREST(o, d, strategy)
       if (info) {
         store.setRouteInfo(info)
-        // fitView 让整条路线可见
-        setTimeout(() => fitView(), 100)
+        // 策略变了，corridor polygon 变了，重新搜沿途景点
+        if (store.candidatePois.length > 0) {
+          store.clearAllCandidatePois()
+        }
+        await store.searchPoisByRoute()
       }
     } finally {
       store.isComputingRoute = false
@@ -77,19 +81,18 @@ watch(
   }
 )
 
-// 监听路线信息变化，画 polyline
+// 监听 routeInfo -> fitView
 watch(
   () => store.routeInfo,
   (info) => {
     if (info && info.polyline && info.polyline.length > 0) {
-      // renderRouteByREST 已经画了，这里 fitView
-      setTimeout(() => fitView(), 100)
+      setTimeout(() => fitView(), 200)
     }
   },
   { deep: true, immediate: false }
 )
 
-// 监听候选 POI / 选中 POI 变化，在地图上显示
+// 候选 / 选中 POI 变化 -> 渲染 marker
 watch(
   () => store.candidatePois,
   () => {
@@ -107,34 +110,19 @@ watch(
   { deep: true }
 )
 
-// 地图左上角策略按钮：预览但不切换（不修改 currentStrategy，除非点了"应用"）
-const previewingStrategy = ref<number | null>(null)
-async function handleStrategyPreview(strategy: number) {
-  const o = store.params.origin
-  const d = store.params.destination
-  if (!o || !d || o.lat == null || d.lat == null) return
-  previewingStrategy.value = strategy
-  try {
-    const info = await renderRouteByREST(o, d, strategy)
-    if (info) {
-      store.setRouteInfo(info)
-    }
-  } finally {
-    previewingStrategy.value = null
-  }
-}
-
-function handleFitView() {
-  fitView()
-}
-
+// ============ 控件事件 ============
+function handleFitView() { fitView() }
 function handleToggleSatellite() {
   toggleSatellite()
   isSatellite.value = !isSatellite.value
 }
-
 function handleZoomIn() { zoomIn() }
 function handleZoomOut() { zoomOut() }
+
+// 地图左上策略按钮：仅切换策略（不弹阶段）
+async function handleMapStrategyClick(s: number) {
+  store.setCurrentStrategy(s)
+}
 </script>
 
 <template>
@@ -166,30 +154,31 @@ function handleZoomOut() { zoomOut() }
         📍 归位
       </button>
 
-      <!-- 线路策略预览按钮（仅在两端都设了位置时显示） -->
+      <!-- 策略切换器（仅在两端都设了位置时显示） -->
       <div v-if="store.params.origin && store.params.destination" class="bg-white rounded-lg shadow-md overflow-hidden">
         <div class="px-3 py-1.5 text-xs text-gray-500 bg-gray-50 border-b border-gray-100">
-          🛣️ 线路策略预览
+          🛣️ 线路策略
         </div>
         <button
           v-for="strategy in ROUTE_STRATEGIES"
           :key="strategy.value"
           :class="[
-            'w-full px-3 py-2 text-sm text-left transition-colors flex items-center gap-2',
+            'w-full px-3 py-2 text-sm text-left transition-colors flex items-start gap-2',
             store.currentStrategy === strategy.value
               ? 'bg-blue-50 text-blue-700 font-medium'
               : 'text-gray-600 hover:bg-gray-50',
           ]"
-          :disabled="previewingStrategy !== null"
-          @click="handleStrategyPreview(strategy.value)"
           :title="strategy.desc"
+          @click="handleMapStrategyClick(strategy.value)"
         >
-          <span>{{ strategy.icon }}</span>
+          <span class="mt-0.5">{{ strategy.icon }}</span>
           <div class="flex-1">
-            <div>{{ strategy.label }}</div>
+            <div class="flex items-center gap-1">
+              {{ strategy.label }}
+              <span v-if="store.currentStrategy === strategy.value" class="text-blue-500 text-xs">✓</span>
+            </div>
             <div class="text-xs text-gray-400 font-normal">{{ strategy.desc }}</div>
           </div>
-          <span v-if="store.currentStrategy === strategy.value" class="text-blue-500 text-xs">✓</span>
         </button>
       </div>
 
