@@ -1,169 +1,167 @@
-# AI 自驾游规划器 — 项目状态
+# AI 自驾游规划器 — 项目状态 & 会话交接
 
-**更新日期：** 2026-06-14
-**当前阶段：** Phase 2 完成，Phase 3 基础流程跑通；**高德配额重构完成**（输入提示→行政区域查询，IP定位→AMap.Geolocation 插件，地图点选→逆地理编码，天气接入）
-
----
-
-## 1. 已完成功能
-
-### 1.1 三面板布局 ✅
-- 左侧：Chat Panel（AI 对话，头部固定，消息滚动，输入固定底部）
-- 中间：Map Panel（高德地图，缩放/归位/图层切换、**地图点击加地点**）
-- 右侧：Itinerary Strip（表单输入 + 景点列表 + **天气面板**）
-
-### 1.2 AI 对话集成 ✅
-- 文件桥接架构：前端 ↔ JSONL ↔ Python Bridge ↔ AI CLI
-- 默认 AI 后端：CodeBuddy（备用 MiMo）
-- 会话自动加载、会话切换下拉
-
-### 1.3 高德地图集成 ✅
-- 地图渲染：高德 JS API 2.0
-- 地点标记：AMap.Marker + label（纯文字）
-- 驾车路线：REST API → Polyline
-- 归位/缩放/图层切换按钮
-- 线路策略选择（高速/距离最短/不走高速/混合）
-- **地图点击**：`map.on('click')` → 逆地理编码 → 弹浮层菜单（添加此地/设起点/设终点/找附近景点/酒店/美食）
-
-### 1.4 右侧行程面板 ✅
-- 表单输入：起点/终点（**客户端 district 匹配** + 失焦 geocode 验证）
-- 起点定位按钮（📍 **AMap.Geolocation 插件** GPS/电脑内置识别）
-- 起终点互换按钮（⇅）
-- 路线信息显示（距离/时长/城市数）
-- 自定义地点输入（district 匹配 + geocode 添加）
-- 景点列表：× 删除 / ↑↓ 排序 / 清空 / 选择状态
-- 搜索次数限制（3次/路线确认）
-- 返回修改按钮
-- **天气面板**：路线确认后手动触发，选出发日，>5 天精度警示
-
-### 1.5 路线计算 ✅
-- 地理编码：文本输入 → 坐标（仅在失焦/确认时调用）
-- 驾车路线：高德 REST API
-- 多边形走廊搜索：基于偏离距离生成搜索区域（1次API调用）
-
-### 1.6 会话管理 ✅
-- JSONL 文件格式
-- 自动归档（4小时）
-- 新建会话清除旧数据
+> **📌 下一会话的 agent 必读**：新开会话第一件事就是读这个文件，里面有：
+> - 当前架构（已废弃的旧设计勿要恢复）
+> - 最近 5 个 commit 改了什么（知道现在在哪一步）
+> - 已知的 bug 修复历史（避免重复踩坑）
+> - 待办事项（按优先级）
+> - 高德 API 配额状态
 
 ---
 
-## 2. 已确认的架构设计
-
-### 三层推荐体系
+## 1. 当前架构（v2.3，2026-06-13）
 
 ```
-Layer 1: 高德 API（自动推荐）
-├── 多边形走廊搜索（基于偏离距离）
-├── 生成走廊多边形（polyline采样+偏移）
-└── 多边形搜索 API（1次调用，25个结果）
-
-Layer 2: 用户补充（手动输入）
-├── 填表输入特定地点
-├── 客户端 district 匹配（启动 1 次预加载，0 调用/输入）
-└── 失焦/确认时 geocode 兜底
-
-Layer 3: AI 个性化（智能推荐）
-├── 收到路线+城市+景点信息
-├── 网络检索最新信息
-├── 列表内推荐：最值得去的 3-5 个
-├── 列表外推荐：偏离距离内值得绕路的
-└── 推荐理由要具体
+┌─ ChatPanel 340px ─┬─ MapPanel flex-1 ─────┬─ ItineraryStrip 260px ─┬─ PoiDrawer 320px（抽屉）─┐
+│ - 行程对话         │ - 高德地图            │ - 起/终点 chip（可点击  │ - 滑入覆盖地图右半     │
+│ - 大模型推荐       │ - 起/终点 marker     │   聚焦地图）            │ - 自定义地点           │
+│                   │ - 路线 polyline      │ - 旅行参数              │ - 候选 POI             │
+│                   │ - POI marker         │ - 进入规划按钮          │ - 已选 POI 排序         │
+│                   │ - 左上 4 策略（折叠） │ - 路线卡（4 维决策数据）│ - 天气（按城市）       │
+│                   │                       │ - 4 策略切换器         │                          │
+│                   │                       │ - 搜索/抽屉入口         │                          │
+└────────────────────┴───────────────────────┴─────────────────────────┴──────────────────────────┘
 ```
 
-### AI 提示词（已确认）
+**两阶段流程**（无 preview 卡顿）：
+- stage 1 = input：起/终点 + 旅行参数
+- stage 2 = confirmed：进入后默认策略 0（高速优先），4 策略可实时切换
+
+---
+
+## 2. 关键文件 & 职责
+
+| 文件 | 职责 |
+|------|------|
+| [src/store/tripStore.ts](file:///Users/LiYuan/Documents/Ai-TripPlanner/src/store/tripStore.ts) | 全局状态：params / locations / routeInfo / currentStrategy / candidatePois / selectedPois / mapControls / poiDrawerOpen |
+| [src/composables/useMap.ts](file:///Users/LiYuan/Documents/Ai-TripPlanner/src/composables/useMap.ts) | 高德地图封装：initMap / renderRouteByREST / panTo / setEndpointMarker / POI marker / 4 策略定义 |
+| [src/components/MapPanel/MapPanel.vue](file:///Users/LiYuan/Documents/Ai-TripPlanner/src/components/MapPanel/MapPanel.vue) | 地图组件：watch origin/dest → panTo(zoom=10)；watch currentStrategy → 重算+重搜；左上 4 策略面板默认折叠 |
+| [src/components/ItineraryStrip/ItineraryStrip.vue](file:///Users/LiYuan/Documents/Ai-TripPlanner/src/components/ItineraryStrip/ItineraryStrip.vue) | 260px 窄右栏：起终点输入 + 路线卡 + 4 策略切换器 + 搜索按钮 |
+| [src/components/PoiDrawer/PoiDrawer.vue](file:///Users/LiYuan/Documents/Ai-TripPlanner/src/components/PoiDrawer/PoiDrawer.vue) | 320px 抽屉：自定义地点 + 候选 POI + 已选 POI + 天气 |
+| [src/services/amapDistrict.ts](file:///Users/LiYuan/Documents/Ai-TripPlanner/src/services/amapDistrict.ts) | 行政区域预加载 + localStorage 缓存（v2 密钥）+ 客户端模糊匹配（替代输入提示 API） |
+| [src/services/amapRegeo.ts](file:///Users/LiYuan/Documents/Ai-TripPlanner/src/services/amapRegeo.ts) | 逆地理编码（替代周边搜索 + 地图点击查 POI） |
+| [src/services/amapGeolocation.ts](file:///Users/LiYuan/Documents/Ai-TripPlanner/src/services/amapGeolocation.ts) | AMap.Geolocation 插件（GPS + 电脑内置定位，替代 IP 定位） |
+| [src/services/amapWeather.ts](file:///Users/LiYuan/Documents/Ai-TripPlanner/src/services/amapWeather.ts) | 天气 base+all（独立池 5000/月） |
+| [src/services/poiSearch.ts](file:///Users/LiYuan/Documents/Ai-TripPlanner/src/services/poiSearch.ts) | 地理编码 + 多边形搜索（基础搜索池 5000/月） |
+| [src/composables/useAI.ts](file:///Users/LiYuan/Documents/Ai-TripPlanner/src/composables/useAI.ts) | LLM 消息发送（JSONL 文件桥接） |
+| [src/composables/useSession.ts](file:///Users/LiYuan/Documents/Ai-TripPlanner/src/composables/useSession.ts) | 会话管理（JSONL session 列表） |
+| [src/composables/usePolling.ts](file:///Users/LiYuan/Documents/Ai-TripPlanner/src/composables/usePolling.ts) | 轮询 AI 响应（默认 1s 间隔，30s 超时） |
+
+---
+
+## 3. 高德 API 配额池现状（v2.3）
+
+| 池 | 配额 | 用途 | 状态 |
+|---|---|---|---|
+| 基础搜索服务 | 5000/月 **共享** | 关键字 / 周边 / 多边形 / ID / 输入提示 | ✅ **仅用 `poiSearch.ts` 的多边形搜索**（1 次/策略切换） |
+| 基础 LBS | 150k/日 | 地理编码 / 驾车路线 / 逆地理 / 行政区域 / 坐标转换 / IP 定位 | ✅ 充足 |
+| 基础地图定位 | 1.5M/日 | JS 地图初始化 / AMap.Geolocation / 静态地图 | ✅ 充足 |
+| 天气 | 5000/月 | 天气查询 | ✅ 充足 |
+
+**关键策略**：
+- 输入提示 ❌ → 客户端 `amapDistrict` 区划匹配（1 次启动调用 + localStorage 缓存）
+- 周边搜索 ❌ → 逆地理编码 `extensions=all` 替代
+- IP 定位 ❌ → AMap.Geolocation 插件替代（精度更高）
+
+---
+
+## 4. 最近 5 个 commit
 
 ```
-你是自驾游规划助手。每次回复必须是合法JSON：
-{"chat":"简洁推荐","status":"planning|refining","tripParamUpdates":{},"locationUpdates":[],"itineraryNotes":""}
-
-你的职责：收到系统提供的沿途景点列表后，做两件事——
-1. 从列表中选出最值得去的3-5个，每个给1句话理由
-2. 如果列表外有值得绕路去看的地方，也推荐出来，说明偏离距离和理由
-
-约束：
-- 推荐前先以当前日期做一次网络检索，确认景点开放状态、季节适宜性等最新信息
-- 列表外推荐范围：根据用户设定的绕路距离，可以适当放宽
-- 不要复述用户已知信息
-- 不要逐个介绍列表里的景点，只挑最值得的
-- 推荐理由要具体（季节、特色、性价比等），不要空话
-- chat字段控制在10句话以内
-- 只输出JSON
+4a3f6a2 refactor(ui): 260px 窄右栏 + POI 抽屉 + 路线决策数据
+fb8ffc8 fix(ui): single-page stage 2 + 4 策略切换器内联 + 起点/终点地图跟随
+ac85955 fix: 基础搜索 5,000 池月消耗从 292 降到 ~1
+3e7a8b1 feat: 行政区域缓存 + AMap.Geolocation + 逆地理编码
+fb205e2 chore: 初版基础架构（直接用高德 API，含 input_tips 大量消耗）
 ```
 
 ---
 
-## 3. 待办事项（按优先级）
+## 5. ⚠️ 用户反馈的 bug 历史（避免重蹈覆辙）
 
-### P0：当前问题修复
-- [ ] 地图标记漂移问题（缩放时标签位置不对）
-- [ ] 起点终点下拉联想选中后地图实时联动显示位置
-- [ ] 搜索结果图片显示不全（部分POI没有照片）
-
-### P1：Phase 3 完善
-- [ ] AI 主动推荐集成（确认路线后AI自动推荐）
-- [ ] 用户补充地点的搜索逻辑优化
-- [ ] 景点选择后路线实时更新
-
-### P2：Phase 4-6
-- [ ] Phase 4：每日细化（点击天卡片进入细致规划）
-- [ ] Phase 5：精细化循环（叠加态：手动+AI同时调整）
-- [ ] Phase 6：导出到高德地图 App（URI API）
-
-### P3：UI/UX 优化
-- [ ] 安装前端设计 skill，美化界面
-- [ ] 移动端适配
-- [ ] 过渡动画
+| bug | 原因 | 修复 |
+|---|---|---|
+| 「加载地名数据」banner 看不到 | 缓存命中后状态闪一下就 true | banner 加 setTimeout 1.8s 持续显示 |
+| 定位后地图不跟随 | 没调 `panTo` | MapPanel watch origin/dest → `panTo(lon, lat, 10)` |
+| 输入「昆明」下拉永远无匹配 | localStorage 旧版 v1 缓存可能为空 | 缓存 key v1→v2 强制重拉 |
+| 「进入规划」按钮卡灰 | `originValid/destValid` 状态机过于复杂 | 改为只看 `store.params.origin.lat` |
+| preview 阶段流程卡住 | 用户要求单页 | 删 stage 2 = preview，改为单页 stage 2 confirmed |
+| 4 策略切换卡点不动 | UI 误用 | 改在 confirmed 阶段头部 inline 切换器 |
+| 策略切换后景点推荐不更新 | 没自动重搜 | MapPanel watch currentStrategy → `searchPoisByRoute` |
+| 起点选「我的位置」被重新 geocode 覆盖 | `renderRouteByREST` 内部读 store 重复 geocode | 改成接收参数 origin/dest |
+| 路过常德而非长沙 | IP 定位漂移 | 改用 AMap.Geolocation |
+| 地图点选「设为终点」无效 | 终点被重新 geocode 到城市 | 同上 |
+| 4 策略「距离最短反而更远」 | 高德算法特性 | 已加主要道路名展示辅助判断，非 bug |
 
 ---
 
-## 4. 技术栈
+## 6. ⏭️ 待办（按优先级）
 
-| 层 | 技术 |
-|---|---|
-| 前端 | Vue 3 + TypeScript + Tailwind CSS |
-| 状态 | Pinia |
-| 地图 | 高德地图 JS API 2.0 |
-| AI | CodeBuddy CLI（备用 MiMo） |
-| 桥接 | Python (watchdog) |
-| 会话 | JSONL 文件 |
+### 🔴 高优
+- [ ] **大模型交互**：ChatPanel 当前只发了 system prompt，AI 没在产生地点推荐。基于已选路线让 LLM 推荐 POI
+- [ ] **POI 抽屉测试**：用户上一轮还没测试过新抽屉 UI
 
----
+### 🟡 中优
+- [ ] **「途经」列表溢出问题**：15 个城市横排挤在小卡片里。可改为 tooltip 或"展开/收起"按钮
+- [ ] **API 真实数据可视化**：补充展示 - 主要道路 step 详情（点击地图上某段高亮路名）
+- [ ] **「添加自定义地点」**：用户希望在 stage 2 也能添加 POI（不只是从搜索结果选）
 
-## 5. API 额度控制（高德配额重构后）
-
-| 模块 | API | 池 | 用途 | 每次消耗 |
-|---|---|---|---|---|
-| 基础搜索（共享 5,000/月） | 多边形搜索 | 共享 | 沿途景点搜索 | 1次/路线 |
-| 基础搜索（共享 5,000/月） | **输入提示** | 共享 | ~~地名联想~~ | **已停用** |
-| 基础LBS（独立） | **地理编码** | 150,000/月 | 文本→坐标（失焦/确认） | 0~3次/输入 |
-| 基础LBS（独立） | **行政区域查询** | 海量 | 启动 1 次预加载省市区 | **1次/启动** |
-| 基础LBS（独立） | **逆地理编码** | 海量 | 地图点击拿 POI/酒店/美食 | 1次/点击 |
-| 基础地图定位（独立） | **AMap.Geolocation 插件** | 在线定位 | GPS/电脑内置定位 | 0次（JS 端） |
-| 基础地图定位（独立） | JS 地图初始化 | 1,500,000 | 地图加载 | 1次/刷新 |
-| 天气（独立 5,000/月） | weather/weatherInfo | 独立 | 行程城市实况+3天预报 | 1~2次/城市 |
-| 基础LBS | IP 定位 | 独立 | ~~坐标~~ | **改用 AMap.Geolocation** |
-
-**重构后效果：**
-- 基础搜索 5,000 池从 292/月消耗降到 ~1/月（多边形搜索）
-- 输入提示 / 关键字搜索 5,000 池占用 → 0
-- 基础LBS / 定位 / 天气 池使用不到 1%
+### 🟢 低优
+- [ ] **响应式布局**：< 1024px 屏幕适配
+- [ ] **AMAP_KEY 抽到 .env**：目前硬编码在 5 个文件中
+- [ ] **多语言**：当前纯中文
 
 ---
 
-## 6. 启动命令
+## 7. 🛠️ 开发备忘
 
+### 启动
 ```bash
-# 1. API Server
-python3 scripts/server.py &
-
-# 2. Bridge
-python3 scripts/bridge.py &
-
-# 3. 前端
+# 主目录
+cd /Users/LiYuan/Documents/Ai-TripPlanner
 npm run dev
+
+# Worktree（如需并行）
+cd /Users/LiYuan/.trae-cn/worktrees/Ai-TripPlanner/feat-analyze-readme-NocuDQ
+```
+
+### 构建
+```bash
+npm run build
+```
+
+### 提交规范
+```bash
+# 在 worktree 改 → commit → 合并到 master
+git add -A
+git commit -m "fix/feat/refactor: 简明描述"
+cd /Users/LiYuan/Documents/Ai-TripPlanner
+git merge feat-analyze-readme-NocuDQ --ff-only
+```
+
+### 清缓存（开发调试）
+```js
+// 浏览器 console
+localStorage.removeItem('adcode_cache_v2')
+location.reload()
 ```
 
 ---
 
-*End of project status.*
+## 8. 已清理的冗余（v2.3）
+
+- ❌ `src/components/HelloWorld.vue`（Vite scaffold 残留）
+- ❌ `src/components/ItineraryStrip/DayCard.vue`（从未使用）
+- ❌ `src/components/ItineraryStrip/DriveTimeBar.vue`（从未使用）
+- ❌ `src/assets/hero.png` / `vue.svg` / `vite.svg`（scaffold 残留）
+- ❌ `docs/roadtrip-planner-architecture.md`（第一版已废弃）
+- ❌ `useMap.ts` 中 `prefetchStrategies`（已注释，未引用）
+- ❌ `env.d.ts` 中 `VITE_AMAP_KEY`（未通过 env 注入，改为注释说明）
+
+## 9. 保留的历史文档
+
+- `docs/compose/specs/` — 第 1 版设计 spec
+- `docs/compose/plans/` — 第 1-3 阶段实施计划
+- `docs/compose/reports/` — 第 1-3 阶段完成报告
+
+这些是历史决策记录，**新会话勿要参考其架构设计**（已被本文件 v2.3 架构取代），但可作为"为什么改成现在这样"的背景。

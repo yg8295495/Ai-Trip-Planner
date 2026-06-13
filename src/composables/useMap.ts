@@ -252,17 +252,19 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
     return info
   }
 
-  // 并发计算多个策略（用于对比预览）
-  async function prefetchStrategies(
-    origin: GeocodedPlace,
-    dest: GeocodedPlace,
-    strategies: readonly number[] = [0, 1, 3, 7]
-  ): Promise<RouteInfo[]> {
-    const results = await Promise.all(
-      strategies.map(s => computeSingleRoute(origin, dest, s))
-    )
-    return results.filter((r): r is RouteInfo => r !== null)
-  }
+  // 并发计算多种策略路线（用于预览对比）
+  // ⚠️ 当前版本：单策略按需算（用户切策略时 MapPanel.watch currentStrategy 触发）
+  //    保留此函数以备未来"策略对比表"功能用
+  // async function prefetchStrategies(
+  //   origin: GeocodedPlace,
+  //   dest: GeocodedPlace,
+  //   strategies: readonly number[] = [0, 1, 3, 7]
+  // ): Promise<RouteInfo[]> {
+  //   const results = await Promise.all(
+  //     strategies.map(s => computeSingleRoute(origin, dest, s))
+  //   )
+  //   return results.filter((r): r is RouteInfo => r !== null)
+  // }
 
   function fitView() {
     if (routeLines.length > 0) map.setFitView(routeLines)
@@ -330,7 +332,7 @@ export function useMap(containerRef: Ref<HTMLElement | null>) {
 
   return {
     updateMap, renderPoiMarkers, getRouteInfo, renderRouteByREST,
-    prefetchStrategies, computeSingleRoute,
+    computeSingleRoute,
     fitView, toggleSatellite, zoomIn, zoomOut,
     onMapClick, getMap, panTo, addTempMarker,
     setEndpointMarker, clearEndpointMarkers,
