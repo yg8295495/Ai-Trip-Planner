@@ -1,0 +1,11292 @@
+[
+  {
+    "name": "北京",
+    "pinyin": "beijing",
+    "id": 1
+  },
+  {
+    "name": "上海",
+    "pinyin": "shanghai",
+    "id": 2
+  },
+  {
+    "name": "大连",
+    "pinyin": "dalian",
+    "id": 4
+  },
+  {
+    "name": "青岛",
+    "pinyin": "qingdao",
+    "id": 5
+  },
+  {
+    "name": "泰山风景区",
+    "pinyin": "mounttaishan",
+    "id": 6
+  },
+  {
+    "name": "泰山",
+    "pinyin": "taishan",
+    "id": 6
+  },
+  {
+    "name": "西安",
+    "pinyin": "xian",
+    "id": 7
+  },
+  {
+    "name": "敦煌",
+    "pinyin": "dunhuang",
+    "id": 8
+  },
+  {
+    "name": "南京",
+    "pinyin": "nanjing",
+    "id": 9
+  },
+  {
+    "name": "无锡",
+    "pinyin": "wuxi",
+    "id": 10
+  },
+  {
+    "name": "苏州",
+    "pinyin": "suzhou",
+    "id": 11
+  },
+  {
+    "name": "扬州",
+    "pinyin": "yangzhou",
+    "id": 12
+  },
+  {
+    "name": "镇江",
+    "pinyin": "zhenjiang",
+    "id": 13
+  },
+  {
+    "name": "杭州",
+    "pinyin": "hangzhou",
+    "id": 14
+  },
+  {
+    "name": "西塘古镇",
+    "pinyin": "xitanghistorictownofchina",
+    "id": 15
+  },
+  {
+    "name": "西塘古镇",
+    "pinyin": "xitang",
+    "id": 15
+  },
+  {
+    "name": "普陀山风景区",
+    "pinyin": "putuomountainscenicarea",
+    "id": 16
+  },
+  {
+    "name": "普陀山",
+    "pinyin": "putuoshan",
+    "id": 16
+  },
+  {
+    "name": "千岛湖景区",
+    "pinyin": "qiandaolake",
+    "id": 17
+  },
+  {
+    "name": "千岛湖",
+    "pinyin": "qiandaohu",
+    "id": 17
+  },
+  {
+    "name": "绍兴",
+    "pinyin": "shaoxing",
+    "id": 18
+  },
+  {
+    "name": "黄山风景区",
+    "pinyin": "huangshanscenicarea",
+    "id": 19
+  },
+  {
+    "name": "黄山",
+    "pinyin": "huangshan",
+    "id": 19
+  },
+  {
+    "name": "庐山风景名胜区",
+    "pinyin": "lushannationalpark",
+    "id": 20
+  },
+  {
+    "name": "庐山",
+    "pinyin": "lushan",
+    "id": 20
+  },
+  {
+    "name": "厦门",
+    "pinyin": "xiamen",
+    "id": 21
+  },
+  {
+    "name": "武夷山",
+    "pinyin": "wuyishan",
+    "id": 22
+  },
+  {
+    "name": "张家界",
+    "pinyin": "zhangjiajie",
+    "id": 23
+  },
+  {
+    "name": "峨眉山",
+    "pinyin": "emeishan",
+    "id": 24
+  },
+  {
+    "name": "九寨沟",
+    "pinyin": "jiuzhaigou",
+    "id": 25
+  },
+  {
+    "name": "深圳",
+    "pinyin": "shenzhen",
+    "id": 26
+  },
+  {
+    "name": "珠海",
+    "pinyin": "zhuhai",
+    "id": 27
+  },
+  {
+    "name": "桂林",
+    "pinyin": "guilin",
+    "id": 28
+  },
+  {
+    "name": "昆明",
+    "pinyin": "kunming",
+    "id": 29
+  },
+  {
+    "name": "西双版纳",
+    "pinyin": "xishuangbanna",
+    "id": 30
+  },
+  {
+    "name": "丽江",
+    "pinyin": "lijiang",
+    "id": 32
+  },
+  {
+    "name": "贵阳",
+    "pinyin": "guiyang",
+    "id": 33
+  },
+  {
+    "name": "吐鲁番",
+    "pinyin": "tulufan",
+    "id": 35
+  },
+  {
+    "name": "拉萨",
+    "pinyin": "lhasa",
+    "id": 36
+  },
+  {
+    "name": "海口",
+    "pinyin": "haikou",
+    "id": 37
+  },
+  {
+    "name": "香港",
+    "pinyin": "hongkong",
+    "id": 38
+  },
+  {
+    "name": "澳门",
+    "pinyin": "macau",
+    "id": 39
+  },
+  {
+    "name": "马六甲市",
+    "pinyin": "melaka",
+    "id": 42
+  },
+  {
+    "name": "吉隆坡",
+    "pinyin": "kualalumpur",
+    "id": 45
+  },
+  {
+    "name": "新加坡",
+    "pinyin": "singapore",
+    "id": 53
+  },
+  {
+    "name": "三亚",
+    "pinyin": "sanya",
+    "id": 61
+  },
+  {
+    "name": "楠溪江",
+    "pinyin": "nanxijiang",
+    "id": 66
+  },
+  {
+    "name": "湖州",
+    "pinyin": "huzhou",
+    "id": 68
+  },
+  {
+    "name": "溪口",
+    "pinyin": "xikou",
+    "id": 69
+  },
+  {
+    "name": "新昌",
+    "pinyin": "xinchang",
+    "id": 75
+  },
+  {
+    "name": "昆山",
+    "pinyin": "kunshan",
+    "id": 77
+  },
+  {
+    "name": "南浔古镇",
+    "pinyin": "nanxunancienttown",
+    "id": 80
+  },
+  {
+    "name": "南浔",
+    "pinyin": "nanxun",
+    "id": 80
+  },
+  {
+    "name": "周庄",
+    "pinyin": "zhouzhuang",
+    "id": 81
+  },
+  {
+    "name": "嵊泗",
+    "pinyin": "shengsi",
+    "id": 82
+  },
+  {
+    "name": "宁波",
+    "pinyin": "ningbo",
+    "id": 83
+  },
+  {
+    "name": "南通",
+    "pinyin": "nantong",
+    "id": 85
+  },
+  {
+    "name": "海宁",
+    "pinyin": "haining",
+    "id": 86
+  },
+  {
+    "name": "莫干山风景名胜区",
+    "pinyin": "moganshannationalpark",
+    "id": 87
+  },
+  {
+    "name": "莫干山",
+    "pinyin": "moganshan",
+    "id": 87
+  },
+  {
+    "name": "甪直",
+    "pinyin": "luzhi",
+    "id": 94
+  },
+  {
+    "name": "同里古镇",
+    "pinyin": "tongliancienttown",
+    "id": 95
+  },
+  {
+    "name": "同里",
+    "pinyin": "tongli",
+    "id": 95
+  },
+  {
+    "name": "余姚",
+    "pinyin": "yuyao",
+    "id": 98
+  },
+  {
+    "name": "阿里",
+    "pinyin": "ngari",
+    "id": 99
+  },
+  {
+    "name": "阿里",
+    "pinyin": "ali",
+    "id": 99
+  },
+  {
+    "name": "日喀则",
+    "pinyin": "shigatse",
+    "id": 100
+  },
+  {
+    "name": "日喀则",
+    "pinyin": "rikaze",
+    "id": 100
+  },
+  {
+    "name": "常熟",
+    "pinyin": "changshu",
+    "id": 101
+  },
+  {
+    "name": "乐山",
+    "pinyin": "leshan",
+    "id": 103
+  },
+  {
+    "name": "成都",
+    "pinyin": "chengdu",
+    "id": 104
+  },
+  {
+    "name": "泸沽湖",
+    "pinyin": "luguhu",
+    "id": 105
+  },
+  {
+    "name": "长江三峡",
+    "pinyin": "changjiangsanxia",
+    "id": 109
+  },
+  {
+    "name": "伊犁",
+    "pinyin": "ili",
+    "id": 115
+  },
+  {
+    "name": "乌鲁木齐",
+    "pinyin": "urumqi",
+    "id": 117
+  },
+  {
+    "name": "喀什",
+    "pinyin": "kashi",
+    "id": 124
+  },
+  {
+    "name": "林芝",
+    "pinyin": "nyingchi",
+    "id": 126
+  },
+  {
+    "name": "济南",
+    "pinyin": "jinan",
+    "id": 128
+  },
+  {
+    "name": "曲阜",
+    "pinyin": "qufu",
+    "id": 129
+  },
+  {
+    "name": "秦皇岛",
+    "pinyin": "qinhuangdao",
+    "id": 132
+  },
+  {
+    "name": "承德",
+    "pinyin": "chengde",
+    "id": 135
+  },
+  {
+    "name": "北海",
+    "pinyin": "beihai",
+    "id": 140
+  },
+  {
+    "name": "梧州",
+    "pinyin": "wuzhou",
+    "id": 142
+  },
+  {
+    "name": "柳州",
+    "pinyin": "liuzhou",
+    "id": 143
+  },
+  {
+    "name": "武汉",
+    "pinyin": "wuhan",
+    "id": 145
+  },
+  {
+    "name": "武当山风景区",
+    "pinyin": "wudangscenicspot",
+    "id": 146
+  },
+  {
+    "name": "武当山",
+    "pinyin": "wudangshan",
+    "id": 146
+  },
+  {
+    "name": "神农架",
+    "pinyin": "shennongjia",
+    "id": 147
+  },
+  {
+    "name": "长沙",
+    "pinyin": "changsha",
+    "id": 148
+  },
+  {
+    "name": "哈尔滨",
+    "pinyin": "harbin",
+    "id": 151
+  },
+  {
+    "name": "广州",
+    "pinyin": "guangzhou",
+    "id": 152
+  },
+  {
+    "name": "温州",
+    "pinyin": "wenzhou",
+    "id": 153
+  },
+  {
+    "name": "天津",
+    "pinyin": "tianjin",
+    "id": 154
+  },
+  {
+    "name": "沈阳",
+    "pinyin": "shenyang",
+    "id": 155
+  },
+  {
+    "name": "呼和浩特",
+    "pinyin": "hohhot",
+    "id": 156
+  },
+  {
+    "name": "郑州",
+    "pinyin": "zhengzhou",
+    "id": 157
+  },
+  {
+    "name": "重庆",
+    "pinyin": "chongqing",
+    "id": 158
+  },
+  {
+    "name": "三清山风景区",
+    "pinyin": "sanqingshanmountscenicarea",
+    "id": 159
+  },
+  {
+    "name": "三清山",
+    "pinyin": "sanqingshan",
+    "id": 159
+  },
+  {
+    "name": "龙虎山风景名胜区",
+    "pinyin": "longhumountains",
+    "id": 160
+  },
+  {
+    "name": "龙虎山",
+    "pinyin": "longhushan",
+    "id": 160
+  },
+  {
+    "name": "天柱山",
+    "pinyin": "tianzhumountain",
+    "id": 161
+  },
+  {
+    "name": "天柱山",
+    "pinyin": "tianzhushan",
+    "id": 161
+  },
+  {
+    "name": "福州",
+    "pinyin": "fuzhou",
+    "id": 164
+  },
+  {
+    "name": "开封",
+    "pinyin": "kaifeng",
+    "id": 165
+  },
+  {
+    "name": "南宁",
+    "pinyin": "nanning",
+    "id": 166
+  },
+  {
+    "name": "太原",
+    "pinyin": "taiyuan",
+    "id": 167
+  },
+  {
+    "name": "蓬莱",
+    "pinyin": "penglai",
+    "id": 168
+  },
+  {
+    "name": "威海",
+    "pinyin": "weihai",
+    "id": 169
+  },
+  {
+    "name": "烟台",
+    "pinyin": "yantai",
+    "id": 170
+  },
+  {
+    "name": "井冈山",
+    "pinyin": "jinggangshan",
+    "id": 171
+  },
+  {
+    "name": "衢州",
+    "pinyin": "quzhou",
+    "id": 174
+  },
+  {
+    "name": "南昌",
+    "pinyin": "nanchang",
+    "id": 175
+  },
+  {
+    "name": "朱家角",
+    "pinyin": "zhujiajiao",
+    "id": 176
+  },
+  {
+    "name": "嵩山风景名胜区",
+    "pinyin": "songshanscenicarea",
+    "id": 178
+  },
+  {
+    "name": "嵩山",
+    "pinyin": "songshan",
+    "id": 178
+  },
+  {
+    "name": "安庆",
+    "pinyin": "anqing",
+    "id": 179
+  },
+  {
+    "name": "河内",
+    "pinyin": "hanoi",
+    "id": 181
+  },
+  {
+    "name": "九华山风景区",
+    "pinyin": "jiuhuamountain",
+    "id": 182
+  },
+  {
+    "name": "九华山",
+    "pinyin": "jiuhuashan",
+    "id": 182
+  },
+  {
+    "name": "华山",
+    "pinyin": "mounthua",
+    "id": 183
+  },
+  {
+    "name": "华山",
+    "pinyin": "huashan",
+    "id": 183
+  },
+  {
+    "name": "五台山",
+    "pinyin": "wutaimountain",
+    "id": 184
+  },
+  {
+    "name": "五台山",
+    "pinyin": "wutaishan",
+    "id": 184
+  },
+  {
+    "name": "鹰潭",
+    "pinyin": "yingtan",
+    "id": 186
+  },
+  {
+    "name": "巢湖",
+    "pinyin": "chaohu",
+    "id": 187
+  },
+  {
+    "name": "永康",
+    "pinyin": "yongkang",
+    "id": 189
+  },
+  {
+    "name": "曼谷",
+    "pinyin": "bangkok",
+    "id": 191
+  },
+  {
+    "name": "合肥",
+    "pinyin": "hefei",
+    "id": 196
+  },
+  {
+    "name": "洛阳",
+    "pinyin": "luoyang",
+    "id": 198
+  },
+  {
+    "name": "石家庄",
+    "pinyin": "shijiazhuang",
+    "id": 199
+  },
+  {
+    "name": "唐山",
+    "pinyin": "tangshan",
+    "id": 200
+  },
+  {
+    "name": "湛江",
+    "pinyin": "zhanjiang",
+    "id": 202
+  },
+  {
+    "name": "张家港",
+    "pinyin": "zhangjiagang",
+    "id": 203
+  },
+  {
+    "name": "遵义",
+    "pinyin": "zunyi",
+    "id": 204
+  },
+  {
+    "name": "蚌埠",
+    "pinyin": "bengbu",
+    "id": 205
+  },
+  {
+    "name": "常州",
+    "pinyin": "changzhou",
+    "id": 206
+  },
+  {
+    "name": "佛山",
+    "pinyin": "foshan",
+    "id": 207
+  },
+  {
+    "name": "芭堤雅",
+    "pinyin": "pattaya",
+    "id": 208
+  },
+  {
+    "name": "清迈",
+    "pinyin": "chiangmai",
+    "id": 209
+  },
+  {
+    "name": "东莞",
+    "pinyin": "dongguan",
+    "id": 212
+  },
+  {
+    "name": "惠州",
+    "pinyin": "huizhou",
+    "id": 213
+  },
+  {
+    "name": "汕头",
+    "pinyin": "shantou",
+    "id": 215
+  },
+  {
+    "name": "长春",
+    "pinyin": "changchun",
+    "id": 216
+  },
+  {
+    "name": "雁荡山",
+    "pinyin": "yandangmountain",
+    "id": 217
+  },
+  {
+    "name": "雁荡山",
+    "pinyin": "yandangshan",
+    "id": 217
+  },
+  {
+    "name": "下龙湾",
+    "pinyin": "halongbay",
+    "id": 218
+  },
+  {
+    "name": "金华",
+    "pinyin": "jinhua",
+    "id": 219
+  },
+  {
+    "name": "桐乡",
+    "pinyin": "tongxiang",
+    "id": 220
+  },
+  {
+    "name": "韶关",
+    "pinyin": "shaoguan",
+    "id": 222
+  },
+  {
+    "name": "仙都",
+    "pinyin": "xiandu",
+    "id": 225
+  },
+  {
+    "name": "潍坊",
+    "pinyin": "weifang",
+    "id": 226
+  },
+  {
+    "name": "宜兴",
+    "pinyin": "yixing",
+    "id": 227
+  },
+  {
+    "name": "滁州",
+    "pinyin": "chuzhou",
+    "id": 228
+  },
+  {
+    "name": "鞍山",
+    "pinyin": "anshan",
+    "id": 229
+  },
+  {
+    "name": "徐州",
+    "pinyin": "xuzhou",
+    "id": 230
+  },
+  {
+    "name": "兰州",
+    "pinyin": "lanzhou",
+    "id": 231
+  },
+  {
+    "name": "中山詹园",
+    "pinyin": "zhongshan",
+    "id": 233
+  },
+  {
+    "name": "首尔",
+    "pinyin": "seoul",
+    "id": 234
+  },
+  {
+    "name": "江阴",
+    "pinyin": "jiangyin",
+    "id": 235
+  },
+  {
+    "name": "悉尼",
+    "pinyin": "sydney",
+    "id": 236
+  },
+  {
+    "name": "西宁",
+    "pinyin": "xining",
+    "id": 237
+  },
+  {
+    "name": "连云港",
+    "pinyin": "lianyungang",
+    "id": 238
+  },
+  {
+    "name": "银川",
+    "pinyin": "yinchuan",
+    "id": 239
+  },
+  {
+    "name": "泉州",
+    "pinyin": "quanzhou",
+    "id": 243
+  },
+  {
+    "name": "石狮",
+    "pinyin": "shishi",
+    "id": 245
+  },
+  {
+    "name": "天台山",
+    "pinyin": "tiantaishan",
+    "id": 246
+  },
+  {
+    "name": "纽约",
+    "pinyin": "newyork",
+    "id": 248
+  },
+  {
+    "name": "旧金山",
+    "pinyin": "sanfrancisco",
+    "id": 249
+  },
+  {
+    "name": "夏威夷",
+    "pinyin": "hawaii",
+    "id": 251
+  },
+  {
+    "name": "拉斯维加斯",
+    "pinyin": "lasvegas",
+    "id": 252
+  },
+  {
+    "name": "西雅图",
+    "pinyin": "seattle",
+    "id": 253
+  },
+  {
+    "name": "芝加哥",
+    "pinyin": "chicago",
+    "id": 254
+  },
+  {
+    "name": "太仓",
+    "pinyin": "taicang",
+    "id": 255
+  },
+  {
+    "name": "朱家尖风景区",
+    "pinyin": "zhujiajianscenicarea",
+    "id": 256
+  },
+  {
+    "name": "朱家尖",
+    "pinyin": "zhujiajian",
+    "id": 256
+  },
+  {
+    "name": "华盛顿",
+    "pinyin": "washingtondc",
+    "id": 257
+  },
+  {
+    "name": "伊斯坦布尔",
+    "pinyin": "istanbul",
+    "id": 258
+  },
+  {
+    "name": "比勒陀利亚",
+    "pinyin": "pretoria",
+    "id": 259
+  },
+  {
+    "name": "特拉维夫",
+    "pinyin": "telavivyafo",
+    "id": 260
+  },
+  {
+    "name": "牡丹江",
+    "pinyin": "mudanjiang",
+    "id": 264
+  },
+  {
+    "name": "黑河",
+    "pinyin": "heihe",
+    "id": 265
+  },
+  {
+    "name": "吉林市",
+    "pinyin": "jilinshi",
+    "id": 267
+  },
+  {
+    "name": "长白山",
+    "pinyin": "changbaimountain",
+    "id": 268
+  },
+  {
+    "name": "长白山",
+    "pinyin": "changbaishan",
+    "id": 268
+  },
+  {
+    "name": "肇庆",
+    "pinyin": "zhaoqing",
+    "id": 269
+  },
+  {
+    "name": "石林",
+    "pinyin": "shilin",
+    "id": 271
+  },
+  {
+    "name": "嘉兴",
+    "pinyin": "jiaxing",
+    "id": 272
+  },
+  {
+    "name": "大同",
+    "pinyin": "datong",
+    "id": 275
+  },
+  {
+    "name": "衡山",
+    "pinyin": "hengshan",
+    "id": 277
+  },
+  {
+    "name": "宜宾",
+    "pinyin": "yibin",
+    "id": 278
+  },
+  {
+    "name": "青海湖景区",
+    "pinyin": "qinghailake",
+    "id": 281
+  },
+  {
+    "name": "青海湖",
+    "pinyin": "qinghaihu",
+    "id": 281
+  },
+  {
+    "name": "酒泉",
+    "pinyin": "jiuquan",
+    "id": 282
+  },
+  {
+    "name": "张掖",
+    "pinyin": "zhangye",
+    "id": 283
+  },
+  {
+    "name": "嘉峪关",
+    "pinyin": "jiayuguan",
+    "id": 284
+  },
+  {
+    "name": "天水",
+    "pinyin": "tianshui",
+    "id": 285
+  },
+  {
+    "name": "岳阳",
+    "pinyin": "yueyang",
+    "id": 287
+  },
+  {
+    "name": "永安",
+    "pinyin": "yongan",
+    "id": 288
+  },
+  {
+    "name": "武威",
+    "pinyin": "wuwei",
+    "id": 290
+  },
+  {
+    "name": "九州",
+    "pinyin": "kyushu",
+    "id": 291
+  },
+  {
+    "name": "大阪",
+    "pinyin": "osaka",
+    "id": 293
+  },
+  {
+    "name": "东京",
+    "pinyin": "tokyo",
+    "id": 294
+  },
+  {
+    "name": "北海道",
+    "pinyin": "hokkaido",
+    "id": 296
+  },
+  {
+    "name": "济州岛",
+    "pinyin": "jejuisland",
+    "id": 297
+  },
+  {
+    "name": "济州岛",
+    "pinyin": "chejudoisland",
+    "id": 297
+  },
+  {
+    "name": "布鲁塞尔",
+    "pinyin": "brussels",
+    "id": 298
+  },
+  {
+    "name": "阿姆斯特丹",
+    "pinyin": "amsterdam",
+    "id": 299
+  },
+  {
+    "name": "苏黎世",
+    "pinyin": "zurich",
+    "id": 301
+  },
+  {
+    "name": "日内瓦",
+    "pinyin": "geneva",
+    "id": 302
+  },
+  {
+    "name": "罗马",
+    "pinyin": "rome",
+    "id": 303
+  },
+  {
+    "name": "米兰",
+    "pinyin": "milan",
+    "id": 304
+  },
+  {
+    "name": "法兰克福",
+    "pinyin": "frankfurt",
+    "id": 305
+  },
+  {
+    "name": "柏林",
+    "pinyin": "berlin",
+    "id": 306
+  },
+  {
+    "name": "巴黎",
+    "pinyin": "paris",
+    "id": 308
+  },
+  {
+    "name": "伦敦",
+    "pinyin": "london",
+    "id": 309
+  },
+  {
+    "name": "墨尔本",
+    "pinyin": "melbourne",
+    "id": 312
+  },
+  {
+    "name": "宜昌",
+    "pinyin": "yichang",
+    "id": 313
+  },
+  {
+    "name": "平壤",
+    "pinyin": "pyongyang",
+    "id": 314
+  },
+  {
+    "name": "丹东",
+    "pinyin": "dandong",
+    "id": 315
+  },
+  {
+    "name": "莆田",
+    "pinyin": "putian",
+    "id": 317
+  },
+  {
+    "name": "临汾",
+    "pinyin": "linfen",
+    "id": 318
+  },
+  {
+    "name": "满洲里",
+    "pinyin": "manzhouli",
+    "id": 319
+  },
+  {
+    "name": "奥克兰",
+    "pinyin": "auckland",
+    "id": 320
+  },
+  {
+    "name": "堪培拉",
+    "pinyin": "canberra",
+    "id": 321
+  },
+  {
+    "name": "布里斯班",
+    "pinyin": "brisbane",
+    "id": 323
+  },
+  {
+    "name": "开罗",
+    "pinyin": "cairo",
+    "id": 326
+  },
+  {
+    "name": "开普敦",
+    "pinyin": "capetown",
+    "id": 327
+  },
+  {
+    "name": "约翰内斯堡",
+    "pinyin": "johannesburg",
+    "id": 328
+  },
+  {
+    "name": "安卡拉",
+    "pinyin": "ankara",
+    "id": 329
+  },
+  {
+    "name": "马尔代夫",
+    "pinyin": "maldives",
+    "id": 330
+  },
+  {
+    "name": "格尔木",
+    "pinyin": "golmud",
+    "id": 332
+  },
+  {
+    "name": "漳州",
+    "pinyin": "zhangzhou",
+    "id": 334
+  },
+  {
+    "name": "郴州",
+    "pinyin": "chenzhou",
+    "id": 336
+  },
+  {
+    "name": "高州",
+    "pinyin": "gaozhou",
+    "id": 337
+  },
+  {
+    "name": "山南",
+    "pinyin": "shannan",
+    "id": 339
+  },
+  {
+    "name": "威尼斯",
+    "pinyin": "venice",
+    "id": 340
+  },
+  {
+    "name": "佛罗伦萨",
+    "pinyin": "florence",
+    "id": 341
+  },
+  {
+    "name": "稻城",
+    "pinyin": "daocheng",
+    "id": 342
+  },
+  {
+    "name": "康定",
+    "pinyin": "kangding",
+    "id": 344
+  },
+  {
+    "name": "葫芦岛",
+    "pinyin": "huludao",
+    "id": 345
+  },
+  {
+    "name": "韶山",
+    "pinyin": "shaoshan",
+    "id": 346
+  },
+  {
+    "name": "包头",
+    "pinyin": "baotou",
+    "id": 347
+  },
+  {
+    "name": "临潼",
+    "pinyin": "lintong",
+    "id": 348
+  },
+  {
+    "name": "河源",
+    "pinyin": "heyuan",
+    "id": 350
+  },
+  {
+    "name": "淮安",
+    "pinyin": "huaian",
+    "id": 351
+  },
+  {
+    "name": "墨西哥城",
+    "pinyin": "mexicocity",
+    "id": 352
+  },
+  {
+    "name": "温哥华",
+    "pinyin": "vancouver",
+    "id": 354
+  },
+  {
+    "name": "多伦多",
+    "pinyin": "toronto",
+    "id": 355
+  },
+  {
+    "name": "渥太华",
+    "pinyin": "ottawa",
+    "id": 356
+  },
+  {
+    "name": "维多利亚",
+    "pinyin": "victoria",
+    "id": 357
+  },
+  {
+    "name": "莫斯科",
+    "pinyin": "moscow",
+    "id": 358
+  },
+  {
+    "name": "圣彼得堡",
+    "pinyin": "saintpetersburg",
+    "id": 359
+  },
+  {
+    "name": "台北",
+    "pinyin": "taipei",
+    "id": 360
+  },
+  {
+    "name": "台北",
+    "pinyin": "taipeicity",
+    "id": 360
+  },
+  {
+    "name": "江门",
+    "pinyin": "jiangmen",
+    "id": 362
+  },
+  {
+    "name": "阳江",
+    "pinyin": "yangjiang",
+    "id": 363
+  },
+  {
+    "name": "普吉岛",
+    "pinyin": "phuket",
+    "id": 364
+  },
+  {
+    "name": "平遥",
+    "pinyin": "pingyao",
+    "id": 365
+  },
+  {
+    "name": "龙岩",
+    "pinyin": "longyan",
+    "id": 366
+  },
+  {
+    "name": "马尼拉",
+    "pinyin": "manila",
+    "id": 367
+  },
+  {
+    "name": "马德里",
+    "pinyin": "madrid",
+    "id": 378
+  },
+  {
+    "name": "格拉纳达",
+    "pinyin": "granada",
+    "id": 379
+  },
+  {
+    "name": "塞维利亚",
+    "pinyin": "seville",
+    "id": 380
+  },
+  {
+    "name": "塞维利亚",
+    "pinyin": "sevilla",
+    "id": 380
+  },
+  {
+    "name": "巴塞罗那",
+    "pinyin": "barcelona",
+    "id": 381
+  },
+  {
+    "name": "雅典",
+    "pinyin": "athens",
+    "id": 382
+  },
+  {
+    "name": "伯罗奔尼撒",
+    "pinyin": "peloponnese",
+    "id": 383
+  },
+  {
+    "name": "海牙",
+    "pinyin": "hague",
+    "id": 385
+  },
+  {
+    "name": "科隆",
+    "pinyin": "cologne",
+    "id": 388
+  },
+  {
+    "name": "爱丁堡",
+    "pinyin": "edinburgh",
+    "id": 389
+  },
+  {
+    "name": "里昂",
+    "pinyin": "lyon",
+    "id": 391
+  },
+  {
+    "name": "鹿特丹",
+    "pinyin": "rotterdam",
+    "id": 393
+  },
+  {
+    "name": "齐齐哈尔",
+    "pinyin": "qiqihar",
+    "id": 395
+  },
+  {
+    "name": "大兴安岭",
+    "pinyin": "daxinganling",
+    "id": 396
+  },
+  {
+    "name": "运城",
+    "pinyin": "yuncheng",
+    "id": 397
+  },
+  {
+    "name": "台州",
+    "pinyin": "taizhou",
+    "id": 402
+  },
+  {
+    "name": "亳州",
+    "pinyin": "bozhou",
+    "id": 404
+  },
+  {
+    "name": "景德镇",
+    "pinyin": "jingdezhen",
+    "id": 405
+  },
+  {
+    "name": "牛津",
+    "pinyin": "oxford",
+    "id": 407
+  },
+  {
+    "name": "卢克索",
+    "pinyin": "luxor",
+    "id": 410
+  },
+  {
+    "name": "阿斯旺",
+    "pinyin": "aswan",
+    "id": 411
+  },
+  {
+    "name": "安阳",
+    "pinyin": "anyang",
+    "id": 412
+  },
+  {
+    "name": "荆州",
+    "pinyin": "jingzhou",
+    "id": 413
+  },
+  {
+    "name": "襄阳",
+    "pinyin": "xiangyang",
+    "id": 414
+  },
+  {
+    "name": "延边",
+    "pinyin": "yanbian",
+    "id": 415
+  },
+  {
+    "name": "常德",
+    "pinyin": "changde",
+    "id": 417
+  },
+  {
+    "name": "桂平",
+    "pinyin": "guiping",
+    "id": 418
+  },
+  {
+    "name": "保山",
+    "pinyin": "baoshan",
+    "id": 420
+  },
+  {
+    "name": "宝鸡",
+    "pinyin": "baoji",
+    "id": 422
+  },
+  {
+    "name": "延安",
+    "pinyin": "yanan",
+    "id": 423
+  },
+  {
+    "name": "平凉",
+    "pinyin": "pingliang",
+    "id": 424
+  },
+  {
+    "name": "甘南",
+    "pinyin": "gannan",
+    "id": 426
+  },
+  {
+    "name": "阿勒泰地区",
+    "pinyin": "altayprefecture",
+    "id": 427
+  },
+  {
+    "name": "阿勒泰",
+    "pinyin": "aletai",
+    "id": 427
+  },
+  {
+    "name": "克拉玛依",
+    "pinyin": "karamay",
+    "id": 428
+  },
+  {
+    "name": "库尔勒",
+    "pinyin": "korla",
+    "id": 429
+  },
+  {
+    "name": "京都",
+    "pinyin": "kyoto",
+    "id": 430
+  },
+  {
+    "name": "釜山",
+    "pinyin": "busan",
+    "id": 432
+  },
+  {
+    "name": "胡志明市",
+    "pinyin": "hochiminhcity",
+    "id": 434
+  },
+  {
+    "name": "雅加达",
+    "pinyin": "jakarta",
+    "id": 435
+  },
+  {
+    "name": "万隆",
+    "pinyin": "bandung",
+    "id": 436
+  },
+  {
+    "name": "巴厘岛",
+    "pinyin": "bali",
+    "id": 438
+  },
+  {
+    "name": "维也纳",
+    "pinyin": "vienna",
+    "id": 439
+  },
+  {
+    "name": "萨尔茨堡",
+    "pinyin": "salzburg",
+    "id": 440
+  },
+  {
+    "name": "丽水",
+    "pinyin": "lishui",
+    "id": 441
+  },
+  {
+    "name": "波士顿",
+    "pinyin": "boston",
+    "id": 442
+  },
+  {
+    "name": "伯尔尼",
+    "pinyin": "bern",
+    "id": 443
+  },
+  {
+    "name": "毛里求斯",
+    "pinyin": "mauritius",
+    "id": 444
+  },
+  {
+    "name": "婺源",
+    "pinyin": "wuyuan",
+    "id": 446
+  },
+  {
+    "name": "信阳",
+    "pinyin": "xinyang",
+    "id": 448
+  },
+  {
+    "name": "奥斯陆",
+    "pinyin": "oslo",
+    "id": 450
+  },
+  {
+    "name": "斯德哥尔摩",
+    "pinyin": "stockholm",
+    "id": 451
+  },
+  {
+    "name": "赫尔辛基",
+    "pinyin": "helsinki",
+    "id": 452
+  },
+  {
+    "name": "凯恩斯",
+    "pinyin": "cairns",
+    "id": 453
+  },
+  {
+    "name": "黄金海岸",
+    "pinyin": "goldcoast",
+    "id": 456
+  },
+  {
+    "name": "芜湖",
+    "pinyin": "wuhu",
+    "id": 457
+  },
+  {
+    "name": "呼伦贝尔",
+    "pinyin": "hulunbuir",
+    "id": 458
+  },
+  {
+    "name": "保定",
+    "pinyin": "baoding",
+    "id": 459
+  },
+  {
+    "name": "邢台",
+    "pinyin": "xingtai",
+    "id": 460
+  },
+  {
+    "name": "衡水",
+    "pinyin": "hengshui",
+    "id": 461
+  },
+  {
+    "name": "德阳",
+    "pinyin": "deyang",
+    "id": 462
+  },
+  {
+    "name": "本溪",
+    "pinyin": "benxi",
+    "id": 463
+  },
+  {
+    "name": "十堰",
+    "pinyin": "shiyan",
+    "id": 464
+  },
+  {
+    "name": "许昌",
+    "pinyin": "xuchang",
+    "id": 465
+  },
+  {
+    "name": "潮州",
+    "pinyin": "chaozhou",
+    "id": 467
+  },
+  {
+    "name": "铜陵",
+    "pinyin": "tongling",
+    "id": 472
+  },
+  {
+    "name": "赣州",
+    "pinyin": "ganzhou",
+    "id": 473
+  },
+  {
+    "name": "新乡",
+    "pinyin": "xinxiang",
+    "id": 474
+  },
+  {
+    "name": "延吉",
+    "pinyin": "yanji",
+    "id": 475
+  },
+  {
+    "name": "华阴",
+    "pinyin": "huayin",
+    "id": 476
+  },
+  {
+    "name": "玉溪",
+    "pinyin": "yuxi",
+    "id": 477
+  },
+  {
+    "name": "舟山",
+    "pinyin": "zhoushan",
+    "id": 479
+  },
+  {
+    "name": "临沂",
+    "pinyin": "linyi",
+    "id": 480
+  },
+  {
+    "name": "加德满都",
+    "pinyin": "kathmandu",
+    "id": 482
+  },
+  {
+    "name": "赤峰",
+    "pinyin": "chifeng",
+    "id": 483
+  },
+  {
+    "name": "锡林郭勒盟",
+    "pinyin": "xilingol",
+    "id": 484
+  },
+  {
+    "name": "榆林",
+    "pinyin": "yulin",
+    "id": 485
+  },
+  {
+    "name": "汉中",
+    "pinyin": "hanzhong",
+    "id": 486
+  },
+  {
+    "name": "恩施",
+    "pinyin": "enshi",
+    "id": 487
+  },
+  {
+    "name": "仰光",
+    "pinyin": "yangon",
+    "id": 488
+  },
+  {
+    "name": "金边",
+    "pinyin": "phnompenh",
+    "id": 489
+  },
+  {
+    "name": "宁德",
+    "pinyin": "ningde",
+    "id": 490
+  },
+  {
+    "name": "凯里",
+    "pinyin": "kaili",
+    "id": 491
+  },
+  {
+    "name": "宿迁",
+    "pinyin": "suqian",
+    "id": 492
+  },
+  {
+    "name": "盐城",
+    "pinyin": "yancheng",
+    "id": 493
+  },
+  {
+    "name": "邯郸",
+    "pinyin": "handan",
+    "id": 495
+  },
+  {
+    "name": "湘西土家族苗族自治州",
+    "pinyin": "xiangxiprefecture",
+    "id": 496
+  },
+  {
+    "name": "湘西",
+    "pinyin": "xiangxi",
+    "id": 496
+  },
+  {
+    "name": "张家口",
+    "pinyin": "zhangjiakou",
+    "id": 497
+  },
+  {
+    "name": "伊春",
+    "pinyin": "yichun",
+    "id": 498
+  },
+  {
+    "name": "佳木斯",
+    "pinyin": "jiamusi",
+    "id": 501
+  },
+  {
+    "name": "六安",
+    "pinyin": "luan",
+    "id": 502
+  },
+  {
+    "name": "六安",
+    "pinyin": "liuan",
+    "id": 502
+  },
+  {
+    "name": "马鞍山",
+    "pinyin": "maanshan",
+    "id": 503
+  },
+  {
+    "name": "宣城",
+    "pinyin": "xuancheng",
+    "id": 504
+  },
+  {
+    "name": "洞头",
+    "pinyin": "dongtou",
+    "id": 506
+  },
+  {
+    "name": "乌镇",
+    "pinyin": "wuzhen",
+    "id": 508
+  },
+  {
+    "name": "曲靖",
+    "pinyin": "qujing",
+    "id": 509
+  },
+  {
+    "name": "楚雄",
+    "pinyin": "chuxiong",
+    "id": 510
+  },
+  {
+    "name": "文山",
+    "pinyin": "wenshan",
+    "id": 511
+  },
+  {
+    "name": "红河",
+    "pinyin": "honghe",
+    "id": 512
+  },
+  {
+    "name": "锦州",
+    "pinyin": "jinzhou",
+    "id": 513
+  },
+  {
+    "name": "抚顺",
+    "pinyin": "fushun",
+    "id": 514
+  },
+  {
+    "name": "长海",
+    "pinyin": "changhai",
+    "id": 516
+  },
+  {
+    "name": "清远",
+    "pinyin": "qingyuan",
+    "id": 517
+  },
+  {
+    "name": "安顺",
+    "pinyin": "anshun",
+    "id": 518
+  },
+  {
+    "name": "兴义",
+    "pinyin": "xingyi",
+    "id": 519
+  },
+  {
+    "name": "毕节",
+    "pinyin": "bijie",
+    "id": 521
+  },
+  {
+    "name": "三门峡",
+    "pinyin": "sanmenxia",
+    "id": 522
+  },
+  {
+    "name": "梅州",
+    "pinyin": "meizhou",
+    "id": 523
+  },
+  {
+    "name": "百色",
+    "pinyin": "baise",
+    "id": 524
+  },
+  {
+    "name": "开平",
+    "pinyin": "kaiping",
+    "id": 525
+  },
+  {
+    "name": "德宏",
+    "pinyin": "dehong",
+    "id": 526
+  },
+  {
+    "name": "歙县",
+    "pinyin": "shecounty",
+    "id": 527
+  },
+  {
+    "name": "海盐",
+    "pinyin": "haiyan",
+    "id": 529
+  },
+  {
+    "name": "西沙群岛",
+    "pinyin": "xishaislands",
+    "id": 530
+  },
+  {
+    "name": "西沙群岛",
+    "pinyin": "xishaqundao",
+    "id": 530
+  },
+  {
+    "name": "大庆",
+    "pinyin": "daqing",
+    "id": 531
+  },
+  {
+    "name": "增城",
+    "pinyin": "zengcheng",
+    "id": 532
+  },
+  {
+    "name": "宿雾",
+    "pinyin": "cebu",
+    "id": 534
+  },
+  {
+    "name": "淄博",
+    "pinyin": "zibo",
+    "id": 536
+  },
+  {
+    "name": "沙巴",
+    "pinyin": "sabah",
+    "id": 538
+  },
+  {
+    "name": "兰卡威",
+    "pinyin": "langkawi",
+    "id": 539
+  },
+  {
+    "name": "沧州",
+    "pinyin": "cangzhou",
+    "id": 540
+  },
+  {
+    "name": "慈溪",
+    "pinyin": "cixi",
+    "id": 543
+  },
+  {
+    "name": "临海",
+    "pinyin": "linhai",
+    "id": 544
+  },
+  {
+    "name": "安康",
+    "pinyin": "ankang",
+    "id": 545
+  },
+  {
+    "name": "温岭",
+    "pinyin": "wenling",
+    "id": 546
+  },
+  {
+    "name": "上饶",
+    "pinyin": "shangrao",
+    "id": 547
+  },
+  {
+    "name": "安塔利亚",
+    "pinyin": "antalya",
+    "id": 549
+  },
+  {
+    "name": "耶路撒冷",
+    "pinyin": "jerusalem",
+    "id": 552
+  },
+  {
+    "name": "嵊州",
+    "pinyin": "shengzhou",
+    "id": 553
+  },
+  {
+    "name": "三水",
+    "pinyin": "sanshui",
+    "id": 554
+  },
+  {
+    "name": "四平",
+    "pinyin": "siping",
+    "id": 556
+  },
+  {
+    "name": "和田",
+    "pinyin": "hetian",
+    "id": 557
+  },
+  {
+    "name": "昌都",
+    "pinyin": "qamdo",
+    "id": 559
+  },
+  {
+    "name": "江都",
+    "pinyin": "jiangdu",
+    "id": 560
+  },
+  {
+    "name": "云顶高原",
+    "pinyin": "gentinghighlan",
+    "id": 561
+  },
+  {
+    "name": "皮皮岛",
+    "pinyin": "phiphiislands",
+    "id": 565
+  },
+  {
+    "name": "苏梅岛",
+    "pinyin": "kohsamui",
+    "id": 566
+  },
+  {
+    "name": "哈密",
+    "pinyin": "hami",
+    "id": 567
+  },
+  {
+    "name": "丰宁",
+    "pinyin": "fengning",
+    "id": 568
+  },
+  {
+    "name": "塞班岛",
+    "pinyin": "saipan",
+    "id": 569
+  },
+  {
+    "name": "天宁岛",
+    "pinyin": "tinian",
+    "id": 570
+  },
+  {
+    "name": "崇明",
+    "pinyin": "chongming",
+    "id": 571
+  },
+  {
+    "name": "慕尼黑",
+    "pinyin": "munich",
+    "id": 572
+  },
+  {
+    "name": "汉堡",
+    "pinyin": "hamburg",
+    "id": 573
+  },
+  {
+    "name": "里斯本",
+    "pinyin": "lisbon",
+    "id": 574
+  },
+  {
+    "name": "自贡",
+    "pinyin": "zigong",
+    "id": 575
+  },
+  {
+    "name": "福冈",
+    "pinyin": "fukuoka",
+    "id": 576
+  },
+  {
+    "name": "兵库县",
+    "pinyin": "hyogo",
+    "id": 577
+  },
+  {
+    "name": "神奈川县",
+    "pinyin": "kanagawa",
+    "id": 578
+  },
+  {
+    "name": "新德里",
+    "pinyin": "newdelhi",
+    "id": 579
+  },
+  {
+    "name": "尼斯",
+    "pinyin": "nice",
+    "id": 580
+  },
+  {
+    "name": "濮阳",
+    "pinyin": "puyang",
+    "id": 581
+  },
+  {
+    "name": "廊坊",
+    "pinyin": "langfang",
+    "id": 582
+  },
+  {
+    "name": "亚庇",
+    "pinyin": "kotakinabalu",
+    "id": 583
+  },
+  {
+    "name": "孟买",
+    "pinyin": "bombay",
+    "id": 584
+  },
+  {
+    "name": "汉诺威",
+    "pinyin": "hannover",
+    "id": 585
+  },
+  {
+    "name": "曼彻斯特",
+    "pinyin": "manchester",
+    "id": 588
+  },
+  {
+    "name": "铁岭",
+    "pinyin": "tieling",
+    "id": 589
+  },
+  {
+    "name": "南阳",
+    "pinyin": "nanyang",
+    "id": 591
+  },
+  {
+    "name": "西昌",
+    "pinyin": "xichang",
+    "id": 592
+  },
+  {
+    "name": "广元",
+    "pinyin": "guangyuan",
+    "id": 593
+  },
+  {
+    "name": "鹤壁",
+    "pinyin": "hebi",
+    "id": 595
+  },
+  {
+    "name": "博卡拉",
+    "pinyin": "pokhara",
+    "id": 597
+  },
+  {
+    "name": "溧阳",
+    "pinyin": "liyang",
+    "id": 598
+  },
+  {
+    "name": "暹粒",
+    "pinyin": "siemreap",
+    "id": 599
+  },
+  {
+    "name": "鄂尔多斯",
+    "pinyin": "ordos",
+    "id": 600
+  },
+  {
+    "name": "鄂尔多斯",
+    "pinyin": "eerduosi",
+    "id": 600
+  },
+  {
+    "name": "盘锦",
+    "pinyin": "panjin",
+    "id": 602
+  },
+  {
+    "name": "德州",
+    "pinyin": "dezhou",
+    "id": 603
+  },
+  {
+    "name": "泸州",
+    "pinyin": "luzhou",
+    "id": 604
+  },
+  {
+    "name": "遂宁",
+    "pinyin": "suining",
+    "id": 605
+  },
+  {
+    "name": "东阳",
+    "pinyin": "dongyang",
+    "id": 608
+  },
+  {
+    "name": "连城",
+    "pinyin": "liancheng",
+    "id": 609
+  },
+  {
+    "name": "长滩岛",
+    "pinyin": "boracay",
+    "id": 610
+  },
+  {
+    "name": "兰溪",
+    "pinyin": "lanxi",
+    "id": 611
+  },
+  {
+    "name": "东营",
+    "pinyin": "dongying",
+    "id": 612
+  },
+  {
+    "name": "福鼎",
+    "pinyin": "fuding",
+    "id": 613
+  },
+  {
+    "name": "龙目岛",
+    "pinyin": "lombok",
+    "id": 614
+  },
+  {
+    "name": "茂名",
+    "pinyin": "maoming",
+    "id": 615
+  },
+  {
+    "name": "甲米",
+    "pinyin": "krabi",
+    "id": 616
+  },
+  {
+    "name": "上虞",
+    "pinyin": "shangyu",
+    "id": 617
+  },
+  {
+    "name": "富春江",
+    "pinyin": "fuchunjiang",
+    "id": 618
+  },
+  {
+    "name": "三明",
+    "pinyin": "sanming",
+    "id": 620
+  },
+  {
+    "name": "从化",
+    "pinyin": "conghua",
+    "id": 621
+  },
+  {
+    "name": "日照",
+    "pinyin": "rizhao",
+    "id": 622
+  },
+  {
+    "name": "汕尾",
+    "pinyin": "shanwei",
+    "id": 624
+  },
+  {
+    "name": "泰顺",
+    "pinyin": "taishun",
+    "id": 625
+  },
+  {
+    "name": "阿德莱德",
+    "pinyin": "adelaide",
+    "id": 626
+  },
+  {
+    "name": "北领地",
+    "pinyin": "northernterrity",
+    "id": 627
+  },
+  {
+    "name": "霍巴特",
+    "pinyin": "hobart",
+    "id": 629
+  },
+  {
+    "name": "咸阳",
+    "pinyin": "xianyang",
+    "id": 632
+  },
+  {
+    "name": "荆门",
+    "pinyin": "jingmen",
+    "id": 634
+  },
+  {
+    "name": "聊城",
+    "pinyin": "liaocheng",
+    "id": 635
+  },
+  {
+    "name": "淮南",
+    "pinyin": "huainan",
+    "id": 638
+  },
+  {
+    "name": "晋中",
+    "pinyin": "jinzhong",
+    "id": 639
+  },
+  {
+    "name": "济源",
+    "pinyin": "jiyuan",
+    "id": 640
+  },
+  {
+    "name": "驻马店",
+    "pinyin": "zhumadian",
+    "id": 642
+  },
+  {
+    "name": "卢塞恩",
+    "pinyin": "lucerne",
+    "id": 644
+  },
+  {
+    "name": "滦平",
+    "pinyin": "luanping",
+    "id": 645
+  },
+  {
+    "name": "邦咯岛",
+    "pinyin": "pangkor",
+    "id": 647
+  },
+  {
+    "name": "民丹岛",
+    "pinyin": "bintan",
+    "id": 651
+  },
+  {
+    "name": "怀化",
+    "pinyin": "huaihua",
+    "id": 655
+  },
+  {
+    "name": "枣庄",
+    "pinyin": "zaozhuang",
+    "id": 656
+  },
+  {
+    "name": "淮北",
+    "pinyin": "huaibei",
+    "id": 657
+  },
+  {
+    "name": "济宁",
+    "pinyin": "jining",
+    "id": 658
+  },
+  {
+    "name": "荔波",
+    "pinyin": "libo",
+    "id": 659
+  },
+  {
+    "name": "滨州",
+    "pinyin": "binzhou",
+    "id": 660
+  },
+  {
+    "name": "蒙特利尔",
+    "pinyin": "montreal",
+    "id": 661
+  },
+  {
+    "name": "热浪岛",
+    "pinyin": "pulauredang",
+    "id": 662
+  },
+  {
+    "name": "焦作",
+    "pinyin": "jiaozuo",
+    "id": 663
+  },
+  {
+    "name": "漯河",
+    "pinyin": "luohe",
+    "id": 664
+  },
+  {
+    "name": "晋城",
+    "pinyin": "jincheng",
+    "id": 665
+  },
+  {
+    "name": "顺化",
+    "pinyin": "hue",
+    "id": 667
+  },
+  {
+    "name": "会安",
+    "pinyin": "hoian",
+    "id": 668
+  },
+  {
+    "name": "岘港",
+    "pinyin": "danang",
+    "id": 669
+  },
+  {
+    "name": "芽庄",
+    "pinyin": "nhatrang",
+    "id": 670
+  },
+  {
+    "name": "华欣",
+    "pinyin": "huahin",
+    "id": 674
+  },
+  {
+    "name": "晋江",
+    "pinyin": "jinjiang",
+    "id": 675
+  },
+  {
+    "name": "罗平",
+    "pinyin": "luoping",
+    "id": 676
+  },
+  {
+    "name": "乌海",
+    "pinyin": "wuhai",
+    "id": 677
+  },
+  {
+    "name": "都匀",
+    "pinyin": "duyun",
+    "id": 678
+  },
+  {
+    "name": "六盘水",
+    "pinyin": "liupanshui",
+    "id": 679
+  },
+  {
+    "name": "铜仁",
+    "pinyin": "tongren",
+    "id": 680
+  },
+  {
+    "name": "怒江",
+    "pinyin": "nujiang",
+    "id": 681
+  },
+  {
+    "name": "罗托鲁瓦",
+    "pinyin": "rotorua",
+    "id": 682
+  },
+  {
+    "name": "皇后镇",
+    "pinyin": "queenstown",
+    "id": 684
+  },
+  {
+    "name": "安吉",
+    "pinyin": "anji",
+    "id": 686
+  },
+  {
+    "name": "建德",
+    "pinyin": "jiande",
+    "id": 687
+  },
+  {
+    "name": "桐庐",
+    "pinyin": "tonglu",
+    "id": 688
+  },
+  {
+    "name": "宁海",
+    "pinyin": "ninghai",
+    "id": 689
+  },
+  {
+    "name": "诸暨",
+    "pinyin": "zhuji",
+    "id": 690
+  },
+  {
+    "name": "仙居",
+    "pinyin": "xianju",
+    "id": 691
+  },
+  {
+    "name": "营口",
+    "pinyin": "yingkou",
+    "id": 692
+  },
+  {
+    "name": "广安",
+    "pinyin": "guangan",
+    "id": 693
+  },
+  {
+    "name": "基督城",
+    "pinyin": "christchurch",
+    "id": 695
+  },
+  {
+    "name": "腾冲",
+    "pinyin": "tengchong",
+    "id": 696
+  },
+  {
+    "name": "钦州",
+    "pinyin": "qinzhou",
+    "id": 697
+  },
+  {
+    "name": "防城港",
+    "pinyin": "fangchenggang",
+    "id": 698
+  },
+  {
+    "name": "杜塞尔多夫",
+    "pinyin": "dusseldorf",
+    "id": 700
+  },
+  {
+    "name": "阳朔",
+    "pinyin": "yangshuo",
+    "id": 702
+  },
+  {
+    "name": "巴中",
+    "pinyin": "bazhong",
+    "id": 703
+  },
+  {
+    "name": "丹巴",
+    "pinyin": "danba",
+    "id": 704
+  },
+  {
+    "name": "中国贡嘎山海螺沟",
+    "pinyin": "hailuogoumtgonggachina",
+    "id": 705
+  },
+  {
+    "name": "海螺沟",
+    "pinyin": "hailuogou",
+    "id": 705
+  },
+  {
+    "name": "贺州",
+    "pinyin": "hezhou",
+    "id": 707
+  },
+  {
+    "name": "菏泽",
+    "pinyin": "heze",
+    "id": 708
+  },
+  {
+    "name": "黄石",
+    "pinyin": "huangshi",
+    "id": 710
+  },
+  {
+    "name": "贵港",
+    "pinyin": "guigang",
+    "id": 711
+  },
+  {
+    "name": "贝尔法斯特",
+    "pinyin": "belfast",
+    "id": 712
+  },
+  {
+    "name": "格拉斯哥",
+    "pinyin": "glasgow",
+    "id": 713
+  },
+  {
+    "name": "萍乡",
+    "pinyin": "pingxiang",
+    "id": 714
+  },
+  {
+    "name": "戛纳",
+    "pinyin": "cannes",
+    "id": 715
+  },
+  {
+    "name": "波尔多",
+    "pinyin": "bordeaux",
+    "id": 716
+  },
+  {
+    "name": "剑桥",
+    "pinyin": "cambridge",
+    "id": 721
+  },
+  {
+    "name": "象山",
+    "pinyin": "xiangshan",
+    "id": 723
+  },
+  {
+    "name": "斯里巴加湾市",
+    "pinyin": "bandarseribegawan",
+    "id": 724
+  },
+  {
+    "name": "洛桑",
+    "pinyin": "lausanne",
+    "id": 725
+  },
+  {
+    "name": "因特拉肯",
+    "pinyin": "interlaken",
+    "id": 727
+  },
+  {
+    "name": "卡塔尼亚",
+    "pinyin": "catania",
+    "id": 734
+  },
+  {
+    "name": "阿坝",
+    "pinyin": "abazhou",
+    "id": 744
+  },
+  {
+    "name": "泰安",
+    "pinyin": "taian",
+    "id": 746
+  },
+  {
+    "name": "那不勒斯",
+    "pinyin": "naples",
+    "id": 747
+  },
+  {
+    "name": "普罗旺斯",
+    "pinyin": "provence",
+    "id": 750
+  },
+  {
+    "name": "宜春明月山旅游区",
+    "pinyin": "mountmingyue",
+    "id": 752
+  },
+  {
+    "name": "明月山",
+    "pinyin": "mingyueshan",
+    "id": 752
+  },
+  {
+    "name": "科伦坡",
+    "pinyin": "colombo",
+    "id": 753
+  },
+  {
+    "name": "甘孜",
+    "pinyin": "ganzizhou",
+    "id": 754
+  },
+  {
+    "name": "惠灵顿",
+    "pinyin": "wellington",
+    "id": 755
+  },
+  {
+    "name": "高雄",
+    "pinyin": "kaohsiung",
+    "id": 756
+  },
+  {
+    "name": "高雄",
+    "pinyin": "gaoxiong",
+    "id": 756
+  },
+  {
+    "name": "台南",
+    "pinyin": "tainan",
+    "id": 757
+  },
+  {
+    "name": "嘉义市",
+    "pinyin": "chiayicity",
+    "id": 758
+  },
+  {
+    "name": "嘉义",
+    "pinyin": "jiayi",
+    "id": 758
+  },
+  {
+    "name": "南投",
+    "pinyin": "nantou",
+    "id": 759
+  },
+  {
+    "name": "台东",
+    "pinyin": "taitung",
+    "id": 760
+  },
+  {
+    "name": "密云",
+    "pinyin": "miyun",
+    "id": 768
+  },
+  {
+    "name": "延庆",
+    "pinyin": "yanqing",
+    "id": 770
+  },
+  {
+    "name": "仙桃",
+    "pinyin": "xiantao",
+    "id": 775
+  },
+  {
+    "name": "亚历山大",
+    "pinyin": "alexandria",
+    "id": 777
+  },
+  {
+    "name": "南充",
+    "pinyin": "nanchong",
+    "id": 782
+  },
+  {
+    "name": "忻州",
+    "pinyin": "xinzhou",
+    "id": 783
+  },
+  {
+    "name": "永嘉",
+    "pinyin": "yongjia",
+    "id": 785
+  },
+  {
+    "name": "攀枝花",
+    "pinyin": "panzhihua",
+    "id": 786
+  },
+  {
+    "name": "波恩",
+    "pinyin": "bonn",
+    "id": 787
+  },
+  {
+    "name": "北马里亚纳群岛",
+    "pinyin": "northernmarianaislands",
+    "id": 788
+  },
+  {
+    "name": "约克",
+    "pinyin": "york",
+    "id": 789
+  },
+  {
+    "name": "海德堡",
+    "pinyin": "heidelberg",
+    "id": 790
+  },
+  {
+    "name": "因斯布鲁克",
+    "pinyin": "innsbruck",
+    "id": 791
+  },
+  {
+    "name": "哈尔施塔特",
+    "pinyin": "hallstatt",
+    "id": 792
+  },
+  {
+    "name": "格拉茨",
+    "pinyin": "graz",
+    "id": 793
+  },
+  {
+    "name": "莱芜",
+    "pinyin": "laiwu",
+    "id": 794
+  },
+  {
+    "name": "内罗毕",
+    "pinyin": "nairobi",
+    "id": 795
+  },
+  {
+    "name": "马赛马拉国家保护区",
+    "pinyin": "maasaimaranationalreserve",
+    "id": 797
+  },
+  {
+    "name": "里尔",
+    "pinyin": "lille",
+    "id": 808
+  },
+  {
+    "name": "平顶山",
+    "pinyin": "pingdingshan",
+    "id": 810
+  },
+  {
+    "name": "鹤岗",
+    "pinyin": "hegang",
+    "id": 811
+  },
+  {
+    "name": "龙游",
+    "pinyin": "longyou",
+    "id": 812
+  },
+  {
+    "name": "太阳城",
+    "pinyin": "suncity",
+    "id": 814
+  },
+  {
+    "name": "亚布力滑雪旅游度假区",
+    "pinyin": "yabuliskiresort",
+    "id": 815
+  },
+  {
+    "name": "亚布力",
+    "pinyin": "yabuli",
+    "id": 815
+  },
+  {
+    "name": "喀纳斯景区",
+    "pinyin": "xinjiangkanasnationalgeopark",
+    "id": 816
+  },
+  {
+    "name": "喀纳斯",
+    "pinyin": "kanasi",
+    "id": 816
+  },
+  {
+    "name": "句容",
+    "pinyin": "jurong",
+    "id": 817
+  },
+  {
+    "name": "都柏林",
+    "pinyin": "dublin",
+    "id": 819
+  },
+  {
+    "name": "布拉格",
+    "pinyin": "prague",
+    "id": 822
+  },
+  {
+    "name": "内江",
+    "pinyin": "neijiang",
+    "id": 823
+  },
+  {
+    "name": "池州",
+    "pinyin": "chizhou",
+    "id": 825
+  },
+  {
+    "name": "白银",
+    "pinyin": "baiyin",
+    "id": 828
+  },
+  {
+    "name": "定西",
+    "pinyin": "dingxi",
+    "id": 830
+  },
+  {
+    "name": "阆中",
+    "pinyin": "langzhong",
+    "id": 831
+  },
+  {
+    "name": "金昌",
+    "pinyin": "jinchang",
+    "id": 832
+  },
+  {
+    "name": "临夏回族自治州",
+    "pinyin": "linxiaprefecture",
+    "id": 833
+  },
+  {
+    "name": "临夏",
+    "pinyin": "linxia",
+    "id": 833
+  },
+  {
+    "name": "庆阳",
+    "pinyin": "qingyang",
+    "id": 834
+  },
+  {
+    "name": "揭阳",
+    "pinyin": "jieyang",
+    "id": 835
+  },
+  {
+    "name": "云浮",
+    "pinyin": "yunfu",
+    "id": 836
+  },
+  {
+    "name": "崇左",
+    "pinyin": "chongzuo",
+    "id": 837
+  },
+  {
+    "name": "河池",
+    "pinyin": "hechi",
+    "id": 838
+  },
+  {
+    "name": "来宾",
+    "pinyin": "laibin",
+    "id": 839
+  },
+  {
+    "name": "儋州",
+    "pinyin": "danzhou",
+    "id": 841
+  },
+  {
+    "name": "东方",
+    "pinyin": "dongfang",
+    "id": 842
+  },
+  {
+    "name": "琼海",
+    "pinyin": "qionghai",
+    "id": 843
+  },
+  {
+    "name": "万宁",
+    "pinyin": "wanning",
+    "id": 846
+  },
+  {
+    "name": "涿州",
+    "pinyin": "zhuozhou",
+    "id": 848
+  },
+  {
+    "name": "商丘",
+    "pinyin": "shangqiu",
+    "id": 849
+  },
+  {
+    "name": "鸡西",
+    "pinyin": "jixi",
+    "id": 852
+  },
+  {
+    "name": "绥芬河",
+    "pinyin": "suifenhe",
+    "id": 855
+  },
+  {
+    "name": "绥化",
+    "pinyin": "suihua",
+    "id": 856
+  },
+  {
+    "name": "五大连池",
+    "pinyin": "wudalianchi",
+    "id": 857
+  },
+  {
+    "name": "黄冈",
+    "pinyin": "huanggang",
+    "id": 859
+  },
+  {
+    "name": "随州",
+    "pinyin": "suizhou",
+    "id": 860
+  },
+  {
+    "name": "咸宁",
+    "pinyin": "xianning",
+    "id": 861
+  },
+  {
+    "name": "孝感",
+    "pinyin": "xiaogan",
+    "id": 862
+  },
+  {
+    "name": "钟祥",
+    "pinyin": "zhongxiang",
+    "id": 863
+  },
+  {
+    "name": "衡阳",
+    "pinyin": "hengyang",
+    "id": 864
+  },
+  {
+    "name": "吉首",
+    "pinyin": "jishou",
+    "id": 865
+  },
+  {
+    "name": "娄底",
+    "pinyin": "loudi",
+    "id": 866
+  },
+  {
+    "name": "邵阳",
+    "pinyin": "shaoyang",
+    "id": 867
+  },
+  {
+    "name": "永州",
+    "pinyin": "yongzhou",
+    "id": 869
+  },
+  {
+    "name": "白城",
+    "pinyin": "baicheng",
+    "id": 870
+  },
+  {
+    "name": "白山",
+    "pinyin": "baishan",
+    "id": 871
+  },
+  {
+    "name": "辽源",
+    "pinyin": "liaoyuan",
+    "id": 872
+  },
+  {
+    "name": "松原",
+    "pinyin": "songyuan",
+    "id": 873
+  },
+  {
+    "name": "通化",
+    "pinyin": "tonghua",
+    "id": 874
+  },
+  {
+    "name": "九江",
+    "pinyin": "jiujiang",
+    "id": 877
+  },
+  {
+    "name": "新余",
+    "pinyin": "xinyu",
+    "id": 878
+  },
+  {
+    "name": "阜新",
+    "pinyin": "fuxin",
+    "id": 879
+  },
+  {
+    "name": "辽阳",
+    "pinyin": "liaoyang",
+    "id": 881
+  },
+  {
+    "name": "巴彦淖尔",
+    "pinyin": "bayannur",
+    "id": 883
+  },
+  {
+    "name": "通辽",
+    "pinyin": "tongliao",
+    "id": 885
+  },
+  {
+    "name": "固原",
+    "pinyin": "guyuan",
+    "id": 888
+  },
+  {
+    "name": "石嘴山",
+    "pinyin": "shizuishan",
+    "id": 889
+  },
+  {
+    "name": "吴忠",
+    "pinyin": "wuzhong",
+    "id": 890
+  },
+  {
+    "name": "德令哈",
+    "pinyin": "delingha",
+    "id": 891
+  },
+  {
+    "name": "玉树藏族自治州",
+    "pinyin": "yushuprefecture",
+    "id": 896
+  },
+  {
+    "name": "玉树",
+    "pinyin": "yushu",
+    "id": 896
+  },
+  {
+    "name": "青州",
+    "pinyin": "qingzhou",
+    "id": 898
+  },
+  {
+    "name": "荣成",
+    "pinyin": "rongcheng",
+    "id": 899
+  },
+  {
+    "name": "长治",
+    "pinyin": "changzhi",
+    "id": 901
+  },
+  {
+    "name": "吕梁",
+    "pinyin": "lvliang",
+    "id": 902
+  },
+  {
+    "name": "朔州",
+    "pinyin": "shuozhou",
+    "id": 903
+  },
+  {
+    "name": "阳泉",
+    "pinyin": "yangquan",
+    "id": 904
+  },
+  {
+    "name": "黄龙",
+    "pinyin": "huanglong",
+    "id": 905
+  },
+  {
+    "name": "商洛",
+    "pinyin": "shangluo",
+    "id": 906
+  },
+  {
+    "name": "铜川",
+    "pinyin": "tongchuan",
+    "id": 907
+  },
+  {
+    "name": "渭南",
+    "pinyin": "weinan",
+    "id": 908
+  },
+  {
+    "name": "崇州",
+    "pinyin": "chongzhou",
+    "id": 909
+  },
+  {
+    "name": "达州",
+    "pinyin": "dazhou",
+    "id": 910
+  },
+  {
+    "name": "都江堰",
+    "pinyin": "dujiangyan",
+    "id": 911
+  },
+  {
+    "name": "凉山",
+    "pinyin": "liangshan",
+    "id": 912
+  },
+  {
+    "name": "马尔康",
+    "pinyin": "barkam",
+    "id": 913
+  },
+  {
+    "name": "眉山",
+    "pinyin": "meishan",
+    "id": 914
+  },
+  {
+    "name": "绵阳",
+    "pinyin": "mianyang",
+    "id": 915
+  },
+  {
+    "name": "东台",
+    "pinyin": "dongtai",
+    "id": 916
+  },
+  {
+    "name": "资阳",
+    "pinyin": "ziyang",
+    "id": 918
+  },
+  {
+    "name": "那曲",
+    "pinyin": "nagqu",
+    "id": 919
+  },
+  {
+    "name": "那曲地区",
+    "pinyin": "naqu",
+    "id": 919
+  },
+  {
+    "name": "阿克苏",
+    "pinyin": "aksu",
+    "id": 920
+  },
+  {
+    "name": "博乐",
+    "pinyin": "bole",
+    "id": 922
+  },
+  {
+    "name": "昌吉",
+    "pinyin": "changji",
+    "id": 923
+  },
+  {
+    "name": "个旧",
+    "pinyin": "gejiu",
+    "id": 925
+  },
+  {
+    "name": "临沧",
+    "pinyin": "lincang",
+    "id": 926
+  },
+  {
+    "name": "泸水",
+    "pinyin": "lushui",
+    "id": 927
+  },
+  {
+    "name": "普洱",
+    "pinyin": "puer",
+    "id": 928
+  },
+  {
+    "name": "昭通",
+    "pinyin": "zhaotong",
+    "id": 929
+  },
+  {
+    "name": "布宜诺斯艾利斯",
+    "pinyin": "buenosaires",
+    "id": 931
+  },
+  {
+    "name": "里约热内卢",
+    "pinyin": "riodejaneiro",
+    "id": 932
+  },
+  {
+    "name": "圣保罗",
+    "pinyin": "saopaulo",
+    "id": 933
+  },
+  {
+    "name": "圣保罗",
+    "pinyin": "stateofsaopa",
+    "id": 933
+  },
+  {
+    "name": "利马",
+    "pinyin": "lima",
+    "id": 934
+  },
+  {
+    "name": "达累斯萨拉姆",
+    "pinyin": "daressalaam",
+    "id": 939
+  },
+  {
+    "name": "突尼斯市",
+    "pinyin": "tunis",
+    "id": 940
+  },
+  {
+    "name": "佛罗里达",
+    "pinyin": "florida",
+    "id": 941
+  },
+  {
+    "name": "休斯敦",
+    "pinyin": "houston",
+    "id": 943
+  },
+  {
+    "name": "亚特兰大",
+    "pinyin": "atlanta",
+    "id": 944
+  },
+  {
+    "name": "利雅得",
+    "pinyin": "riyadh",
+    "id": 947
+  },
+  {
+    "name": "德黑兰",
+    "pinyin": "tehran",
+    "id": 949
+  },
+  {
+    "name": "博罗",
+    "pinyin": "boluo",
+    "id": 954
+  },
+  {
+    "name": "怀集",
+    "pinyin": "huaiji",
+    "id": 955
+  },
+  {
+    "name": "惠东",
+    "pinyin": "huidong",
+    "id": 956
+  },
+  {
+    "name": "乐昌",
+    "pinyin": "lechang",
+    "id": 957
+  },
+  {
+    "name": "南澳",
+    "pinyin": "nanao",
+    "id": 958
+  },
+  {
+    "name": "阳春",
+    "pinyin": "yangchun",
+    "id": 961
+  },
+  {
+    "name": "英德",
+    "pinyin": "yingde",
+    "id": 962
+  },
+  {
+    "name": "大新",
+    "pinyin": "daxin",
+    "id": 963
+  },
+  {
+    "name": "东兴",
+    "pinyin": "dongxing",
+    "id": 964
+  },
+  {
+    "name": "靖西",
+    "pinyin": "jingxi",
+    "id": 967
+  },
+  {
+    "name": "灵山",
+    "pinyin": "lingshan",
+    "id": 969
+  },
+  {
+    "name": "龙脊梯田",
+    "pinyin": "longjiriceterraces",
+    "id": 970
+  },
+  {
+    "name": "龙脊梯田",
+    "pinyin": "longjititian",
+    "id": 970
+  },
+  {
+    "name": "三江",
+    "pinyin": "sanjiang",
+    "id": 975
+  },
+  {
+    "name": "资源",
+    "pinyin": "ziyuan",
+    "id": 980
+  },
+  {
+    "name": "乐东",
+    "pinyin": "ledong",
+    "id": 981
+  },
+  {
+    "name": "五指山",
+    "pinyin": "wuzhishan",
+    "id": 982
+  },
+  {
+    "name": "漠河",
+    "pinyin": "mohe",
+    "id": 983
+  },
+  {
+    "name": "利川",
+    "pinyin": "lichuan",
+    "id": 984
+  },
+  {
+    "name": "潜江",
+    "pinyin": "qianjiang",
+    "id": 985
+  },
+  {
+    "name": "天门",
+    "pinyin": "tianmen",
+    "id": 987
+  },
+  {
+    "name": "凤凰",
+    "pinyin": "fenghuang",
+    "id": 988
+  },
+  {
+    "name": "通道",
+    "pinyin": "tongdao",
+    "id": 992
+  },
+  {
+    "name": "芷江",
+    "pinyin": "zhijiang",
+    "id": 994
+  },
+  {
+    "name": "大丰",
+    "pinyin": "dafeng",
+    "id": 995
+  },
+  {
+    "name": "洪泽",
+    "pinyin": "hongze",
+    "id": 996
+  },
+  {
+    "name": "岱山",
+    "pinyin": "daishan",
+    "id": 999
+  },
+  {
+    "name": "江山",
+    "pinyin": "jiangshan",
+    "id": 1000
+  },
+  {
+    "name": "开化",
+    "pinyin": "kaihua",
+    "id": 1001
+  },
+  {
+    "name": "浦江",
+    "pinyin": "pujiang",
+    "id": 1002
+  },
+  {
+    "name": "文成",
+    "pinyin": "wencheng",
+    "id": 1003
+  },
+  {
+    "name": "武义",
+    "pinyin": "wuyi",
+    "id": 1004
+  },
+  {
+    "name": "义乌",
+    "pinyin": "yiwu",
+    "id": 1005
+  },
+  {
+    "name": "玉环",
+    "pinyin": "yuhuan",
+    "id": 1006
+  },
+  {
+    "name": "文昌",
+    "pinyin": "wenchang",
+    "id": 1007
+  },
+  {
+    "name": "保亭",
+    "pinyin": "baoting",
+    "id": 1009
+  },
+  {
+    "name": "布尔津",
+    "pinyin": "burqin",
+    "id": 1010
+  },
+  {
+    "name": "玉山",
+    "pinyin": "yushan",
+    "id": 1013
+  },
+  {
+    "name": "登封",
+    "pinyin": "dengfeng",
+    "id": 1014
+  },
+  {
+    "name": "吴江",
+    "pinyin": "wujiang",
+    "id": 1017
+  },
+  {
+    "name": "嘉善",
+    "pinyin": "jiashan",
+    "id": 1019
+  },
+  {
+    "name": "奉化",
+    "pinyin": "fenghua",
+    "id": 1020
+  },
+  {
+    "name": "缙云",
+    "pinyin": "jinyun",
+    "id": 1021
+  },
+  {
+    "name": "乐清",
+    "pinyin": "yueqing",
+    "id": 1022
+  },
+  {
+    "name": "阿格拉",
+    "pinyin": "agra",
+    "id": 1026
+  },
+  {
+    "name": "斋普尔",
+    "pinyin": "jaipur",
+    "id": 1027
+  },
+  {
+    "name": "安特卫普",
+    "pinyin": "antwerp",
+    "id": 1029
+  },
+  {
+    "name": "爱琴海",
+    "pinyin": "aegean",
+    "id": 1031
+  },
+  {
+    "name": "江油",
+    "pinyin": "jiangyou",
+    "id": 1037
+  },
+  {
+    "name": "斯图加特",
+    "pinyin": "stuttgart",
+    "id": 1039
+  },
+  {
+    "name": "富森",
+    "pinyin": "fussen",
+    "id": 1040
+  },
+  {
+    "name": "博洛尼亚",
+    "pinyin": "bologna",
+    "id": 1041
+  },
+  {
+    "name": "热那亚",
+    "pinyin": "genoa",
+    "id": 1042
+  },
+  {
+    "name": "雷克雅未克",
+    "pinyin": "reykjavik",
+    "id": 1044
+  },
+  {
+    "name": "奈良",
+    "pinyin": "nara",
+    "id": 1045
+  },
+  {
+    "name": "卑尔根",
+    "pinyin": "bergen",
+    "id": 1046
+  },
+  {
+    "name": "第戎",
+    "pinyin": "dijon",
+    "id": 1053
+  },
+  {
+    "name": "伯明翰",
+    "pinyin": "birmingham",
+    "id": 1059
+  },
+  {
+    "name": "科莫",
+    "pinyin": "como",
+    "id": 1060
+  },
+  {
+    "name": "迪拜",
+    "pinyin": "dubai",
+    "id": 1062
+  },
+  {
+    "name": "洛伊克巴德",
+    "pinyin": "leukerbad",
+    "id": 1063
+  },
+  {
+    "name": "瓦伦西亚",
+    "pinyin": "valencia",
+    "id": 1080
+  },
+  {
+    "name": "温德米尔",
+    "pinyin": "windermere",
+    "id": 1082
+  },
+  {
+    "name": "威斯巴登",
+    "pinyin": "wiesbaden",
+    "id": 1088
+  },
+  {
+    "name": "贝希特斯加登",
+    "pinyin": "berchtesgaden",
+    "id": 1090
+  },
+  {
+    "name": "巴登巴登",
+    "pinyin": "badenbaden",
+    "id": 1092
+  },
+  {
+    "name": "奥尔良",
+    "pinyin": "orleans",
+    "id": 1095
+  },
+  {
+    "name": "横店影视城",
+    "pinyin": "hengdianworldstudios",
+    "id": 1096
+  },
+  {
+    "name": "横店",
+    "pinyin": "hengdian",
+    "id": 1096
+  },
+  {
+    "name": "赫尔格达",
+    "pinyin": "hurghada",
+    "id": 1098
+  },
+  {
+    "name": "阿维尼翁",
+    "pinyin": "avignon",
+    "id": 1100
+  },
+  {
+    "name": "朝阳",
+    "pinyin": "chaoyang",
+    "id": 1104
+  },
+  {
+    "name": "布达佩斯",
+    "pinyin": "budapest",
+    "id": 1109
+  },
+  {
+    "name": "蒙彼利埃",
+    "pinyin": "montpellier",
+    "id": 1116
+  },
+  {
+    "name": "锡耶纳",
+    "pinyin": "siena",
+    "id": 1128
+  },
+  {
+    "name": "卡帕多奇亚",
+    "pinyin": "cappadocia",
+    "id": 1133
+  },
+  {
+    "name": "波德申",
+    "pinyin": "portdickson",
+    "id": 1136
+  },
+  {
+    "name": "印第安纳波利斯",
+    "pinyin": "indianapolis",
+    "id": 1137
+  },
+  {
+    "name": "陆良",
+    "pinyin": "luliang",
+    "id": 1140
+  },
+  {
+    "name": "连州",
+    "pinyin": "lianzhou",
+    "id": 1141
+  },
+  {
+    "name": "阳山",
+    "pinyin": "yangshan",
+    "id": 1142
+  },
+  {
+    "name": "梅里雪山国家公园",
+    "pinyin": "meilisnowmountainnationalpark",
+    "id": 1143
+  },
+  {
+    "name": "梅里雪山",
+    "pinyin": "meilixueshan",
+    "id": 1143
+  },
+  {
+    "name": "霞浦",
+    "pinyin": "xiapu",
+    "id": 1154
+  },
+  {
+    "name": "薄荷岛",
+    "pinyin": "boholisland",
+    "id": 1166
+  },
+  {
+    "name": "石河子",
+    "pinyin": "shihezi",
+    "id": 1168
+  },
+  {
+    "name": "奎屯",
+    "pinyin": "kuitun",
+    "id": 1169
+  },
+  {
+    "name": "株洲",
+    "pinyin": "zhuzhou",
+    "id": 1174
+  },
+  {
+    "name": "巴拉望",
+    "pinyin": "palawan",
+    "id": 1175
+  },
+  {
+    "name": "尼尔森",
+    "pinyin": "nelson",
+    "id": 1176
+  },
+  {
+    "name": "七台河",
+    "pinyin": "qitaihe",
+    "id": 1179
+  },
+  {
+    "name": "遵化",
+    "pinyin": "zunhua",
+    "id": 1181
+  },
+  {
+    "name": "中卫",
+    "pinyin": "zhongwei",
+    "id": 1184
+  },
+  {
+    "name": "利川市",
+    "pinyin": "icheon",
+    "id": 1186
+  },
+  {
+    "name": "大城",
+    "pinyin": "phranakhonsiayutthaya",
+    "id": 1187
+  },
+  {
+    "name": "安纳西",
+    "pinyin": "annecy",
+    "id": 1190
+  },
+  {
+    "name": "但尼丁",
+    "pinyin": "dunedin",
+    "id": 1192
+  },
+  {
+    "name": "阿拉善",
+    "pinyin": "alxa",
+    "id": 1193
+  },
+  {
+    "name": "阿拉善盟",
+    "pinyin": "alashan",
+    "id": 1193
+  },
+  {
+    "name": "新竹",
+    "pinyin": "xinzhu",
+    "id": 1197
+  },
+  {
+    "name": "考文垂",
+    "pinyin": "coventry",
+    "id": 1199
+  },
+  {
+    "name": "蒙自",
+    "pinyin": "mengzi",
+    "id": 1201
+  },
+  {
+    "name": "卡罗维发利",
+    "pinyin": "karlovyvary",
+    "id": 1205
+  },
+  {
+    "name": "福克斯冰川镇",
+    "pinyin": "foxglacier",
+    "id": 1210
+  },
+  {
+    "name": "瑞丽",
+    "pinyin": "ruili",
+    "id": 1213
+  },
+  {
+    "name": "布加勒斯特",
+    "pinyin": "bucharest",
+    "id": 1229
+  },
+  {
+    "name": "曼德勒",
+    "pinyin": "mandalay",
+    "id": 1237
+  },
+  {
+    "name": "华沙",
+    "pinyin": "warsaw",
+    "id": 1261
+  },
+  {
+    "name": "天堂岛",
+    "pinyin": "paradiseisland",
+    "id": 1268
+  },
+  {
+    "name": "卢布尔雅那",
+    "pinyin": "ljubljana",
+    "id": 1286
+  },
+  {
+    "name": "乌兰浩特",
+    "pinyin": "ulanhot",
+    "id": 1316
+  },
+  {
+    "name": "宜州",
+    "pinyin": "yizhou",
+    "id": 1319
+  },
+  {
+    "name": "鹿儿岛",
+    "pinyin": "kagoshima",
+    "id": 1326
+  },
+  {
+    "name": "蓝毗尼",
+    "pinyin": "lumbini",
+    "id": 1330
+  },
+  {
+    "name": "加尔各答",
+    "pinyin": "kolkata",
+    "id": 1331
+  },
+  {
+    "name": "浏阳",
+    "pinyin": "liuyang",
+    "id": 1337
+  },
+  {
+    "name": "大邱",
+    "pinyin": "daegu",
+    "id": 1340
+  },
+  {
+    "name": "科尔多瓦",
+    "pinyin": "cordoba",
+    "id": 1341
+  },
+  {
+    "name": "弥勒",
+    "pinyin": "mile",
+    "id": 1342
+  },
+  {
+    "name": "汉密尔顿岛",
+    "pinyin": "hamiltonisland",
+    "id": 1344
+  },
+  {
+    "name": "库车",
+    "pinyin": "kuqa",
+    "id": 1345
+  },
+  {
+    "name": "黎平",
+    "pinyin": "liping",
+    "id": 1346
+  },
+  {
+    "name": "广汉",
+    "pinyin": "guanghan",
+    "id": 1349
+  },
+  {
+    "name": "阿布扎比",
+    "pinyin": "abudhabi",
+    "id": 1353
+  },
+  {
+    "name": "大溪地",
+    "pinyin": "tahiti",
+    "id": 1354
+  },
+  {
+    "name": "克鲁格国家公园",
+    "pinyin": "krugernationalpark",
+    "id": 1355
+  },
+  {
+    "name": "乌兰察布",
+    "pinyin": "ulanqab",
+    "id": 1358
+  },
+  {
+    "name": "乌兰察布",
+    "pinyin": "wulanchabu",
+    "id": 1358
+  },
+  {
+    "name": "屏东",
+    "pinyin": "pingtung",
+    "id": 1364
+  },
+  {
+    "name": "花莲",
+    "pinyin": "hualien",
+    "id": 1366
+  },
+  {
+    "name": "澎湖",
+    "pinyin": "penghu",
+    "id": 1367
+  },
+  {
+    "name": "金门",
+    "pinyin": "jinmen",
+    "id": 1368
+  },
+  {
+    "name": "台中",
+    "pinyin": "taichung",
+    "id": 1369
+  },
+  {
+    "name": "台中",
+    "pinyin": "taizhong",
+    "id": 1369
+  },
+  {
+    "name": "如皋",
+    "pinyin": "rugao",
+    "id": 1372
+  },
+  {
+    "name": "锡林浩特",
+    "pinyin": "xilinhaote",
+    "id": 1373
+  },
+  {
+    "name": "新山",
+    "pinyin": "johorbahru",
+    "id": 1377
+  },
+  {
+    "name": "垦丁国家公园",
+    "pinyin": "kentingnationalpark",
+    "id": 1380
+  },
+  {
+    "name": "垦丁",
+    "pinyin": "kenting",
+    "id": 1380
+  },
+  {
+    "name": "基隆",
+    "pinyin": "keelung",
+    "id": 1382
+  },
+  {
+    "name": "宜兰",
+    "pinyin": "yilan",
+    "id": 1383
+  },
+  {
+    "name": "仁川",
+    "pinyin": "incheon",
+    "id": 1385
+  },
+  {
+    "name": "敦化",
+    "pinyin": "dunhua",
+    "id": 1388
+  },
+  {
+    "name": "美因茨",
+    "pinyin": "mainz",
+    "id": 1390
+  },
+  {
+    "name": "利兹",
+    "pinyin": "leeds",
+    "id": 1392
+  },
+  {
+    "name": "大叻",
+    "pinyin": "dalat",
+    "id": 1393
+  },
+  {
+    "name": "兴城",
+    "pinyin": "xingcheng",
+    "id": 1399
+  },
+  {
+    "name": "茨城县",
+    "pinyin": "ibaraki",
+    "id": 1401
+  },
+  {
+    "name": "邛崃",
+    "pinyin": "qionglai",
+    "id": 1403
+  },
+  {
+    "name": "加那利群岛",
+    "pinyin": "canaryislands",
+    "id": 1404
+  },
+  {
+    "name": "魁北克市",
+    "pinyin": "quebeccity",
+    "id": 1405
+  },
+  {
+    "name": "坎昆",
+    "pinyin": "cancun",
+    "id": 1412
+  },
+  {
+    "name": "马丘比丘",
+    "pinyin": "machupicchu",
+    "id": 1413
+  },
+  {
+    "name": "库斯科",
+    "pinyin": "cusco",
+    "id": 1414
+  },
+  {
+    "name": "湘潭",
+    "pinyin": "xiangtan",
+    "id": 1417
+  },
+  {
+    "name": "复活节岛",
+    "pinyin": "easterisland",
+    "id": 1418
+  },
+  {
+    "name": "科罗拉多州",
+    "pinyin": "colorado",
+    "id": 1421
+  },
+  {
+    "name": "关岛",
+    "pinyin": "guam",
+    "id": 1422
+  },
+  {
+    "name": "巴西利亚",
+    "pinyin": "brasilia",
+    "id": 1426
+  },
+  {
+    "name": "新泽西州",
+    "pinyin": "newjersey",
+    "id": 1427
+  },
+  {
+    "name": "黔西南",
+    "pinyin": "qianxinan",
+    "id": 1428
+  },
+  {
+    "name": "余杭",
+    "pinyin": "yuhang",
+    "id": 1429
+  },
+  {
+    "name": "卡尔加里",
+    "pinyin": "calgary",
+    "id": 1430
+  },
+  {
+    "name": "遂昌",
+    "pinyin": "suichang",
+    "id": 1431
+  },
+  {
+    "name": "盐湖城",
+    "pinyin": "saltlakecity",
+    "id": 1432
+  },
+  {
+    "name": "新奥尔良",
+    "pinyin": "neworleans",
+    "id": 1434
+  },
+  {
+    "name": "天目山",
+    "pinyin": "tianmushan",
+    "id": 1435
+  },
+  {
+    "name": "天目湖旅游度假区",
+    "pinyin": "tianmulakeresort",
+    "id": 1437
+  },
+  {
+    "name": "天目湖",
+    "pinyin": "tianmuhu",
+    "id": 1437
+  },
+  {
+    "name": "桃园",
+    "pinyin": "taoyuan",
+    "id": 1439
+  },
+  {
+    "name": "特里尔",
+    "pinyin": "trier",
+    "id": 1449
+  },
+  {
+    "name": "德累斯顿",
+    "pinyin": "dresden",
+    "id": 1467
+  },
+  {
+    "name": "特雷维索",
+    "pinyin": "treviso",
+    "id": 1471
+  },
+  {
+    "name": "布鲁日",
+    "pinyin": "bruges",
+    "id": 1474
+  },
+  {
+    "name": "巴塞尔",
+    "pinyin": "basel",
+    "id": 1477
+  },
+  {
+    "name": "西岭雪山景区",
+    "pinyin": "xilingsnowmountain",
+    "id": 1484
+  },
+  {
+    "name": "西岭雪山",
+    "pinyin": "xilingxueshan",
+    "id": 1484
+  },
+  {
+    "name": "纽伦堡",
+    "pinyin": "nuremberg",
+    "id": 1489
+  },
+  {
+    "name": "陇南",
+    "pinyin": "longnan",
+    "id": 1491
+  },
+  {
+    "name": "巴里",
+    "pinyin": "bari",
+    "id": 1495
+  },
+  {
+    "name": "三宝垄",
+    "pinyin": "semarang",
+    "id": 1506
+  },
+  {
+    "name": "密山",
+    "pinyin": "mishan",
+    "id": 1508
+  },
+  {
+    "name": "陵水",
+    "pinyin": "lingshui",
+    "id": 1509
+  },
+  {
+    "name": "巴林",
+    "pinyin": "bahrain",
+    "id": 1512
+  },
+  {
+    "name": "富阳",
+    "pinyin": "fuyang",
+    "id": 1513
+  },
+  {
+    "name": "普宁",
+    "pinyin": "puning",
+    "id": 1523
+  },
+  {
+    "name": "尼亚加拉瀑布",
+    "pinyin": "niagarafalls",
+    "id": 1527
+  },
+  {
+    "name": "仙台",
+    "pinyin": "sendai",
+    "id": 1535
+  },
+  {
+    "name": "金坛",
+    "pinyin": "jintan",
+    "id": 1538
+  },
+  {
+    "name": "凤凰城",
+    "pinyin": "phoenix",
+    "id": 1540
+  },
+  {
+    "name": "普拉托",
+    "pinyin": "prato",
+    "id": 1547
+  },
+  {
+    "name": "巴勒莫",
+    "pinyin": "palermo",
+    "id": 1552
+  },
+  {
+    "name": "丹佛",
+    "pinyin": "denver",
+    "id": 1553
+  },
+  {
+    "name": "波西塔诺",
+    "pinyin": "positano",
+    "id": 1556
+  },
+  {
+    "name": "魁北克省",
+    "pinyin": "quebec",
+    "id": 1561
+  },
+  {
+    "name": "拉罗汤加岛",
+    "pinyin": "rarotonga",
+    "id": 1568
+  },
+  {
+    "name": "资兴",
+    "pinyin": "zixing",
+    "id": 1570
+  },
+  {
+    "name": "蒙得维的亚",
+    "pinyin": "montevideo",
+    "id": 1595
+  },
+  {
+    "name": "袋鼠岛",
+    "pinyin": "kangarooisland",
+    "id": 1599
+  },
+  {
+    "name": "匹兹堡",
+    "pinyin": "pittsburgh",
+    "id": 1600
+  },
+  {
+    "name": "桑坦德",
+    "pinyin": "santander",
+    "id": 1604
+  },
+  {
+    "name": "谢菲尔德",
+    "pinyin": "sheffield",
+    "id": 1613
+  },
+  {
+    "name": "巴巴多斯",
+    "pinyin": "barbados",
+    "id": 1615
+  },
+  {
+    "name": "毕尔巴鄂",
+    "pinyin": "bilbao",
+    "id": 1617
+  },
+  {
+    "name": "拉巴斯",
+    "pinyin": "lapaz",
+    "id": 1619
+  },
+  {
+    "name": "昆卡",
+    "pinyin": "cuenca",
+    "id": 1628
+  },
+  {
+    "name": "塞哥维亚",
+    "pinyin": "segovia",
+    "id": 1631
+  },
+  {
+    "name": "布莱克浦",
+    "pinyin": "blackpool",
+    "id": 1634
+  },
+  {
+    "name": "纳什维尔",
+    "pinyin": "nashville",
+    "id": 1636
+  },
+  {
+    "name": "斯普利特",
+    "pinyin": "split",
+    "id": 1642
+  },
+  {
+    "name": "利马索尔",
+    "pinyin": "limassol",
+    "id": 1663
+  },
+  {
+    "name": "冲绳岛",
+    "pinyin": "okinawa",
+    "id": 1668
+  },
+  {
+    "name": "金泽",
+    "pinyin": "kanazawa",
+    "id": 1672
+  },
+  {
+    "name": "门多萨",
+    "pinyin": "mendoza",
+    "id": 1680
+  },
+  {
+    "name": "乌斯怀亚",
+    "pinyin": "ushuaia",
+    "id": 1685
+  },
+  {
+    "name": "埃森",
+    "pinyin": "essen",
+    "id": 1686
+  },
+  {
+    "name": "卡萨布兰卡",
+    "pinyin": "casablanca",
+    "id": 1693
+  },
+  {
+    "name": "布鲁姆",
+    "pinyin": "broome",
+    "id": 1694
+  },
+  {
+    "name": "波哥大",
+    "pinyin": "bogota",
+    "id": 1702
+  },
+  {
+    "name": "波尔图",
+    "pinyin": "porto",
+    "id": 1708
+  },
+  {
+    "name": "巴拿马城",
+    "pinyin": "panamacity",
+    "id": 1711
+  },
+  {
+    "name": "库里提巴",
+    "pinyin": "curitiba",
+    "id": 1713
+  },
+  {
+    "name": "科克",
+    "pinyin": "cork",
+    "id": 1715
+  },
+  {
+    "name": "贝鲁特",
+    "pinyin": "beirut",
+    "id": 1716
+  },
+  {
+    "name": "伊瓜苏国家公园",
+    "pinyin": "iguaunationalpark",
+    "id": 1717
+  },
+  {
+    "name": "康提",
+    "pinyin": "kandy",
+    "id": 1722
+  },
+  {
+    "name": "萨格勒布",
+    "pinyin": "zagreb",
+    "id": 1725
+  },
+  {
+    "name": "尼甘布",
+    "pinyin": "negombo",
+    "id": 1727
+  },
+  {
+    "name": "多哈",
+    "pinyin": "doha",
+    "id": 1733
+  },
+  {
+    "name": "的里雅斯特",
+    "pinyin": "trieste",
+    "id": 1740
+  },
+  {
+    "name": "彭州",
+    "pinyin": "pengzhou",
+    "id": 1747
+  },
+  {
+    "name": "马拉喀什",
+    "pinyin": "marrakech",
+    "id": 1748
+  },
+  {
+    "name": "美奈",
+    "pinyin": "muine",
+    "id": 1751
+  },
+  {
+    "name": "班加罗尔",
+    "pinyin": "bangalore",
+    "id": 1752
+  },
+  {
+    "name": "莫雷阿岛",
+    "pinyin": "moorea",
+    "id": 1757
+  },
+  {
+    "name": "波拉波拉岛",
+    "pinyin": "borabora",
+    "id": 1760
+  },
+  {
+    "name": "比萨",
+    "pinyin": "pisa",
+    "id": 1761
+  },
+  {
+    "name": "凤城",
+    "pinyin": "fengcheng",
+    "id": 1762
+  },
+  {
+    "name": "垦利",
+    "pinyin": "kenli",
+    "id": 1767
+  },
+  {
+    "name": "赤水",
+    "pinyin": "chishui",
+    "id": 1770
+  },
+  {
+    "name": "紫云",
+    "pinyin": "ziyun",
+    "id": 1780
+  },
+  {
+    "name": "莱昂",
+    "pinyin": "leon",
+    "id": 1784
+  },
+  {
+    "name": "埃托沙国家公园",
+    "pinyin": "etoshanationalpark",
+    "id": 1792
+  },
+  {
+    "name": "马埃岛",
+    "pinyin": "maheisland",
+    "id": 1805
+  },
+  {
+    "name": "德班",
+    "pinyin": "durban",
+    "id": 1810
+  },
+  {
+    "name": "马拉加",
+    "pinyin": "malaga",
+    "id": 1811
+  },
+  {
+    "name": "瓜达拉哈拉",
+    "pinyin": "guadalajara",
+    "id": 1813
+  },
+  {
+    "name": "圣何塞",
+    "pinyin": "sanjose",
+    "id": 1815
+  },
+  {
+    "name": "埃德蒙顿",
+    "pinyin": "edmonton",
+    "id": 1816
+  },
+  {
+    "name": "明尼阿波利斯",
+    "pinyin": "minneapolis",
+    "id": 1818
+  },
+  {
+    "name": "圣安东尼奥",
+    "pinyin": "sanantonio",
+    "id": 1822
+  },
+  {
+    "name": "费城",
+    "pinyin": "philadelphia",
+    "id": 1825
+  },
+  {
+    "name": "奥兰多",
+    "pinyin": "orlando",
+    "id": 1827
+  },
+  {
+    "name": "辛辛那提",
+    "pinyin": "cincinnati",
+    "id": 1828
+  },
+  {
+    "name": "奥斯汀",
+    "pinyin": "austin",
+    "id": 1829
+  },
+  {
+    "name": "长兴",
+    "pinyin": "changxing",
+    "id": 1832
+  },
+  {
+    "name": "昌黎",
+    "pinyin": "changli",
+    "id": 1835
+  },
+  {
+    "name": "胶州",
+    "pinyin": "jiaozhou",
+    "id": 1836
+  },
+  {
+    "name": "蒙特雷",
+    "pinyin": "monterrey",
+    "id": 1844
+  },
+  {
+    "name": "大石桥",
+    "pinyin": "dashiqiao",
+    "id": 1845
+  },
+  {
+    "name": "巩义",
+    "pinyin": "gongyi",
+    "id": 1846
+  },
+  {
+    "name": "桐城",
+    "pinyin": "tongcheng",
+    "id": 1847
+  },
+  {
+    "name": "基多",
+    "pinyin": "quito",
+    "id": 1856
+  },
+  {
+    "name": "特罗姆瑟",
+    "pinyin": "tromso",
+    "id": 1857
+  },
+  {
+    "name": "明斯克",
+    "pinyin": "minsk",
+    "id": 1858
+  },
+  {
+    "name": "马斯喀特",
+    "pinyin": "muscat",
+    "id": 1861
+  },
+  {
+    "name": "布拉加",
+    "pinyin": "braga",
+    "id": 1873
+  },
+  {
+    "name": "札幌",
+    "pinyin": "sapporo",
+    "id": 1878
+  },
+  {
+    "name": "扶风",
+    "pinyin": "fufeng",
+    "id": 1880
+  },
+  {
+    "name": "林州",
+    "pinyin": "linzhou",
+    "id": 1890
+  },
+  {
+    "name": "米脂",
+    "pinyin": "mizhi",
+    "id": 1895
+  },
+  {
+    "name": "马尔默",
+    "pinyin": "malmo",
+    "id": 1897
+  },
+  {
+    "name": "拉奈岛",
+    "pinyin": "lanai",
+    "id": 1919
+  },
+  {
+    "name": "迈阿密",
+    "pinyin": "miami",
+    "id": 1920
+  },
+  {
+    "name": "波特兰",
+    "pinyin": "portland",
+    "id": 1923
+  },
+  {
+    "name": "棕榈泉",
+    "pinyin": "palmsprings",
+    "id": 1925
+  },
+  {
+    "name": "夏威夷岛",
+    "pinyin": "hawaiiisland",
+    "id": 1928
+  },
+  {
+    "name": "大岛",
+    "pinyin": "thebigisland",
+    "id": 1928
+  },
+  {
+    "name": "栾川",
+    "pinyin": "luanchuan",
+    "id": 1930
+  },
+  {
+    "name": "吕宋岛",
+    "pinyin": "luzon",
+    "id": 1933
+  },
+  {
+    "name": "北川",
+    "pinyin": "beichuan",
+    "id": 1934
+  },
+  {
+    "name": "海门",
+    "pinyin": "haimen",
+    "id": 1935
+  },
+  {
+    "name": "南戴河",
+    "pinyin": "nandaihe",
+    "id": 1937
+  },
+  {
+    "name": "北戴河",
+    "pinyin": "beidaihe",
+    "id": 1938
+  },
+  {
+    "name": "三门",
+    "pinyin": "sanmen",
+    "id": 1945
+  },
+  {
+    "name": "兴化",
+    "pinyin": "xinghua",
+    "id": 1946
+  },
+  {
+    "name": "石梅湾",
+    "pinyin": "shimeiwan",
+    "id": 1948
+  },
+  {
+    "name": "圣迭戈",
+    "pinyin": "sandiego",
+    "id": 1954
+  },
+  {
+    "name": "萨拉曼卡",
+    "pinyin": "salamanca",
+    "id": 1956
+  },
+  {
+    "name": "托莱多",
+    "pinyin": "toledo",
+    "id": 1958
+  },
+  {
+    "name": "萨拉戈萨",
+    "pinyin": "zaragoza",
+    "id": 1961
+  },
+  {
+    "name": "多维尔",
+    "pinyin": "deauville",
+    "id": 1968
+  },
+  {
+    "name": "伊斯特本",
+    "pinyin": "eastbourne",
+    "id": 1979
+  },
+  {
+    "name": "莱斯特",
+    "pinyin": "leicester",
+    "id": 1984
+  },
+  {
+    "name": "米克诺斯镇",
+    "pinyin": "mykonostown",
+    "id": 1996
+  },
+  {
+    "name": "圣托里尼",
+    "pinyin": "santorini",
+    "id": 1998
+  },
+  {
+    "name": "死海",
+    "pinyin": "deadsea",
+    "id": 2008
+  },
+  {
+    "name": "荔浦",
+    "pinyin": "lipu",
+    "id": 2020
+  },
+  {
+    "name": "海拉尔",
+    "pinyin": "hailaer",
+    "id": 2025
+  },
+  {
+    "name": "额尔古纳",
+    "pinyin": "ergun",
+    "id": 2026
+  },
+  {
+    "name": "额尔古纳",
+    "pinyin": "eerguna",
+    "id": 2026
+  },
+  {
+    "name": "章丘",
+    "pinyin": "zhangqiu",
+    "id": 2027
+  },
+  {
+    "name": "洪湖",
+    "pinyin": "honghu",
+    "id": 2031
+  },
+  {
+    "name": "元阳",
+    "pinyin": "yuanyang",
+    "id": 2032
+  },
+  {
+    "name": "景宁",
+    "pinyin": "jingning",
+    "id": 2034
+  },
+  {
+    "name": "沂水",
+    "pinyin": "yishui",
+    "id": 2035
+  },
+  {
+    "name": "沂南",
+    "pinyin": "yinan",
+    "id": 2036
+  },
+  {
+    "name": "沙姆沙伊赫",
+    "pinyin": "sharmelsheikh",
+    "id": 2039
+  },
+  {
+    "name": "班夫国家公园",
+    "pinyin": "banffnationalpark",
+    "id": 2045
+  },
+  {
+    "name": "佛坪",
+    "pinyin": "foping",
+    "id": 2051
+  },
+  {
+    "name": "长葛",
+    "pinyin": "changge",
+    "id": 2055
+  },
+  {
+    "name": "平定",
+    "pinyin": "pingding",
+    "id": 2057
+  },
+  {
+    "name": "伊宁市",
+    "pinyin": "yiningcity",
+    "id": 2058
+  },
+  {
+    "name": "伊宁",
+    "pinyin": "yining",
+    "id": 2058
+  },
+  {
+    "name": "泸定",
+    "pinyin": "luding",
+    "id": 2059
+  },
+  {
+    "name": "檀香山",
+    "pinyin": "honolulu",
+    "id": 2060
+  },
+  {
+    "name": "茂宜岛",
+    "pinyin": "maui",
+    "id": 2061
+  },
+  {
+    "name": "新北",
+    "pinyin": "newtaipeicity",
+    "id": 2063
+  },
+  {
+    "name": "诸城",
+    "pinyin": "zhucheng",
+    "id": 2077
+  },
+  {
+    "name": "博鳌",
+    "pinyin": "boao",
+    "id": 2078
+  },
+  {
+    "name": "抚仙湖",
+    "pinyin": "fuxianlake",
+    "id": 2080
+  },
+  {
+    "name": "抚仙湖",
+    "pinyin": "fuxianhu",
+    "id": 2080
+  },
+  {
+    "name": "乐亭",
+    "pinyin": "leting",
+    "id": 2082
+  },
+  {
+    "name": "右玉",
+    "pinyin": "youyu",
+    "id": 2085
+  },
+  {
+    "name": "瓦努阿图",
+    "pinyin": "vanuatu",
+    "id": 2099
+  },
+  {
+    "name": "平罗",
+    "pinyin": "pingluo",
+    "id": 2102
+  },
+  {
+    "name": "湖区",
+    "pinyin": "lakedistrict",
+    "id": 2103
+  },
+  {
+    "name": "贺兰",
+    "pinyin": "helan",
+    "id": 2119
+  },
+  {
+    "name": "横滨",
+    "pinyin": "yokohama",
+    "id": 2126
+  },
+  {
+    "name": "名古屋",
+    "pinyin": "nagoya",
+    "id": 2127
+  },
+  {
+    "name": "绥中",
+    "pinyin": "suizhong",
+    "id": 2133
+  },
+  {
+    "name": "新宾",
+    "pinyin": "xinbin",
+    "id": 2138
+  },
+  {
+    "name": "黑山",
+    "pinyin": "heishan",
+    "id": 2141
+  },
+  {
+    "name": "庄河",
+    "pinyin": "zhuanghe",
+    "id": 2148
+  },
+  {
+    "name": "建水",
+    "pinyin": "jianshui",
+    "id": 2151
+  },
+  {
+    "name": "墨江",
+    "pinyin": "mojiang",
+    "id": 2152
+  },
+  {
+    "name": "景洪",
+    "pinyin": "jinghong",
+    "id": 2154
+  },
+  {
+    "name": "宾川",
+    "pinyin": "binchuan",
+    "id": 2157
+  },
+  {
+    "name": "寻甸",
+    "pinyin": "dundian",
+    "id": 2164
+  },
+  {
+    "name": "澄江",
+    "pinyin": "chengjiang",
+    "id": 2171
+  },
+  {
+    "name": "丘北",
+    "pinyin": "qiubei",
+    "id": 2175
+  },
+  {
+    "name": "宜良",
+    "pinyin": "yiliang",
+    "id": 2177
+  },
+  {
+    "name": "德钦",
+    "pinyin": "deqin",
+    "id": 2178
+  },
+  {
+    "name": "洱源",
+    "pinyin": "eryuan",
+    "id": 2180
+  },
+  {
+    "name": "盈江",
+    "pinyin": "yingjiang",
+    "id": 2182
+  },
+  {
+    "name": "富宁",
+    "pinyin": "funing",
+    "id": 2187
+  },
+  {
+    "name": "永胜",
+    "pinyin": "yongsheng",
+    "id": 2192
+  },
+  {
+    "name": "广南",
+    "pinyin": "guangnan",
+    "id": 2198
+  },
+  {
+    "name": "芒市",
+    "pinyin": "mangshi",
+    "id": 2199
+  },
+  {
+    "name": "嵩明",
+    "pinyin": "songming",
+    "id": 2202
+  },
+  {
+    "name": "云龙",
+    "pinyin": "yunlong",
+    "id": 2203
+  },
+  {
+    "name": "云县",
+    "pinyin": "yuncounty",
+    "id": 2206
+  },
+  {
+    "name": "巍山",
+    "pinyin": "weishan",
+    "id": 2211
+  },
+  {
+    "name": "会泽",
+    "pinyin": "huize",
+    "id": 2212
+  },
+  {
+    "name": "剑川",
+    "pinyin": "jianchuan",
+    "id": 2215
+  },
+  {
+    "name": "虎林",
+    "pinyin": "hulin",
+    "id": 2224
+  },
+  {
+    "name": "嘉荫",
+    "pinyin": "jiayin",
+    "id": 2228
+  },
+  {
+    "name": "铁力",
+    "pinyin": "tieli",
+    "id": 2230
+  },
+  {
+    "name": "五常",
+    "pinyin": "wuchang",
+    "id": 2237
+  },
+  {
+    "name": "海林",
+    "pinyin": "hailin",
+    "id": 2240
+  },
+  {
+    "name": "青田",
+    "pinyin": "qingtian",
+    "id": 2247
+  },
+  {
+    "name": "淳安",
+    "pinyin": "chunan",
+    "id": 2249
+  },
+  {
+    "name": "松阳",
+    "pinyin": "songyang",
+    "id": 2250
+  },
+  {
+    "name": "云和",
+    "pinyin": "yunhe",
+    "id": 2251
+  },
+  {
+    "name": "新郑",
+    "pinyin": "xinzheng",
+    "id": 2264
+  },
+  {
+    "name": "汤阴",
+    "pinyin": "tangyin",
+    "id": 2277
+  },
+  {
+    "name": "内乡",
+    "pinyin": "neixiang",
+    "id": 2295
+  },
+  {
+    "name": "禹州",
+    "pinyin": "yuzhou",
+    "id": 2301
+  },
+  {
+    "name": "辉县",
+    "pinyin": "huixian",
+    "id": 2313
+  },
+  {
+    "name": "灵武",
+    "pinyin": "lingwu",
+    "id": 2323
+  },
+  {
+    "name": "永宁",
+    "pinyin": "yongning",
+    "id": 2324
+  },
+  {
+    "name": "海原",
+    "pinyin": "haiyuan",
+    "id": 2325
+  },
+  {
+    "name": "隆德",
+    "pinyin": "longde",
+    "id": 2326
+  },
+  {
+    "name": "同心",
+    "pinyin": "tongxin",
+    "id": 2327
+  },
+  {
+    "name": "中宁",
+    "pinyin": "zhongning",
+    "id": 2328
+  },
+  {
+    "name": "泾源",
+    "pinyin": "jingyuan",
+    "id": 2329
+  },
+  {
+    "name": "青铜峡",
+    "pinyin": "qingtongxia",
+    "id": 2330
+  },
+  {
+    "name": "江口",
+    "pinyin": "jiangkou",
+    "id": 2334
+  },
+  {
+    "name": "平塘",
+    "pinyin": "pingtang",
+    "id": 2335
+  },
+  {
+    "name": "金沙",
+    "pinyin": "jinsha",
+    "id": 2338
+  },
+  {
+    "name": "从江",
+    "pinyin": "congjiang",
+    "id": 2344
+  },
+  {
+    "name": "大方",
+    "pinyin": "dafang",
+    "id": 2348
+  },
+  {
+    "name": "龙里",
+    "pinyin": "longli",
+    "id": 2357
+  },
+  {
+    "name": "罗甸",
+    "pinyin": "luodian",
+    "id": 2360
+  },
+  {
+    "name": "织金",
+    "pinyin": "zhijin",
+    "id": 2362
+  },
+  {
+    "name": "福泉",
+    "pinyin": "fuquan",
+    "id": 2363
+  },
+  {
+    "name": "纳雍",
+    "pinyin": "nayong",
+    "id": 2366
+  },
+  {
+    "name": "赫章",
+    "pinyin": "hezhang",
+    "id": 2368
+  },
+  {
+    "name": "黔南",
+    "pinyin": "qiannan",
+    "id": 2374
+  },
+  {
+    "name": "黔东南",
+    "pinyin": "qiandongnan",
+    "id": 2375
+  },
+  {
+    "name": "安远",
+    "pinyin": "anyuan",
+    "id": 2381
+  },
+  {
+    "name": "湖口",
+    "pinyin": "hukou",
+    "id": 2386
+  },
+  {
+    "name": "靖安",
+    "pinyin": "jingan",
+    "id": 2396
+  },
+  {
+    "name": "东乡",
+    "pinyin": "dongxiang",
+    "id": 2404
+  },
+  {
+    "name": "弋阳",
+    "pinyin": "yiyang",
+    "id": 2406
+  },
+  {
+    "name": "永新",
+    "pinyin": "yongxin",
+    "id": 2412
+  },
+  {
+    "name": "奉新",
+    "pinyin": "fengxin",
+    "id": 2413
+  },
+  {
+    "name": "石城",
+    "pinyin": "shicheng",
+    "id": 2415
+  },
+  {
+    "name": "分宜",
+    "pinyin": "fenyi",
+    "id": 2416
+  },
+  {
+    "name": "于都",
+    "pinyin": "yudou",
+    "id": 2419
+  },
+  {
+    "name": "泰和",
+    "pinyin": "taihe",
+    "id": 2422
+  },
+  {
+    "name": "铜鼓",
+    "pinyin": "tonggu",
+    "id": 2425
+  },
+  {
+    "name": "波密",
+    "pinyin": "bome",
+    "id": 2436
+  },
+  {
+    "name": "波密",
+    "pinyin": "bomi",
+    "id": 2436
+  },
+  {
+    "name": "江孜",
+    "pinyin": "jiangzi",
+    "id": 2437
+  },
+  {
+    "name": "普兰",
+    "pinyin": "purang",
+    "id": 2440
+  },
+  {
+    "name": "普兰",
+    "pinyin": "pulan",
+    "id": 2440
+  },
+  {
+    "name": "乃东",
+    "pinyin": "naidong",
+    "id": 2441
+  },
+  {
+    "name": "当雄",
+    "pinyin": "damxung",
+    "id": 2443
+  },
+  {
+    "name": "当雄",
+    "pinyin": "dangxiong",
+    "id": 2443
+  },
+  {
+    "name": "聂拉木",
+    "pinyin": "nielamu",
+    "id": 2445
+  },
+  {
+    "name": "米林",
+    "pinyin": "mainling",
+    "id": 2448
+  },
+  {
+    "name": "定日",
+    "pinyin": "tingri",
+    "id": 2450
+  },
+  {
+    "name": "芒康",
+    "pinyin": "markam",
+    "id": 2452
+  },
+  {
+    "name": "白沙",
+    "pinyin": "baisha",
+    "id": 2455
+  },
+  {
+    "name": "昌江",
+    "pinyin": "changjiang",
+    "id": 2456
+  },
+  {
+    "name": "澄迈",
+    "pinyin": "chengmai",
+    "id": 2457
+  },
+  {
+    "name": "临江",
+    "pinyin": "linjiang",
+    "id": 2460
+  },
+  {
+    "name": "珲春",
+    "pinyin": "hunchun",
+    "id": 2461
+  },
+  {
+    "name": "长白",
+    "pinyin": "changbai",
+    "id": 2463
+  },
+  {
+    "name": "辉南",
+    "pinyin": "huinan",
+    "id": 2464
+  },
+  {
+    "name": "龙井",
+    "pinyin": "longjing",
+    "id": 2465
+  },
+  {
+    "name": "图们",
+    "pinyin": "tumen",
+    "id": 2466
+  },
+  {
+    "name": "集安",
+    "pinyin": "jian",
+    "id": 2467
+  },
+  {
+    "name": "抚松",
+    "pinyin": "fusong",
+    "id": 2479
+  },
+  {
+    "name": "哈巴河",
+    "pinyin": "habahe",
+    "id": 2480
+  },
+  {
+    "name": "五家渠",
+    "pinyin": "wujiaju",
+    "id": 2493
+  },
+  {
+    "name": "鄯善",
+    "pinyin": "shanshan",
+    "id": 2502
+  },
+  {
+    "name": "喀什市",
+    "pinyin": "kashgarcity",
+    "id": 2507
+  },
+  {
+    "name": "塔城市",
+    "pinyin": "tacheng",
+    "id": 2510
+  },
+  {
+    "name": "巴音郭楞",
+    "pinyin": "bayinguoleng",
+    "id": 2512
+  },
+  {
+    "name": "博尔塔拉",
+    "pinyin": "boertala",
+    "id": 2513
+  },
+  {
+    "name": "吴桥",
+    "pinyin": "wuqiao",
+    "id": 2520
+  },
+  {
+    "name": "河间",
+    "pinyin": "hejian",
+    "id": 2522
+  },
+  {
+    "name": "怀来",
+    "pinyin": "huailai",
+    "id": 2527
+  },
+  {
+    "name": "兴隆",
+    "pinyin": "xinglong",
+    "id": 2528
+  },
+  {
+    "name": "涞水",
+    "pinyin": "laishui",
+    "id": 2545
+  },
+  {
+    "name": "崇礼",
+    "pinyin": "chongli",
+    "id": 2548
+  },
+  {
+    "name": "涞源",
+    "pinyin": "laiyuan",
+    "id": 2549
+  },
+  {
+    "name": "盐山",
+    "pinyin": "yanshan",
+    "id": 2553
+  },
+  {
+    "name": "大名",
+    "pinyin": "daming",
+    "id": 2554
+  },
+  {
+    "name": "易县",
+    "pinyin": "yicounty",
+    "id": 2557
+  },
+  {
+    "name": "定州",
+    "pinyin": "dingzhou",
+    "id": 2562
+  },
+  {
+    "name": "蔚县",
+    "pinyin": "yucounty",
+    "id": 2565
+  },
+  {
+    "name": "滦县",
+    "pinyin": "luanxian",
+    "id": 2573
+  },
+  {
+    "name": "张北",
+    "pinyin": "zhangbei",
+    "id": 2575
+  },
+  {
+    "name": "赵县",
+    "pinyin": "zhaocounty",
+    "id": 2578
+  },
+  {
+    "name": "正定",
+    "pinyin": "zhengding",
+    "id": 2581
+  },
+  {
+    "name": "围场",
+    "pinyin": "weichang",
+    "id": 2584
+  },
+  {
+    "name": "馆陶",
+    "pinyin": "guantao",
+    "id": 2589
+  },
+  {
+    "name": "沽源",
+    "pinyin": "guyuancounty",
+    "id": 2591
+  },
+  {
+    "name": "和县",
+    "pinyin": "hecounty",
+    "id": 2598
+  },
+  {
+    "name": "庐江",
+    "pinyin": "lujiang",
+    "id": 2602
+  },
+  {
+    "name": "太湖",
+    "pinyin": "taihu",
+    "id": 2603
+  },
+  {
+    "name": "霍邱",
+    "pinyin": "huoqiu",
+    "id": 2606
+  },
+  {
+    "name": "五河",
+    "pinyin": "wuhe",
+    "id": 2607
+  },
+  {
+    "name": "泾县",
+    "pinyin": "jingcounty",
+    "id": 2616
+  },
+  {
+    "name": "金寨",
+    "pinyin": "jinzhai",
+    "id": 2623
+  },
+  {
+    "name": "石台",
+    "pinyin": "shitai",
+    "id": 2624
+  },
+  {
+    "name": "休宁",
+    "pinyin": "xiuning",
+    "id": 2625
+  },
+  {
+    "name": "贵德",
+    "pinyin": "guide",
+    "id": 2636
+  },
+  {
+    "name": "互助",
+    "pinyin": "huchu",
+    "id": 2637
+  },
+  {
+    "name": "都兰",
+    "pinyin": "dulan",
+    "id": 2638
+  },
+  {
+    "name": "玛沁",
+    "pinyin": "maqin",
+    "id": 2640
+  },
+  {
+    "name": "乌兰",
+    "pinyin": "wulan",
+    "id": 2641
+  },
+  {
+    "name": "湟源",
+    "pinyin": "huangyuan",
+    "id": 2643
+  },
+  {
+    "name": "共和",
+    "pinyin": "gonghe",
+    "id": 2644
+  },
+  {
+    "name": "湟中",
+    "pinyin": "huangzhong",
+    "id": 2645
+  },
+  {
+    "name": "安溪",
+    "pinyin": "anxi",
+    "id": 2647
+  },
+  {
+    "name": "建宁",
+    "pinyin": "jianning",
+    "id": 2648
+  },
+  {
+    "name": "屏南",
+    "pinyin": "pingnan",
+    "id": 2649
+  },
+  {
+    "name": "长乐",
+    "pinyin": "changle",
+    "id": 2650
+  },
+  {
+    "name": "平潭",
+    "pinyin": "pingtan",
+    "id": 2652
+  },
+  {
+    "name": "浦城",
+    "pinyin": "pucheng",
+    "id": 2653
+  },
+  {
+    "name": "仙游",
+    "pinyin": "xianyou",
+    "id": 2654
+  },
+  {
+    "name": "连江",
+    "pinyin": "lianjiang",
+    "id": 2657
+  },
+  {
+    "name": "德化",
+    "pinyin": "dehua",
+    "id": 2659
+  },
+  {
+    "name": "龙海",
+    "pinyin": "longhai",
+    "id": 2660
+  },
+  {
+    "name": "东山",
+    "pinyin": "dongshan",
+    "id": 2662
+  },
+  {
+    "name": "永泰",
+    "pinyin": "yongtai",
+    "id": 2665
+  },
+  {
+    "name": "闽侯",
+    "pinyin": "minhou",
+    "id": 2666
+  },
+  {
+    "name": "光泽",
+    "pinyin": "guangze",
+    "id": 2671
+  },
+  {
+    "name": "南靖",
+    "pinyin": "najing",
+    "id": 2672
+  },
+  {
+    "name": "松溪",
+    "pinyin": "songxi",
+    "id": 2675
+  },
+  {
+    "name": "诏安",
+    "pinyin": "zhaoan",
+    "id": 2676
+  },
+  {
+    "name": "泰宁",
+    "pinyin": "taining",
+    "id": 2678
+  },
+  {
+    "name": "宁化",
+    "pinyin": "ninghua",
+    "id": 2681
+  },
+  {
+    "name": "周宁",
+    "pinyin": "zhouning",
+    "id": 2683
+  },
+  {
+    "name": "沙洋",
+    "pinyin": "shayang",
+    "id": 2686
+  },
+  {
+    "name": "当阳",
+    "pinyin": "dangyang",
+    "id": 2699
+  },
+  {
+    "name": "远安",
+    "pinyin": "yuanan",
+    "id": 2713
+  },
+  {
+    "name": "宁陕",
+    "pinyin": "ningshan",
+    "id": 2735
+  },
+  {
+    "name": "平利",
+    "pinyin": "pingli",
+    "id": 2737
+  },
+  {
+    "name": "户县",
+    "pinyin": "hucounty",
+    "id": 2741
+  },
+  {
+    "name": "靖边",
+    "pinyin": "jingbiancounty",
+    "id": 2745
+  },
+  {
+    "name": "靖边",
+    "pinyin": "jingbian",
+    "id": 2745
+  },
+  {
+    "name": "岐山",
+    "pinyin": "qishan",
+    "id": 2746
+  },
+  {
+    "name": "大荔",
+    "pinyin": "dali",
+    "id": 2748
+  },
+  {
+    "name": "三原",
+    "pinyin": "sanyuan",
+    "id": 2750
+  },
+  {
+    "name": "丹凤",
+    "pinyin": "danfeng",
+    "id": 2751
+  },
+  {
+    "name": "留坝",
+    "pinyin": "liuba",
+    "id": 2761
+  },
+  {
+    "name": "神木",
+    "pinyin": "shenmu",
+    "id": 2762
+  },
+  {
+    "name": "石泉",
+    "pinyin": "shiquan",
+    "id": 2765
+  },
+  {
+    "name": "镇安",
+    "pinyin": "zhenan",
+    "id": 2770
+  },
+  {
+    "name": "勉县",
+    "pinyin": "miancounty",
+    "id": 2779
+  },
+  {
+    "name": "宕昌",
+    "pinyin": "dangchang",
+    "id": 2790
+  },
+  {
+    "name": "夏河",
+    "pinyin": "xiahe",
+    "id": 2792
+  },
+  {
+    "name": "瓜州",
+    "pinyin": "guazhou",
+    "id": 2807
+  },
+  {
+    "name": "茶陵",
+    "pinyin": "chaling",
+    "id": 2812
+  },
+  {
+    "name": "洪江",
+    "pinyin": "hongjiang",
+    "id": 2825
+  },
+  {
+    "name": "会同",
+    "pinyin": "huitong",
+    "id": 2828
+  },
+  {
+    "name": "桑植",
+    "pinyin": "sangzhi",
+    "id": 2851
+  },
+  {
+    "name": "汝城",
+    "pinyin": "rucheng",
+    "id": 2852
+  },
+  {
+    "name": "临朐",
+    "pinyin": "linqu",
+    "id": 2907
+  },
+  {
+    "name": "惠来",
+    "pinyin": "huilai",
+    "id": 2917
+  },
+  {
+    "name": "兴宁",
+    "pinyin": "xingning",
+    "id": 2918
+  },
+  {
+    "name": "新兴",
+    "pinyin": "xinxing",
+    "id": 2919
+  },
+  {
+    "name": "大埔",
+    "pinyin": "dabu",
+    "id": 2920
+  },
+  {
+    "name": "南雄",
+    "pinyin": "nanxiong",
+    "id": 2921
+  },
+  {
+    "name": "徐闻",
+    "pinyin": "xuwen",
+    "id": 2923
+  },
+  {
+    "name": "电白",
+    "pinyin": "dianbai",
+    "id": 2924
+  },
+  {
+    "name": "清新",
+    "pinyin": "qingxin",
+    "id": 2927
+  },
+  {
+    "name": "封开",
+    "pinyin": "fengkai",
+    "id": 2931
+  },
+  {
+    "name": "阳西",
+    "pinyin": "yangxi",
+    "id": 2933
+  },
+  {
+    "name": "佛冈",
+    "pinyin": "fogang",
+    "id": 2935
+  },
+  {
+    "name": "雷州",
+    "pinyin": "leizhou",
+    "id": 2936
+  },
+  {
+    "name": "高要",
+    "pinyin": "gaoyao",
+    "id": 2940
+  },
+  {
+    "name": "连南",
+    "pinyin": "liannan",
+    "id": 2941
+  },
+  {
+    "name": "连平",
+    "pinyin": "lianping",
+    "id": 2942
+  },
+  {
+    "name": "海丰",
+    "pinyin": "haifeng",
+    "id": 2946
+  },
+  {
+    "name": "龙川",
+    "pinyin": "longchuan",
+    "id": 2947
+  },
+  {
+    "name": "和平",
+    "pinyin": "heping",
+    "id": 2948
+  },
+  {
+    "name": "龙门",
+    "pinyin": "longmen",
+    "id": 2949
+  },
+  {
+    "name": "根河",
+    "pinyin": "genhe",
+    "id": 2955
+  },
+  {
+    "name": "和林格尔",
+    "pinyin": "helingeer",
+    "id": 2956
+  },
+  {
+    "name": "苏尼特右旗",
+    "pinyin": "suniteyouqi",
+    "id": 2958
+  },
+  {
+    "name": "西乌珠穆沁旗",
+    "pinyin": "xiwuzhumuqinqi",
+    "id": 2960
+  },
+  {
+    "name": "达拉特旗",
+    "pinyin": "dalateqi",
+    "id": 2964
+  },
+  {
+    "name": "多伦",
+    "pinyin": "duolun",
+    "id": 2967
+  },
+  {
+    "name": "扎兰屯",
+    "pinyin": "zhalantun",
+    "id": 2972
+  },
+  {
+    "name": "额济纳旗",
+    "pinyin": "ejinbanner",
+    "id": 2973
+  },
+  {
+    "name": "额济纳旗",
+    "pinyin": "ejinaqi",
+    "id": 2973
+  },
+  {
+    "name": "二连浩特",
+    "pinyin": "erenhot",
+    "id": 2976
+  },
+  {
+    "name": "介休",
+    "pinyin": "jiexiu",
+    "id": 2982
+  },
+  {
+    "name": "阳高",
+    "pinyin": "yanggao",
+    "id": 2994
+  },
+  {
+    "name": "陵川",
+    "pinyin": "lingchuan",
+    "id": 3004
+  },
+  {
+    "name": "应县",
+    "pinyin": "yingcounty",
+    "id": 3006
+  },
+  {
+    "name": "临猗",
+    "pinyin": "linji",
+    "id": 3013
+  },
+  {
+    "name": "原平",
+    "pinyin": "yuanping",
+    "id": 3014
+  },
+  {
+    "name": "洪洞",
+    "pinyin": "hongtong",
+    "id": 3015
+  },
+  {
+    "name": "五寨",
+    "pinyin": "wuzhai",
+    "id": 3021
+  },
+  {
+    "name": "潞城",
+    "pinyin": "lucheng",
+    "id": 3024
+  },
+  {
+    "name": "浑源",
+    "pinyin": "hunyuan",
+    "id": 3026
+  },
+  {
+    "name": "浑源",
+    "pinyin": "gunyuan",
+    "id": 3026
+  },
+  {
+    "name": "宁武",
+    "pinyin": "ningwu",
+    "id": 3030
+  },
+  {
+    "name": "襄垣",
+    "pinyin": "xiangyuan",
+    "id": 3034
+  },
+  {
+    "name": "巴马",
+    "pinyin": "bama",
+    "id": 3041
+  },
+  {
+    "name": "隆安",
+    "pinyin": "longan",
+    "id": 3042
+  },
+  {
+    "name": "合山",
+    "pinyin": "heshan",
+    "id": 3053
+  },
+  {
+    "name": "蒙山",
+    "pinyin": "mengshan",
+    "id": 3057
+  },
+  {
+    "name": "滨海",
+    "pinyin": "binhai",
+    "id": 3074
+  },
+  {
+    "name": "东海",
+    "pinyin": "donghai",
+    "id": 3078
+  },
+  {
+    "name": "汉源",
+    "pinyin": "hanyuan",
+    "id": 3090
+  },
+  {
+    "name": "冕宁",
+    "pinyin": "mianning",
+    "id": 3091
+  },
+  {
+    "name": "合江",
+    "pinyin": "hejiang",
+    "id": 3093
+  },
+  {
+    "name": "宝兴",
+    "pinyin": "baoxin",
+    "id": 3095
+  },
+  {
+    "name": "米易",
+    "pinyin": "miyi",
+    "id": 3097
+  },
+  {
+    "name": "红原",
+    "pinyin": "hongyuan",
+    "id": 3099
+  },
+  {
+    "name": "汶川",
+    "pinyin": "wenchuan",
+    "id": 3101
+  },
+  {
+    "name": "武胜",
+    "pinyin": "wusheng",
+    "id": 3105
+  },
+  {
+    "name": "会理",
+    "pinyin": "huili",
+    "id": 3106
+  },
+  {
+    "name": "乡城",
+    "pinyin": "xiangcheng",
+    "id": 3107
+  },
+  {
+    "name": "小金",
+    "pinyin": "xiaojin",
+    "id": 3110
+  },
+  {
+    "name": "剑阁",
+    "pinyin": "jiange",
+    "id": 3115
+  },
+  {
+    "name": "喜德",
+    "pinyin": "xide",
+    "id": 3117
+  },
+  {
+    "name": "犍为",
+    "pinyin": "qianwei",
+    "id": 3118
+  },
+  {
+    "name": "彭山",
+    "pinyin": "pengshan",
+    "id": 3123
+  },
+  {
+    "name": "大邑",
+    "pinyin": "dae",
+    "id": 3130
+  },
+  {
+    "name": "平武",
+    "pinyin": "pingwu",
+    "id": 3134
+  },
+  {
+    "name": "雅江",
+    "pinyin": "yajiang",
+    "id": 3137
+  },
+  {
+    "name": "乐至",
+    "pinyin": "lezhi",
+    "id": 3143
+  },
+  {
+    "name": "峨边",
+    "pinyin": "ebian",
+    "id": 3146
+  },
+  {
+    "name": "理塘",
+    "pinyin": "litang",
+    "id": 3150
+  },
+  {
+    "name": "什邡",
+    "pinyin": "shifang",
+    "id": 3154
+  },
+  {
+    "name": "石棉",
+    "pinyin": "shimian",
+    "id": 3158
+  },
+  {
+    "name": "茂县",
+    "pinyin": "maocounty",
+    "id": 3164
+  },
+  {
+    "name": "若尔盖",
+    "pinyin": "ruoergai",
+    "id": 3165
+  },
+  {
+    "name": "平顺",
+    "pinyin": "binhthuan",
+    "id": 3168
+  },
+  {
+    "name": "阿里山",
+    "pinyin": "alishan",
+    "id": 3179
+  },
+  {
+    "name": "彰化",
+    "pinyin": "changhua",
+    "id": 3180
+  },
+  {
+    "name": "太鲁阁国家公园",
+    "pinyin": "tarokonationalpark",
+    "id": 3184
+  },
+  {
+    "name": "淡水",
+    "pinyin": "danshui",
+    "id": 3189
+  },
+  {
+    "name": "鹿港",
+    "pinyin": "lukangtownship",
+    "id": 3190
+  },
+  {
+    "name": "恒春",
+    "pinyin": "hengchun",
+    "id": 3193
+  },
+  {
+    "name": "绿岛",
+    "pinyin": "lvdao",
+    "id": 3195
+  },
+  {
+    "name": "温泉",
+    "pinyin": "warmquelle",
+    "id": 4002
+  },
+  {
+    "name": "马里博尔",
+    "pinyin": "maribor",
+    "id": 4418
+  },
+  {
+    "name": "纳卡",
+    "pinyin": "nacka",
+    "id": 4503
+  },
+  {
+    "name": "阿兰达",
+    "pinyin": "arlandastad",
+    "id": 4505
+  },
+  {
+    "name": "罗斯托夫",
+    "pinyin": "rostov",
+    "id": 4635
+  },
+  {
+    "name": "斯摩棱斯克",
+    "pinyin": "smolensk",
+    "id": 4655
+  },
+  {
+    "name": "车臣共和国",
+    "pinyin": "chechenrepublic",
+    "id": 4662
+  },
+  {
+    "name": "索契",
+    "pinyin": "sochi",
+    "id": 4674
+  },
+  {
+    "name": "海参崴",
+    "pinyin": "vladivostok",
+    "id": 4690
+  },
+  {
+    "name": "鞑靼斯坦共和国",
+    "pinyin": "republicoftatarstan",
+    "id": 4694
+  },
+  {
+    "name": "摩尔曼斯克",
+    "pinyin": "murmansk",
+    "id": 4711
+  },
+  {
+    "name": "贝加尔湖",
+    "pinyin": "lakebaikal",
+    "id": 4726
+  },
+  {
+    "name": "鄂木斯克",
+    "pinyin": "omsk",
+    "id": 4737
+  },
+  {
+    "name": "赤塔",
+    "pinyin": "chita",
+    "id": 4739
+  },
+  {
+    "name": "蒙扎",
+    "pinyin": "monza",
+    "id": 5052
+  },
+  {
+    "name": "阿马尔菲海岸",
+    "pinyin": "costieraamalfitana",
+    "id": 6148
+  },
+  {
+    "name": "西西里",
+    "pinyin": "sicili",
+    "id": 6235
+  },
+  {
+    "name": "芬奇",
+    "pinyin": "vinci",
+    "id": 6742
+  },
+  {
+    "name": "费拉拉",
+    "pinyin": "ferrara",
+    "id": 6830
+  },
+  {
+    "name": "皮亚琴察",
+    "pinyin": "piacenza",
+    "id": 6867
+  },
+  {
+    "name": "卢戈",
+    "pinyin": "lugo",
+    "id": 6970
+  },
+  {
+    "name": "五渔村",
+    "pinyin": "cinqueterre",
+    "id": 7742
+  },
+  {
+    "name": "verona",
+    "pinyin": "verona",
+    "id": 8018
+  },
+  {
+    "name": "维斯",
+    "pinyin": "vis",
+    "id": 8287
+  },
+  {
+    "name": "克鲁姆洛夫",
+    "pinyin": "ceskykrumlov",
+    "id": 8532
+  },
+  {
+    "name": "卡莫纳",
+    "pinyin": "carmona",
+    "id": 8736
+  },
+  {
+    "name": "龙达",
+    "pinyin": "ronda",
+    "id": 8762
+  },
+  {
+    "name": "萨拉斯",
+    "pinyin": "salas",
+    "id": 9299
+  },
+  {
+    "name": "希洪",
+    "pinyin": "gijon",
+    "id": 9317
+  },
+  {
+    "name": "阿尔坎塔拉",
+    "pinyin": "alcantara",
+    "id": 10185
+  },
+  {
+    "name": "梅里达",
+    "pinyin": "merida",
+    "id": 10199
+  },
+  {
+    "name": "卡塞雷斯",
+    "pinyin": "caceres",
+    "id": 10217
+  },
+  {
+    "name": "巴马科",
+    "pinyin": "bamako",
+    "id": 10497
+  },
+  {
+    "name": "加纳",
+    "pinyin": "gannat",
+    "id": 11037
+  },
+  {
+    "name": "凡尔赛",
+    "pinyin": "versailles",
+    "id": 11305
+  },
+  {
+    "name": "阿拉贡",
+    "pinyin": "aragon",
+    "id": 11769
+  },
+  {
+    "name": "夏门",
+    "pinyin": "chamant",
+    "id": 12220
+  },
+  {
+    "name": "珀斯",
+    "pinyin": "pioussay",
+    "id": 12659
+  },
+  {
+    "name": "凯尔",
+    "pinyin": "caille",
+    "id": 13135
+  },
+  {
+    "name": "卡拉",
+    "pinyin": "callas",
+    "id": 13139
+  },
+  {
+    "name": "塞瓦斯托波尔",
+    "pinyin": "sevastopol",
+    "id": 13549
+  },
+  {
+    "name": "怀特岛",
+    "pinyin": "isleofwight",
+    "id": 13635
+  },
+  {
+    "name": "马瑙斯",
+    "pinyin": "manaus",
+    "id": 13750
+  },
+  {
+    "name": "圣路易斯",
+    "pinyin": "saoluis",
+    "id": 13752
+  },
+  {
+    "name": "贝洛奥里藏特",
+    "pinyin": "belohorizonte",
+    "id": 13862
+  },
+  {
+    "name": "亚马孙河",
+    "pinyin": "amazonriver",
+    "id": 13895
+  },
+  {
+    "name": "巴拉",
+    "pinyin": "barra",
+    "id": 13925
+  },
+  {
+    "name": "佩尼亚",
+    "pinyin": "penha",
+    "id": 13997
+  },
+  {
+    "name": "福斯－杜伊瓜苏",
+    "pinyin": "fozdoiguacu",
+    "id": 14022
+  },
+  {
+    "name": "伊瓜苏瀑布",
+    "pinyin": "quedasdoiguacu",
+    "id": 14028
+  },
+  {
+    "name": "加奈马国家公园",
+    "pinyin": "canaimanationalpark",
+    "id": 14208
+  },
+  {
+    "name": "加拉加斯",
+    "pinyin": "caracas",
+    "id": 14213
+  },
+  {
+    "name": "乌布",
+    "pinyin": "ubud",
+    "id": 14307
+  },
+  {
+    "name": "班达亚齐",
+    "pinyin": "bandaaceh",
+    "id": 14346
+  },
+  {
+    "name": "万丹",
+    "pinyin": "banten",
+    "id": 14389
+  },
+  {
+    "name": "婆罗浮屠",
+    "pinyin": "borobudur",
+    "id": 14417
+  },
+  {
+    "name": "普卡",
+    "pinyin": "puncak",
+    "id": 14419
+  },
+  {
+    "name": "静冈县",
+    "pinyin": "shizuokaprefecture",
+    "id": 14445
+  },
+  {
+    "name": "广岛",
+    "pinyin": "hiroshimaprefecture",
+    "id": 14463
+  },
+  {
+    "name": "大阪府",
+    "pinyin": "osakaprefecture",
+    "id": 14472
+  },
+  {
+    "name": "岩手县",
+    "pinyin": "iwateprefecture",
+    "id": 14479
+  },
+  {
+    "name": "函馆",
+    "pinyin": "hakodate",
+    "id": 14536
+  },
+  {
+    "name": "登别",
+    "pinyin": "noboribetsu",
+    "id": 14557
+  },
+  {
+    "name": "美瑛町",
+    "pinyin": "bieicho",
+    "id": 14559
+  },
+  {
+    "name": "小樽",
+    "pinyin": "otaru",
+    "id": 14565
+  },
+  {
+    "name": "福冈县",
+    "pinyin": "fukuokaprefecture",
+    "id": 14584
+  },
+  {
+    "name": "鹿儿岛县",
+    "pinyin": "kagoshimaprefecture",
+    "id": 14587
+  },
+  {
+    "name": "墨西哥",
+    "pinyin": "mexico",
+    "id": 14620
+  },
+  {
+    "name": "苏比克湾",
+    "pinyin": "subicbay",
+    "id": 14633
+  },
+  {
+    "name": "板门店",
+    "pinyin": "panmunjom",
+    "id": 14750
+  },
+  {
+    "name": "西归浦市",
+    "pinyin": "seogwipo",
+    "id": 14755
+  },
+  {
+    "name": "加勒",
+    "pinyin": "galle",
+    "id": 14797
+  },
+  {
+    "name": "塔曼尼加拉",
+    "pinyin": "kualatahan",
+    "id": 14816
+  },
+  {
+    "name": "怡保",
+    "pinyin": "ipoh",
+    "id": 14868
+  },
+  {
+    "name": "弹丸礁",
+    "pinyin": "swallowreef",
+    "id": 14892
+  },
+  {
+    "name": "山打根",
+    "pinyin": "sandakan",
+    "id": 14894
+  },
+  {
+    "name": "仙本那",
+    "pinyin": "semporna",
+    "id": 14898
+  },
+  {
+    "name": "湄南河",
+    "pinyin": "maenam",
+    "id": 14959
+  },
+  {
+    "name": "卡塔",
+    "pinyin": "kata",
+    "id": 14963
+  },
+  {
+    "name": "木斯塘",
+    "pinyin": "mustang",
+    "id": 15000
+  },
+  {
+    "name": "拉达克",
+    "pinyin": "ladakh",
+    "id": 15010
+  },
+  {
+    "name": "焦特普尔",
+    "pinyin": "jodhpur",
+    "id": 15217
+  },
+  {
+    "name": "达兰萨拉",
+    "pinyin": "dharamsala",
+    "id": 15658
+  },
+  {
+    "name": "拿撒勒",
+    "pinyin": "nazareth",
+    "id": 15696
+  },
+  {
+    "name": "金斯顿",
+    "pinyin": "kingston",
+    "id": 15711
+  },
+  {
+    "name": "企鹅岛",
+    "pinyin": "penguin",
+    "id": 15799
+  },
+  {
+    "name": "大堡礁",
+    "pinyin": "greatbarrierreef",
+    "id": 16276
+  },
+  {
+    "name": "菲利普岛",
+    "pinyin": "phillipisland",
+    "id": 16477
+  },
+  {
+    "name": "汉密尔顿",
+    "pinyin": "hamilton",
+    "id": 16581
+  },
+  {
+    "name": "布莱顿",
+    "pinyin": "brighton",
+    "id": 16592
+  },
+  {
+    "name": "纽黑文",
+    "pinyin": "newhaven",
+    "id": 16622
+  },
+  {
+    "name": "罗特尼斯岛",
+    "pinyin": "rottnestisland",
+    "id": 16918
+  },
+  {
+    "name": "卡梅尔",
+    "pinyin": "carmel",
+    "id": 16943
+  },
+  {
+    "name": "维多利亚公园",
+    "pinyin": "victoriapark",
+    "id": 16958
+  },
+  {
+    "name": "丹麦",
+    "pinyin": "denmark",
+    "id": 17007
+  },
+  {
+    "name": "阿皮亚",
+    "pinyin": "apia",
+    "id": 17014
+  },
+  {
+    "name": "阿罗敦",
+    "pinyin": "arrowtown",
+    "id": 17133
+  },
+  {
+    "name": "克伦威尔",
+    "pinyin": "cromwell",
+    "id": 17157
+  },
+  {
+    "name": "瓦纳卡",
+    "pinyin": "wanaka",
+    "id": 17172
+  },
+  {
+    "name": "格莱诺基",
+    "pinyin": "glenorchy",
+    "id": 17173
+  },
+  {
+    "name": "布莱斯",
+    "pinyin": "blyth",
+    "id": 17595
+  },
+  {
+    "name": "哈勃岛",
+    "pinyin": "harbourisland",
+    "id": 17632
+  },
+  {
+    "name": "拉姆岛",
+    "pinyin": "rumcay",
+    "id": 17643
+  },
+  {
+    "name": "银滩",
+    "pinyin": "silversands",
+    "id": 17650
+  },
+  {
+    "name": "新港",
+    "pinyin": "puertonuevo",
+    "id": 17751
+  },
+  {
+    "name": "洛斯卡沃斯",
+    "pinyin": "loscabos",
+    "id": 17754
+  },
+  {
+    "name": "纳帕",
+    "pinyin": "napa",
+    "id": 18255
+  },
+  {
+    "name": "白金汉",
+    "pinyin": "buckingham",
+    "id": 18447
+  },
+  {
+    "name": "弗雷德里克",
+    "pinyin": "frederictownship",
+    "id": 18592
+  },
+  {
+    "name": "棕榈岛",
+    "pinyin": "isleofpalms",
+    "id": 18813
+  },
+  {
+    "name": "哈瓦那",
+    "pinyin": "havana",
+    "id": 18877
+  },
+  {
+    "name": "荷兰",
+    "pinyin": "nederland",
+    "id": 18953
+  },
+  {
+    "name": "大西洋城",
+    "pinyin": "atlanticcity",
+    "id": 19312
+  },
+  {
+    "name": "陶斯",
+    "pinyin": "taos",
+    "id": 19402
+  },
+  {
+    "name": "波茨坦",
+    "pinyin": "potsdam",
+    "id": 19479
+  },
+  {
+    "name": "桑给巴尔岛",
+    "pinyin": "zanzibararchipelago",
+    "id": 19894
+  },
+  {
+    "name": "塞伦盖蒂国家公园",
+    "pinyin": "serengetinationalpark",
+    "id": 19910
+  },
+  {
+    "name": "尼亚美",
+    "pinyin": "niamey",
+    "id": 20022
+  },
+  {
+    "name": "阿布贾",
+    "pinyin": "abuja",
+    "id": 20058
+  },
+  {
+    "name": "维多利亚瀑布",
+    "pinyin": "victoriafalls",
+    "id": 20092
+  },
+  {
+    "name": "科摩罗",
+    "pinyin": "comoros",
+    "id": 20266
+  },
+  {
+    "name": "列支敦士登",
+    "pinyin": "liechtenstein",
+    "id": 20335
+  },
+  {
+    "name": "爱沙尼亚",
+    "pinyin": "estonia",
+    "id": 20340
+  },
+  {
+    "name": "英国",
+    "pinyin": "unitedkingdom",
+    "id": 20354
+  },
+  {
+    "name": "阿塞拜疆",
+    "pinyin": "azerbaijan",
+    "id": 20375
+  },
+  {
+    "name": "蒙古",
+    "pinyin": "mongolia",
+    "id": 20391
+  },
+  {
+    "name": "圣诞岛",
+    "pinyin": "christmasisland",
+    "id": 20393
+  },
+  {
+    "name": "萨摩亚",
+    "pinyin": "samoa",
+    "id": 20422
+  },
+  {
+    "name": "新喀里多尼亚",
+    "pinyin": "newcaledonia",
+    "id": 20424
+  },
+  {
+    "name": "库克群岛",
+    "pinyin": "cookislands",
+    "id": 20426
+  },
+  {
+    "name": "法属波利尼西亚",
+    "pinyin": "frenchpolynesia",
+    "id": 20435
+  },
+  {
+    "name": "克里特岛",
+    "pinyin": "crete",
+    "id": 20504
+  },
+  {
+    "name": "亚速尔群岛",
+    "pinyin": "azores",
+    "id": 20519
+  },
+  {
+    "name": "洛林",
+    "pinyin": "lorraine",
+    "id": 20753
+  },
+  {
+    "name": "摩纳哥城",
+    "pinyin": "monacocity",
+    "id": 20760
+  },
+  {
+    "name": "克里米亚",
+    "pinyin": "crimea",
+    "id": 20762
+  },
+  {
+    "name": "利沃夫",
+    "pinyin": "lviv",
+    "id": 20763
+  },
+  {
+    "name": "敖德萨",
+    "pinyin": "odessa",
+    "id": 20764
+  },
+  {
+    "name": "苏梅",
+    "pinyin": "sumy",
+    "id": 20768
+  },
+  {
+    "name": "基辅",
+    "pinyin": "kiev",
+    "id": 20774
+  },
+  {
+    "name": "北爱尔兰",
+    "pinyin": "northernireland",
+    "id": 20845
+  },
+  {
+    "name": "威尔士",
+    "pinyin": "wales",
+    "id": 20846
+  },
+  {
+    "name": "巴塔哥尼亚",
+    "pinyin": "patagonia",
+    "id": 20852
+  },
+  {
+    "name": "曼塔",
+    "pinyin": "manta",
+    "id": 20859
+  },
+  {
+    "name": "特纳",
+    "pinyin": "tena",
+    "id": 20900
+  },
+  {
+    "name": "维克",
+    "pinyin": "vik",
+    "id": 21001
+  },
+  {
+    "name": "西西里岛",
+    "pinyin": "sicily",
+    "id": 21192
+  },
+  {
+    "name": "托斯卡纳",
+    "pinyin": "tuscanytoscana",
+    "id": 21198
+  },
+  {
+    "name": "圣马力诺",
+    "pinyin": "sanmarino",
+    "id": 21206
+  },
+  {
+    "name": "贝尔格莱德",
+    "pinyin": "belgrade",
+    "id": 21229
+  },
+  {
+    "name": "卡塔赫纳",
+    "pinyin": "cartagena",
+    "id": 21268
+  },
+  {
+    "name": "麦德林",
+    "pinyin": "medellin",
+    "id": 21293
+  },
+  {
+    "name": "苏拉威西",
+    "pinyin": "sulawesi",
+    "id": 21315
+  },
+  {
+    "name": "婆罗洲",
+    "pinyin": "borneo",
+    "id": 21316
+  },
+  {
+    "name": "苏门答腊",
+    "pinyin": "sumatra",
+    "id": 21318
+  },
+  {
+    "name": "伊斯兰堡",
+    "pinyin": "islamabad",
+    "id": 21334
+  },
+  {
+    "name": "拉瓦尔品第",
+    "pinyin": "rawalpindi",
+    "id": 21336
+  },
+  {
+    "name": "卡拉奇",
+    "pinyin": "karachi",
+    "id": 21342
+  },
+  {
+    "name": "四国",
+    "pinyin": "shikoku",
+    "id": 21363
+  },
+  {
+    "name": "棉兰老岛",
+    "pinyin": "mindanao",
+    "id": 21372
+  },
+  {
+    "name": "阿拉木图",
+    "pinyin": "almaty",
+    "id": 21387
+  },
+  {
+    "name": "阿斯塔纳",
+    "pinyin": "astana",
+    "id": 21391
+  },
+  {
+    "name": "比什凯克",
+    "pinyin": "bishkek",
+    "id": 21406
+  },
+  {
+    "name": "万荣",
+    "pinyin": "vangvieng",
+    "id": 21457
+  },
+  {
+    "name": "埃勒",
+    "pinyin": "ella",
+    "id": 21475
+  },
+  {
+    "name": "锡吉里耶",
+    "pinyin": "sigiriya",
+    "id": 21489
+  },
+  {
+    "name": "爱德华王子岛",
+    "pinyin": "princeedwardisland",
+    "id": 21566
+  },
+  {
+    "name": "安提瓜和巴布达",
+    "pinyin": "antiguaandbarbuda",
+    "id": 21592
+  },
+  {
+    "name": "圣基茨和尼维斯",
+    "pinyin": "federationofsaintkittsandnevis",
+    "id": 21597
+  },
+  {
+    "name": "巴哈马",
+    "pinyin": "bahamas",
+    "id": 21598
+  },
+  {
+    "name": "格林纳达",
+    "pinyin": "grenada",
+    "id": 21599
+  },
+  {
+    "name": "百慕大",
+    "pinyin": "bermuda",
+    "id": 21604
+  },
+  {
+    "name": "牙买加",
+    "pinyin": "jamaica",
+    "id": 21608
+  },
+  {
+    "name": "马提尼克",
+    "pinyin": "martinique",
+    "id": 21611
+  },
+  {
+    "name": "开曼群岛",
+    "pinyin": "caymanislands",
+    "id": 21613
+  },
+  {
+    "name": "波多黎各",
+    "pinyin": "puertorico",
+    "id": 21617
+  },
+  {
+    "name": "亚拉巴马州",
+    "pinyin": "alabama",
+    "id": 21624
+  },
+  {
+    "name": "肯塔基州",
+    "pinyin": "kentucky",
+    "id": 21625
+  },
+  {
+    "name": "路易斯安那州",
+    "pinyin": "louisiana",
+    "id": 21628
+  },
+  {
+    "name": "俄亥俄州",
+    "pinyin": "ohio",
+    "id": 21629
+  },
+  {
+    "name": "俄克拉何马州",
+    "pinyin": "oklahoma",
+    "id": 21632
+  },
+  {
+    "name": "阿肯色州",
+    "pinyin": "arkansas",
+    "id": 21633
+  },
+  {
+    "name": "马里兰州",
+    "pinyin": "maryland",
+    "id": 21634
+  },
+  {
+    "name": "加利福尼亚州",
+    "pinyin": "california",
+    "id": 21636
+  },
+  {
+    "name": "马萨诸塞州",
+    "pinyin": "massachusetts",
+    "id": 21637
+  },
+  {
+    "name": "康涅狄格州",
+    "pinyin": "connecticut",
+    "id": 21642
+  },
+  {
+    "name": "密苏里州",
+    "pinyin": "missouri",
+    "id": 21649
+  },
+  {
+    "name": "田纳西州",
+    "pinyin": "tennessee",
+    "id": 21650
+  },
+  {
+    "name": "伊利诺伊州",
+    "pinyin": "illinois",
+    "id": 21663
+  },
+  {
+    "name": "新墨西哥州",
+    "pinyin": "newmexico",
+    "id": 21667
+  },
+  {
+    "name": "不来梅哈芬",
+    "pinyin": "bremerhaven",
+    "id": 21718
+  },
+  {
+    "name": "阿伊特本哈杜",
+    "pinyin": "aitbenhaddou",
+    "id": 21775
+  },
+  {
+    "name": "索维拉",
+    "pinyin": "essaouira",
+    "id": 21788
+  },
+  {
+    "name": "伊夫兰",
+    "pinyin": "ifrane",
+    "id": 21828
+  },
+  {
+    "name": "舍夫沙万",
+    "pinyin": "chefchaouen",
+    "id": 21851
+  },
+  {
+    "name": "塞拉",
+    "pinyin": "sale",
+    "id": 21857
+  },
+  {
+    "name": "西迪·布·赛义德",
+    "pinyin": "sidibousaid",
+    "id": 21913
+  },
+  {
+    "name": "特马",
+    "pinyin": "tema",
+    "id": 22045
+  },
+  {
+    "name": "奥卡万戈三角洲",
+    "pinyin": "okavangodelta",
+    "id": 22085
+  },
+  {
+    "name": "马耳他岛",
+    "pinyin": "malta",
+    "id": 22358
+  },
+  {
+    "name": "施皮茨",
+    "pinyin": "spiez",
+    "id": 22697
+  },
+  {
+    "name": "比尔",
+    "pinyin": "biel",
+    "id": 22718
+  },
+  {
+    "name": "乌尤尼",
+    "pinyin": "uyuni",
+    "id": 22805
+  },
+  {
+    "name": "乌兰巴托",
+    "pinyin": "ulaanbaatar",
+    "id": 23185
+  },
+  {
+    "name": "圣安德鲁斯",
+    "pinyin": "saintandrews",
+    "id": 23274
+  },
+  {
+    "name": "金曼",
+    "pinyin": "kingman",
+    "id": 23476
+  },
+  {
+    "name": "波兰",
+    "pinyin": "poland",
+    "id": 23684
+  },
+  {
+    "name": "长滩",
+    "pinyin": "longbeach",
+    "id": 23982
+  },
+  {
+    "name": "科林斯",
+    "pinyin": "corinth",
+    "id": 23985
+  },
+  {
+    "name": "路易斯维尔",
+    "pinyin": "louisville",
+    "id": 23990
+  },
+  {
+    "name": "麦迪逊",
+    "pinyin": "madison",
+    "id": 24006
+  },
+  {
+    "name": "华盛顿州",
+    "pinyin": "washington",
+    "id": 24125
+  },
+  {
+    "name": "annapolis",
+    "pinyin": "annapolis",
+    "id": 24143
+  },
+  {
+    "name": "丹嫩沙多",
+    "pinyin": "damnoensaduak",
+    "id": 24591
+  },
+  {
+    "name": "廓尔喀",
+    "pinyin": "gorkha",
+    "id": 24659
+  },
+  {
+    "name": "巴德岗",
+    "pinyin": "bhaktapur",
+    "id": 24662
+  },
+  {
+    "name": "塔什干",
+    "pinyin": "tashkent",
+    "id": 24680
+  },
+  {
+    "name": "安达曼-尼科巴群岛",
+    "pinyin": "andamanandnicobarislands",
+    "id": 24683
+  },
+  {
+    "name": "富国岛",
+    "pinyin": "phuquocisland",
+    "id": 24779
+  },
+  {
+    "name": "巴尔卡",
+    "pinyin": "barka",
+    "id": 24930
+  },
+  {
+    "name": "亚丁",
+    "pinyin": "aden",
+    "id": 25006
+  },
+  {
+    "name": "北岛",
+    "pinyin": "northisland",
+    "id": 25055
+  },
+  {
+    "name": "南岛",
+    "pinyin": "southisland",
+    "id": 25056
+  },
+  {
+    "name": "安波塞利国家公园",
+    "pinyin": "amboselinationalpark",
+    "id": 25118
+  },
+  {
+    "name": "圣多美",
+    "pinyin": "saotome",
+    "id": 25124
+  },
+  {
+    "name": "齐齐卡马国家公园",
+    "pinyin": "tsitsikammanationalpark",
+    "id": 25168
+  },
+  {
+    "name": "哈根",
+    "pinyin": "hagen",
+    "id": 26192
+  },
+  {
+    "name": "杜伊斯堡",
+    "pinyin": "duisburg",
+    "id": 26375
+  },
+  {
+    "name": "科林",
+    "pinyin": "chorin",
+    "id": 26683
+  },
+  {
+    "name": "沃尔姆斯",
+    "pinyin": "worms",
+    "id": 27096
+  },
+  {
+    "name": "魏玛",
+    "pinyin": "weimar",
+    "id": 27660
+  },
+  {
+    "name": "沃尔夫斯堡",
+    "pinyin": "wolfsburg",
+    "id": 28013
+  },
+  {
+    "name": "格但斯克",
+    "pinyin": "gdansk",
+    "id": 28125
+  },
+  {
+    "name": "卢布林",
+    "pinyin": "lublin",
+    "id": 28145
+  },
+  {
+    "name": "奥林匹亚",
+    "pinyin": "olympia",
+    "id": 28939
+  },
+  {
+    "name": "米科诺斯岛",
+    "pinyin": "mykonos",
+    "id": 29044
+  },
+  {
+    "name": "吉马良斯",
+    "pinyin": "guimaraes",
+    "id": 29499
+  },
+  {
+    "name": "斯帕",
+    "pinyin": "spa",
+    "id": 29629
+  },
+  {
+    "name": "巴尔的摩",
+    "pinyin": "baltimore",
+    "id": 29961
+  },
+  {
+    "name": "霍斯",
+    "pinyin": "howth",
+    "id": 30105
+  },
+  {
+    "name": "桑给巴尔",
+    "pinyin": "zanzibar",
+    "id": 30488
+  },
+  {
+    "name": "圣克鲁斯",
+    "pinyin": "santacruz",
+    "id": 30576
+  },
+  {
+    "name": "菲尔德",
+    "pinyin": "field",
+    "id": 30932
+  },
+  {
+    "name": "普林斯顿",
+    "pinyin": "princeton",
+    "id": 31017
+  },
+  {
+    "name": "温尼伯",
+    "pinyin": "winnipeg",
+    "id": 31410
+  },
+  {
+    "name": "巴布达",
+    "pinyin": "barbuda",
+    "id": 31672
+  },
+  {
+    "name": "罗索",
+    "pinyin": "roseau",
+    "id": 31683
+  },
+  {
+    "name": "尼维斯",
+    "pinyin": "nevis",
+    "id": 31728
+  },
+  {
+    "name": "特立尼达",
+    "pinyin": "trinidad",
+    "id": 31943
+  },
+  {
+    "name": "anchorage",
+    "pinyin": "anchorage",
+    "id": 32292
+  },
+  {
+    "name": "加拿大",
+    "pinyin": "canada",
+    "id": 32428
+  },
+  {
+    "name": "月牙泉",
+    "pinyin": "crescentsprings",
+    "id": 32484
+  },
+  {
+    "name": "诺姆",
+    "pinyin": "nome",
+    "id": 32709
+  },
+  {
+    "name": "北极",
+    "pinyin": "northpole",
+    "id": 32717
+  },
+  {
+    "name": "马其顿",
+    "pinyin": "macedonia",
+    "id": 32939
+  },
+  {
+    "name": "东湖",
+    "pinyin": "eastlake",
+    "id": 32962
+  },
+  {
+    "name": "bath",
+    "pinyin": "bath",
+    "id": 33033
+  },
+  {
+    "name": "布里斯托",
+    "pinyin": "bristow",
+    "id": 33587
+  },
+  {
+    "name": "索尔兹伯里",
+    "pinyin": "salisbury",
+    "id": 33976
+  },
+  {
+    "name": "scotland",
+    "pinyin": "scotland",
+    "id": 33984
+  },
+  {
+    "name": "尤金",
+    "pinyin": "eugene",
+    "id": 34171
+  },
+  {
+    "name": "密尔沃基",
+    "pinyin": "milwaukie",
+    "id": 34204
+  },
+  {
+    "name": "火山口湖",
+    "pinyin": "craterlake",
+    "id": 34306
+  },
+  {
+    "name": "底特律",
+    "pinyin": "detroit",
+    "id": 34350
+  },
+  {
+    "name": "死亡谷国家公园",
+    "pinyin": "deathvalleynationalpark",
+    "id": 34373
+  },
+  {
+    "name": "橙县",
+    "pinyin": "orangecounty",
+    "id": 34380
+  },
+  {
+    "name": "沙城",
+    "pinyin": "sandcity",
+    "id": 34475
+  },
+  {
+    "name": "坎贝尔",
+    "pinyin": "campbell",
+    "id": 34800
+  },
+  {
+    "name": "优胜美地国家公园",
+    "pinyin": "yosemitenationalpark",
+    "id": 35159
+  },
+  {
+    "name": "哈里斯堡",
+    "pinyin": "harrisburg",
+    "id": 35596
+  },
+  {
+    "name": "印第安纳",
+    "pinyin": "indiana",
+    "id": 35724
+  },
+  {
+    "name": "安娜堡",
+    "pinyin": "annarbor",
+    "id": 36267
+  },
+  {
+    "name": "芬兰",
+    "pinyin": "finland",
+    "id": 36923
+  },
+  {
+    "name": "雷尼尔",
+    "pinyin": "ranier",
+    "id": 37228
+  },
+  {
+    "name": "古巴",
+    "pinyin": "cuba",
+    "id": 37711
+  },
+  {
+    "name": "坦帕",
+    "pinyin": "tampa",
+    "id": 38275
+  },
+  {
+    "name": "橘园",
+    "pinyin": "orangepark",
+    "id": 38286
+  },
+  {
+    "name": "米苏拉",
+    "pinyin": "missoula",
+    "id": 38523
+  },
+  {
+    "name": "土耳其",
+    "pinyin": "turkey",
+    "id": 39095
+  },
+  {
+    "name": "midway",
+    "pinyin": "midway",
+    "id": 39490
+  },
+  {
+    "name": "锡安国家公园",
+    "pinyin": "zionnationalpark",
+    "id": 39640
+  },
+  {
+    "name": "太阳谷",
+    "pinyin": "hailey",
+    "id": 39962
+  },
+  {
+    "name": "叙利亚",
+    "pinyin": "syria",
+    "id": 40393
+  },
+  {
+    "name": "苏黎世湖",
+    "pinyin": "lakezurich",
+    "id": 40597
+  },
+  {
+    "name": "马赛",
+    "pinyin": "marseilles",
+    "id": 40733
+  },
+  {
+    "name": "秘鲁",
+    "pinyin": "peru",
+    "id": 41069
+  },
+  {
+    "name": "康奈尔",
+    "pinyin": "connell",
+    "id": 41699
+  },
+  {
+    "name": "巴西",
+    "pinyin": "brazil",
+    "id": 41874
+  },
+  {
+    "name": "比利时",
+    "pinyin": "belgium",
+    "id": 43489
+  },
+  {
+    "name": "日内瓦湖",
+    "pinyin": "lakegeneva",
+    "id": 43718
+  },
+  {
+    "name": "曼哈顿",
+    "pinyin": "manhattan",
+    "id": 43875
+  },
+  {
+    "name": "博登湖",
+    "pinyin": "lakeconstance",
+    "id": 44693
+  },
+  {
+    "name": "帕索",
+    "pinyin": "passow",
+    "id": 44872
+  },
+  {
+    "name": "斯塔德",
+    "pinyin": "ystad",
+    "id": 44955
+  },
+  {
+    "name": "希特霍伦",
+    "pinyin": "giethoorn",
+    "id": 45331
+  },
+  {
+    "name": "阿尔克马尔",
+    "pinyin": "alkmaar",
+    "id": 45521
+  },
+  {
+    "name": "奈梅亨",
+    "pinyin": "nijmegen",
+    "id": 45680
+  },
+  {
+    "name": "特拉布宗",
+    "pinyin": "trabzon",
+    "id": 45909
+  },
+  {
+    "name": "米卢斯",
+    "pinyin": "mulhouse",
+    "id": 46058
+  },
+  {
+    "name": "石勒苏益格",
+    "pinyin": "schleswig",
+    "id": 46252
+  },
+  {
+    "name": "博德",
+    "pinyin": "bodo",
+    "id": 46371
+  },
+  {
+    "name": "奥达",
+    "pinyin": "odda",
+    "id": 46413
+  },
+  {
+    "name": "施瓦茨",
+    "pinyin": "schwaz",
+    "id": 46788
+  },
+  {
+    "name": "萨米",
+    "pinyin": "sami",
+    "id": 47006
+  },
+  {
+    "name": "格罗兹尼",
+    "pinyin": "groznyy",
+    "id": 47689
+  },
+  {
+    "name": "乌法",
+    "pinyin": "ufa",
+    "id": 47692
+  },
+  {
+    "name": "喀山",
+    "pinyin": "kazan",
+    "id": 47693
+  },
+  {
+    "name": "圣西罗",
+    "pinyin": "sansiro",
+    "id": 47833
+  },
+  {
+    "name": "卡普里",
+    "pinyin": "capri",
+    "id": 48054
+  },
+  {
+    "name": "梅斯",
+    "pinyin": "meis",
+    "id": 48632
+  },
+  {
+    "name": "阿尔比",
+    "pinyin": "arbis",
+    "id": 50493
+  },
+  {
+    "name": "枫丹白露",
+    "pinyin": "fontainebleau",
+    "id": 50841
+  },
+  {
+    "name": "勒芒",
+    "pinyin": "lemans",
+    "id": 51014
+  },
+  {
+    "name": "格拉斯",
+    "pinyin": "grasse",
+    "id": 51832
+  },
+  {
+    "name": "尼斯湖",
+    "pinyin": "lochness",
+    "id": 52984
+  },
+  {
+    "name": "天空岛",
+    "pinyin": "isleofskye",
+    "id": 53192
+  },
+  {
+    "name": "比斯特",
+    "pinyin": "bicester",
+    "id": 53488
+  },
+  {
+    "name": "福伊",
+    "pinyin": "fowey",
+    "id": 54183
+  },
+  {
+    "name": "石头城",
+    "pinyin": "stone",
+    "id": 54247
+  },
+  {
+    "name": "康威",
+    "pinyin": "conwycounty",
+    "id": 55972
+  },
+  {
+    "name": "火地岛国家公园",
+    "pinyin": "parquenacionaltierradelfuego",
+    "id": 56364
+  },
+  {
+    "name": "我孙子市",
+    "pinyin": "abiko",
+    "id": 56655
+  },
+  {
+    "name": "神户",
+    "pinyin": "kobe",
+    "id": 57024
+  },
+  {
+    "name": "气仙沼市",
+    "pinyin": "kesennuma",
+    "id": 57199
+  },
+  {
+    "name": "南阳市",
+    "pinyin": "nanyo",
+    "id": 57255
+  },
+  {
+    "name": "洞爷湖",
+    "pinyin": "toyako",
+    "id": 57281
+  },
+  {
+    "name": "宫古岛",
+    "pinyin": "miyakojima",
+    "id": 57421
+  },
+  {
+    "name": "石垣岛",
+    "pinyin": "ishigakiisland",
+    "id": 57424
+  },
+  {
+    "name": "那霸",
+    "pinyin": "naha",
+    "id": 57429
+  },
+  {
+    "name": "马累",
+    "pinyin": "male",
+    "id": 57616
+  },
+  {
+    "name": "列城",
+    "pinyin": "leh",
+    "id": 57636
+  },
+  {
+    "name": "泰晤士",
+    "pinyin": "thames",
+    "id": 57912
+  },
+  {
+    "name": "纳皮尔",
+    "pinyin": "napier",
+    "id": 57927
+  },
+  {
+    "name": "库克山",
+    "pinyin": "mountcook",
+    "id": 57932
+  },
+  {
+    "name": "特卡波湖",
+    "pinyin": "laketekapo",
+    "id": 57959
+  },
+  {
+    "name": "勒阿弗尔",
+    "pinyin": "lehavre",
+    "id": 59126
+  },
+  {
+    "name": "古尔",
+    "pinyin": "goult",
+    "id": 59211
+  },
+  {
+    "name": "箱根",
+    "pinyin": "hakone",
+    "id": 60571
+  },
+  {
+    "name": "涩谷",
+    "pinyin": "shibuya",
+    "id": 60641
+  },
+  {
+    "name": "海南",
+    "pinyin": "hainan",
+    "id": 100001
+  },
+  {
+    "name": "西藏",
+    "pinyin": "xizang",
+    "id": 100003
+  },
+  {
+    "name": "西藏",
+    "pinyin": "tibet",
+    "id": 100003
+  },
+  {
+    "name": "云南",
+    "pinyin": "yunnan",
+    "id": 100007
+  },
+  {
+    "name": "新疆",
+    "pinyin": "xinjiang",
+    "id": 100008
+  },
+  {
+    "name": "四川",
+    "pinyin": "sichuan",
+    "id": 100009
+  },
+  {
+    "name": "泰国",
+    "pinyin": "thailand",
+    "id": 100021
+  },
+  {
+    "name": "马来西亚",
+    "pinyin": "malaysia",
+    "id": 100022
+  },
+  {
+    "name": "法国",
+    "pinyin": "france",
+    "id": 100024
+  },
+  {
+    "name": "德国",
+    "pinyin": "germany",
+    "id": 100025
+  },
+  {
+    "name": "意大利",
+    "pinyin": "italy",
+    "id": 100026
+  },
+  {
+    "name": "奥地利",
+    "pinyin": "austria",
+    "id": 100027
+  },
+  {
+    "name": "荷兰",
+    "pinyin": "holland",
+    "id": 100028
+  },
+  {
+    "name": "埃及",
+    "pinyin": "egypt",
+    "id": 100030
+  },
+  {
+    "name": "吉林",
+    "pinyin": "jilin",
+    "id": 100031
+  },
+  {
+    "name": "青海",
+    "pinyin": "qinghai",
+    "id": 100032
+  },
+  {
+    "name": "西班牙",
+    "pinyin": "spain",
+    "id": 100035
+  },
+  {
+    "name": "希腊",
+    "pinyin": "greece",
+    "id": 100036
+  },
+  {
+    "name": "英格兰",
+    "pinyin": "england",
+    "id": 100037
+  },
+  {
+    "name": "福建",
+    "pinyin": "fujian",
+    "id": 100038
+  },
+  {
+    "name": "山东",
+    "pinyin": "shandong",
+    "id": 100039
+  },
+  {
+    "name": "日本",
+    "pinyin": "japan",
+    "id": 100041
+  },
+  {
+    "name": "韩国",
+    "pinyin": "korea",
+    "id": 100042
+  },
+  {
+    "name": "韩国",
+    "pinyin": "southkorea",
+    "id": 100042
+  },
+  {
+    "name": "菲律宾",
+    "pinyin": "philippine",
+    "id": 100044
+  },
+  {
+    "name": "菲律宾",
+    "pinyin": "philippines",
+    "id": 100044
+  },
+  {
+    "name": "印度尼西亚",
+    "pinyin": "indonesia",
+    "id": 100045
+  },
+  {
+    "name": "越南",
+    "pinyin": "vietnam",
+    "id": 100046
+  },
+  {
+    "name": "美国",
+    "pinyin": "unitedstates",
+    "id": 100047
+  },
+  {
+    "name": "澳大利亚",
+    "pinyin": "australia",
+    "id": 100048
+  },
+  {
+    "name": "南非",
+    "pinyin": "southafrica",
+    "id": 100049
+  },
+  {
+    "name": "瑞士",
+    "pinyin": "switzerland",
+    "id": 100050
+  },
+  {
+    "name": "广东",
+    "pinyin": "guangdong",
+    "id": 100051
+  },
+  {
+    "name": "广西",
+    "pinyin": "guangxi",
+    "id": 100052
+  },
+  {
+    "name": "湖南",
+    "pinyin": "hunan",
+    "id": 100053
+  },
+  {
+    "name": "江西",
+    "pinyin": "jiangxi",
+    "id": 100054
+  },
+  {
+    "name": "黑龙江",
+    "pinyin": "heilongjiang",
+    "id": 100055
+  },
+  {
+    "name": "山西",
+    "pinyin": "shanxi",
+    "id": 100056
+  },
+  {
+    "name": "河南",
+    "pinyin": "henan",
+    "id": 100058
+  },
+  {
+    "name": "河北",
+    "pinyin": "hebei",
+    "id": 100059
+  },
+  {
+    "name": "甘肃",
+    "pinyin": "gansu",
+    "id": 100060
+  },
+  {
+    "name": "辽宁",
+    "pinyin": "liaoning",
+    "id": 100061
+  },
+  {
+    "name": "内蒙古",
+    "pinyin": "neimenggu",
+    "id": 100062
+  },
+  {
+    "name": "内蒙古",
+    "pinyin": "innermongolia",
+    "id": 100062
+  },
+  {
+    "name": "宁夏",
+    "pinyin": "ningxia",
+    "id": 100063
+  },
+  {
+    "name": "贵州",
+    "pinyin": "guizhou",
+    "id": 100064
+  },
+  {
+    "name": "浙江",
+    "pinyin": "zhejiang",
+    "id": 100065
+  },
+  {
+    "name": "江苏",
+    "pinyin": "jiangsu",
+    "id": 100066
+  },
+  {
+    "name": "湖北",
+    "pinyin": "hubei",
+    "id": 100067
+  },
+  {
+    "name": "安徽",
+    "pinyin": "anhui",
+    "id": 100068
+  },
+  {
+    "name": "以色列",
+    "pinyin": "isreal",
+    "id": 100074
+  },
+  {
+    "name": "以色列",
+    "pinyin": "israel",
+    "id": 100074
+  },
+  {
+    "name": "台湾",
+    "pinyin": "taiwan",
+    "id": 100076
+  },
+  {
+    "name": "缅甸",
+    "pinyin": "myanmar",
+    "id": 100077
+  },
+  {
+    "name": "新西兰",
+    "pinyin": "newzealand",
+    "id": 100078
+  },
+  {
+    "name": "尼泊尔",
+    "pinyin": "nepal",
+    "id": 100079
+  },
+  {
+    "name": "印度",
+    "pinyin": "india",
+    "id": 100080
+  },
+  {
+    "name": "柬埔寨",
+    "pinyin": "cambodia",
+    "id": 100081
+  },
+  {
+    "name": "俄罗斯",
+    "pinyin": "russia",
+    "id": 100083
+  },
+  {
+    "name": "斯里兰卡",
+    "pinyin": "srilanka",
+    "id": 100084
+  },
+  {
+    "name": "约旦",
+    "pinyin": "jordan",
+    "id": 100085
+  },
+  {
+    "name": "肯尼亚",
+    "pinyin": "kenya",
+    "id": 100087
+  },
+  {
+    "name": "文莱",
+    "pinyin": "brunei",
+    "id": 100089
+  },
+  {
+    "name": "爱尔兰",
+    "pinyin": "ireland",
+    "id": 100090
+  },
+  {
+    "name": "捷克",
+    "pinyin": "theczechrepublic",
+    "id": 100094
+  },
+  {
+    "name": "冰岛",
+    "pinyin": "iceland",
+    "id": 100096
+  },
+  {
+    "name": "瑞典",
+    "pinyin": "sweden",
+    "id": 100097
+  },
+  {
+    "name": "挪威",
+    "pinyin": "norway",
+    "id": 100098
+  },
+  {
+    "name": "阿联酋",
+    "pinyin": "unitedarademirates",
+    "id": 100099
+  },
+  {
+    "name": "匈牙利",
+    "pinyin": "hungary",
+    "id": 100101
+  },
+  {
+    "name": "斐济",
+    "pinyin": "fiji",
+    "id": 100102
+  },
+  {
+    "name": "朝鲜",
+    "pinyin": "northkorea",
+    "id": 100103
+  },
+  {
+    "name": "老挝",
+    "pinyin": "laos",
+    "id": 100105
+  },
+  {
+    "name": "葡萄牙",
+    "pinyin": "portugal",
+    "id": 100106
+  },
+  {
+    "name": "巴西",
+    "pinyin": "brasil",
+    "id": 100109
+  },
+  {
+    "name": "智利",
+    "pinyin": "chile",
+    "id": 100110
+  },
+  {
+    "name": "阿根廷",
+    "pinyin": "argentina",
+    "id": 100111
+  },
+  {
+    "name": "巴基斯坦",
+    "pinyin": "pakistan",
+    "id": 100114
+  },
+  {
+    "name": "突尼斯",
+    "pinyin": "tunisia",
+    "id": 100115
+  },
+  {
+    "name": "塞浦路斯",
+    "pinyin": "cyprus",
+    "id": 100116
+  },
+  {
+    "name": "斯洛伐克",
+    "pinyin": "slovakia",
+    "id": 100117
+  },
+  {
+    "name": "斯洛文尼亚",
+    "pinyin": "slovenija",
+    "id": 100119
+  },
+  {
+    "name": "立陶宛",
+    "pinyin": "lithuania",
+    "id": 100122
+  },
+  {
+    "name": "伊朗",
+    "pinyin": "iran",
+    "id": 100123
+  },
+  {
+    "name": "拉脱维亚",
+    "pinyin": "latvija",
+    "id": 100124
+  },
+  {
+    "name": "埃塞俄比亚",
+    "pinyin": "ethiopia",
+    "id": 100125
+  },
+  {
+    "name": "克罗地亚",
+    "pinyin": "croatia",
+    "id": 100129
+  },
+  {
+    "name": "保加利亚",
+    "pinyin": "bulgaria",
+    "id": 100130
+  },
+  {
+    "name": "摩纳哥",
+    "pinyin": "monaco",
+    "id": 100131
+  },
+  {
+    "name": "摩洛哥",
+    "pinyin": "morocco",
+    "id": 100132
+  },
+  {
+    "name": "巴拿马",
+    "pinyin": "panama",
+    "id": 100135
+  },
+  {
+    "name": "哥斯达黎加",
+    "pinyin": "costarica",
+    "id": 100140
+  },
+  {
+    "name": "白俄罗斯",
+    "pinyin": "belarus",
+    "id": 100141
+  },
+  {
+    "name": "阿曼",
+    "pinyin": "oman",
+    "id": 100142
+  },
+  {
+    "name": "哈萨克斯坦",
+    "pinyin": "kazakhstan",
+    "id": 100144
+  },
+  {
+    "name": "多米尼加",
+    "pinyin": "dominicanrepublic",
+    "id": 100145
+  },
+  {
+    "name": "多哥",
+    "pinyin": "togo",
+    "id": 100147
+  },
+  {
+    "name": "纳米比亚",
+    "pinyin": "namibia",
+    "id": 100151
+  },
+  {
+    "name": "塞内加尔",
+    "pinyin": "senegal",
+    "id": 100152
+  },
+  {
+    "name": "塞舌尔",
+    "pinyin": "seychelles",
+    "id": 100153
+  },
+  {
+    "name": "坦桑尼亚",
+    "pinyin": "tanzania",
+    "id": 100154
+  },
+  {
+    "name": "赞比亚",
+    "pinyin": "zambia",
+    "id": 100155
+  },
+  {
+    "name": "圣多美和普林西比",
+    "pinyin": "saotomeandprincip",
+    "id": 100191
+  },
+  {
+    "name": "布隆迪",
+    "pinyin": "burundi",
+    "id": 100192
+  },
+  {
+    "name": "喀麦隆",
+    "pinyin": "cameroon",
+    "id": 100194
+  },
+  {
+    "name": "毛里塔尼亚",
+    "pinyin": "mauritania",
+    "id": 100201
+  },
+  {
+    "name": "塞拉利昂",
+    "pinyin": "sierraleone",
+    "id": 100212
+  },
+  {
+    "name": "马达加斯加",
+    "pinyin": "madagascar",
+    "id": 100214
+  },
+  {
+    "name": "格陵兰岛",
+    "pinyin": "greenland",
+    "id": 100221
+  },
+  {
+    "name": "直布罗陀",
+    "pinyin": "gibraltar",
+    "id": 100225
+  },
+  {
+    "name": "格鲁吉亚",
+    "pinyin": "georgia",
+    "id": 100229
+  },
+  {
+    "name": "法罗群岛",
+    "pinyin": "faroeislands",
+    "id": 100231
+  },
+  {
+    "name": "塞尔维亚",
+    "pinyin": "serbia",
+    "id": 100232
+  },
+  {
+    "name": "福克兰群岛",
+    "pinyin": "falklandislands",
+    "id": 100233
+  },
+  {
+    "name": "苏里南",
+    "pinyin": "suriname",
+    "id": 100234
+  },
+  {
+    "name": "孟加拉国",
+    "pinyin": "bangladesh",
+    "id": 100237
+  },
+  {
+    "name": "吉尔吉斯斯坦",
+    "pinyin": "kyrgyzrepublic",
+    "id": 100238
+  },
+  {
+    "name": "东帝汶",
+    "pinyin": "easttimor",
+    "id": 100242
+  },
+  {
+    "name": "乌兹别克斯坦",
+    "pinyin": "uzbekistan",
+    "id": 100243
+  },
+  {
+    "name": "汤加",
+    "pinyin": "tonga",
+    "id": 100245
+  },
+  {
+    "name": "瑙鲁",
+    "pinyin": "nauru",
+    "id": 100249
+  },
+  {
+    "name": "所罗门群岛",
+    "pinyin": "solomonislands",
+    "id": 100251
+  },
+  {
+    "name": "图瓦卢",
+    "pinyin": "tuvalu",
+    "id": 100255
+  },
+  {
+    "name": "巴布亚新几内亚",
+    "pinyin": "papuanewguinea",
+    "id": 100256
+  },
+  {
+    "name": "玻利维亚",
+    "pinyin": "bolivia",
+    "id": 100259
+  },
+  {
+    "name": "亚州",
+    "pinyin": "asia",
+    "id": 120001
+  },
+  {
+    "name": "欧洲",
+    "pinyin": "europe",
+    "id": 120002
+  },
+  {
+    "name": "大洋洲",
+    "pinyin": "oceania",
+    "id": 120003
+  },
+  {
+    "name": "北美洲",
+    "pinyin": "northamerica",
+    "id": 120004
+  },
+  {
+    "name": "南美洲",
+    "pinyin": "southamerica",
+    "id": 120005
+  },
+  {
+    "name": "非州",
+    "pinyin": "africa",
+    "id": 120006
+  },
+  {
+    "name": "中东",
+    "pinyin": "middleeast",
+    "id": 120007
+  },
+  {
+    "name": "迪庆",
+    "pinyin": "diqing",
+    "id": 120009
+  },
+  {
+    "name": "海东",
+    "pinyin": "haidong",
+    "id": 120010
+  },
+  {
+    "name": "海西",
+    "pinyin": "haixi",
+    "id": 120012
+  },
+  {
+    "name": "果洛",
+    "pinyin": "golog",
+    "id": 120013
+  },
+  {
+    "name": "海北",
+    "pinyin": "haibei",
+    "id": 120014
+  },
+  {
+    "name": "武隆",
+    "pinyin": "wulong",
+    "id": 120015
+  },
+  {
+    "name": "璧山",
+    "pinyin": "bishan",
+    "id": 120016
+  },
+  {
+    "name": "蓟县",
+    "pinyin": "jixian",
+    "id": 120017
+  },
+  {
+    "name": "巫山",
+    "pinyin": "wushan",
+    "id": 120018
+  },
+  {
+    "name": "秀山",
+    "pinyin": "xiushan",
+    "id": 120020
+  },
+  {
+    "name": "石柱",
+    "pinyin": "shizhu",
+    "id": 120022
+  },
+  {
+    "name": "大足",
+    "pinyin": "dazu",
+    "id": 120025
+  },
+  {
+    "name": "丰都",
+    "pinyin": "fengdu",
+    "id": 120029
+  },
+  {
+    "name": "奉节",
+    "pinyin": "fengjie",
+    "id": 120033
+  },
+  {
+    "name": "石灰岩海岸",
+    "pinyin": "limestonecoast",
+    "id": 120037
+  },
+  {
+    "name": "黄南",
+    "pinyin": "huangnan",
+    "id": 120042
+  },
+  {
+    "name": "双廊",
+    "pinyin": "shuanglang",
+    "id": 120045
+  },
+  {
+    "name": "碧罗雪山",
+    "pinyin": "biluoxueshan",
+    "id": 120049
+  },
+  {
+    "name": "丙中洛",
+    "pinyin": "bingzhongluo",
+    "id": 120050
+  },
+  {
+    "name": "诺邓",
+    "pinyin": "nuodeng",
+    "id": 120051
+  },
+  {
+    "name": "九乡风景区",
+    "pinyin": "jiuxiangscenicarea",
+    "id": 120052
+  },
+  {
+    "name": "九乡",
+    "pinyin": "jiuxiang",
+    "id": 120052
+  },
+  {
+    "name": "普者黑景区",
+    "pinyin": "puzheheiscenicarea",
+    "id": 120055
+  },
+  {
+    "name": "普者黑",
+    "pinyin": "puzhehei",
+    "id": 120055
+  },
+  {
+    "name": "沙溪古镇",
+    "pinyin": "shaxiguzhen",
+    "id": 120056
+  },
+  {
+    "name": "丰宁坝上",
+    "pinyin": "fengningbashang",
+    "id": 120057
+  },
+  {
+    "name": "鼓浪屿",
+    "pinyin": "kulangsu",
+    "id": 120058
+  },
+  {
+    "name": "鼓浪屿",
+    "pinyin": "gulangyu",
+    "id": 120058
+  },
+  {
+    "name": "平谷",
+    "pinyin": "pinggu",
+    "id": 120059
+  },
+  {
+    "name": "萧山",
+    "pinyin": "xiaoshan",
+    "id": 120060
+  },
+  {
+    "name": "涠洲岛",
+    "pinyin": "weizhouisland",
+    "id": 120063
+  },
+  {
+    "name": "三山岛",
+    "pinyin": "sanshandao",
+    "id": 120072
+  },
+  {
+    "name": "坝上",
+    "pinyin": "bashang",
+    "id": 120073
+  },
+  {
+    "name": "海南藏族自治州",
+    "pinyin": "hainantibetanautonomousprefecture",
+    "id": 120074
+  },
+  {
+    "name": "北屯",
+    "pinyin": "beitun",
+    "id": 120077
+  },
+  {
+    "name": "阿拉尔",
+    "pinyin": "alaer",
+    "id": 120078
+  },
+  {
+    "name": "图木舒克",
+    "pinyin": "tumushuke",
+    "id": 120079
+  },
+  {
+    "name": "卡帕莱",
+    "pinyin": "kapalai",
+    "id": 120080
+  },
+  {
+    "name": "塘栖",
+    "pinyin": "tangqi",
+    "id": 120081
+  },
+  {
+    "name": "巽寮湾",
+    "pinyin": "xunliaowan",
+    "id": 120082
+  },
+  {
+    "name": "上川岛",
+    "pinyin": "shangchuanisland",
+    "id": 120083
+  },
+  {
+    "name": "阿尔山",
+    "pinyin": "arxan",
+    "id": 120084
+  },
+  {
+    "name": "阿尔山",
+    "pinyin": "aershan",
+    "id": 120084
+  },
+  {
+    "name": "放鸡岛",
+    "pinyin": "fangjiisland",
+    "id": 120085
+  },
+  {
+    "name": "唐克",
+    "pinyin": "tangke",
+    "id": 120086
+  },
+  {
+    "name": "四明山",
+    "pinyin": "simingmountain",
+    "id": 120087
+  },
+  {
+    "name": "大嵛山岛",
+    "pinyin": "dayushanisland",
+    "id": 120088
+  },
+  {
+    "name": "门头沟",
+    "pinyin": "mengtougou",
+    "id": 120093
+  },
+  {
+    "name": "番禺",
+    "pinyin": "panyudistrict",
+    "id": 120096
+  },
+  {
+    "name": "德庆",
+    "pinyin": "deqing",
+    "id": 120097
+  },
+  {
+    "name": "顺德",
+    "pinyin": "shundedistrict",
+    "id": 120098
+  },
+  {
+    "name": "诸葛八卦村",
+    "pinyin": "zhugebaguavillage",
+    "id": 120100
+  },
+  {
+    "name": "三沙",
+    "pinyin": "sansha",
+    "id": 120101
+  },
+  {
+    "name": "郎木寺",
+    "pinyin": "langmusi",
+    "id": 120109
+  },
+  {
+    "name": "喜洲",
+    "pinyin": "xizhou",
+    "id": 120111
+  },
+  {
+    "name": "西柏坡",
+    "pinyin": "xibaipo",
+    "id": 120116
+  },
+  {
+    "name": "上林",
+    "pinyin": "shanglin",
+    "id": 120117
+  },
+  {
+    "name": "祁连",
+    "pinyin": "qilian",
+    "id": 120123
+  },
+  {
+    "name": "沈家门",
+    "pinyin": "shenjiamen",
+    "id": 120124
+  },
+  {
+    "name": "鲅鱼圈",
+    "pinyin": "bayuquan",
+    "id": 120127
+  },
+  {
+    "name": "瑶里景区",
+    "pinyin": "yaoliancienttown",
+    "id": 120130
+  },
+  {
+    "name": "瑶里",
+    "pinyin": "yaoli",
+    "id": 120130
+  },
+  {
+    "name": "虎门",
+    "pinyin": "humen",
+    "id": 120132
+  },
+  {
+    "name": "噶尔",
+    "pinyin": "geer",
+    "id": 120143
+  },
+  {
+    "name": "狮泉河",
+    "pinyin": "shiquanhe",
+    "id": 120148
+  },
+  {
+    "name": "查济",
+    "pinyin": "zhajivillage",
+    "id": 120357
+  },
+  {
+    "name": "阿拉善右旗",
+    "pinyin": "alashanyouqi",
+    "id": 120362
+  },
+  {
+    "name": "戈尔德",
+    "pinyin": "gordes",
+    "id": 120371
+  },
+  {
+    "name": "萨嘎",
+    "pinyin": "saga",
+    "id": 120381
+  },
+  {
+    "name": "那曲",
+    "pinyin": "naqucounty",
+    "id": 120387
+  },
+  {
+    "name": "察隅",
+    "pinyin": "chayu",
+    "id": 120394
+  },
+  {
+    "name": "墨脱",
+    "pinyin": "motuo",
+    "id": 120397
+  },
+  {
+    "name": "八宿",
+    "pinyin": "basu",
+    "id": 120403
+  },
+  {
+    "name": "左贡",
+    "pinyin": "zogangcounty",
+    "id": 120405
+  },
+  {
+    "name": "贡嘎",
+    "pinyin": "gongga",
+    "id": 120408
+  },
+  {
+    "name": "黄石国家公园",
+    "pinyin": "yellowstonenationalpark",
+    "id": 120415
+  },
+  {
+    "name": "东极岛风景区",
+    "pinyin": "dongjiisland",
+    "id": 120416
+  },
+  {
+    "name": "东极岛",
+    "pinyin": "dongjidao",
+    "id": 120416
+  },
+  {
+    "name": "怀柔",
+    "pinyin": "huairou",
+    "id": 120418
+  },
+  {
+    "name": "韩城",
+    "pinyin": "hancheng",
+    "id": 120420
+  },
+  {
+    "name": "可可托海",
+    "pinyin": "keketuohai",
+    "id": 120423
+  },
+  {
+    "name": "九份",
+    "pinyin": "jiufen",
+    "id": 120424
+  },
+  {
+    "name": "秀山岛",
+    "pinyin": "xiushandao",
+    "id": 120434
+  },
+  {
+    "name": "桃花岛",
+    "pinyin": "taohuadao",
+    "id": 120435
+  },
+  {
+    "name": "长白山西坡景区",
+    "pinyin": "westslopeofchangbaimountainscenicarea",
+    "id": 120439
+  },
+  {
+    "name": "长白山北坡景区",
+    "pinyin": "northslopeofchangbaimountain",
+    "id": 120440
+  },
+  {
+    "name": "长白山南坡景区",
+    "pinyin": "changbaimountainsouthslopescenicarea",
+    "id": 120441
+  },
+  {
+    "name": "锦屏",
+    "pinyin": "jinping",
+    "id": 120445
+  },
+  {
+    "name": "台江",
+    "pinyin": "taijiang",
+    "id": 120447
+  },
+  {
+    "name": "太行山",
+    "pinyin": "taihangshan",
+    "id": 120466
+  },
+  {
+    "name": "北疆",
+    "pinyin": "beijiang",
+    "id": 120469
+  },
+  {
+    "name": "旅顺",
+    "pinyin": "lvshun",
+    "id": 120470
+  },
+  {
+    "name": "南疆",
+    "pinyin": "nanjiang",
+    "id": 120471
+  },
+  {
+    "name": "库布齐沙漠",
+    "pinyin": "kubuqidesert",
+    "id": 120472
+  },
+  {
+    "name": "库布齐沙漠",
+    "pinyin": "kubuqi",
+    "id": 120472
+  },
+  {
+    "name": "顺义",
+    "pinyin": "shunyi",
+    "id": 120473
+  },
+  {
+    "name": "榆次",
+    "pinyin": "yuci",
+    "id": 120474
+  },
+  {
+    "name": "撒哈拉沙漠",
+    "pinyin": "saharadesert",
+    "id": 120475
+  },
+  {
+    "name": "拜县",
+    "pinyin": "pai",
+    "id": 120476
+  },
+  {
+    "name": "色达县",
+    "pinyin": "sedaxian",
+    "id": 120478
+  },
+  {
+    "name": "玛多",
+    "pinyin": "madoi",
+    "id": 120480
+  },
+  {
+    "name": "野三坡",
+    "pinyin": "yesanpo",
+    "id": 120483
+  },
+  {
+    "name": "束河",
+    "pinyin": "shuhe",
+    "id": 120484
+  },
+  {
+    "name": "白玉县",
+    "pinyin": "baiyuxian",
+    "id": 120485
+  },
+  {
+    "name": "南极",
+    "pinyin": "southpole",
+    "id": 120487
+  },
+  {
+    "name": "叶城",
+    "pinyin": "yecheng",
+    "id": 120489
+  },
+  {
+    "name": "日月潭",
+    "pinyin": "sunmoonlake",
+    "id": 120492
+  },
+  {
+    "name": "乌兰布统旅游区",
+    "pinyin": "wulanbutonggransslandscenicarea",
+    "id": 120493
+  },
+  {
+    "name": "乌兰布统草原",
+    "pinyin": "wulanbutong",
+    "id": 120493
+  },
+  {
+    "name": "云台山风景名胜区",
+    "pinyin": "yuntaimountainscenicarea",
+    "id": 120494
+  },
+  {
+    "name": "云台山",
+    "pinyin": "yuntaishan",
+    "id": 120494
+  },
+  {
+    "name": "塞罕坝国家森林公园",
+    "pinyin": "saihanbanationalforestpark",
+    "id": 120495
+  },
+  {
+    "name": "塞罕坝",
+    "pinyin": "saihanba",
+    "id": 120495
+  },
+  {
+    "name": "宏村景区",
+    "pinyin": "hongcunvillage",
+    "id": 120496
+  },
+  {
+    "name": "宏村",
+    "pinyin": "hongcun",
+    "id": 120496
+  },
+  {
+    "name": "洛杉矶",
+    "pinyin": "losangeles",
+    "id": 120518
+  },
+  {
+    "name": "阳澄湖",
+    "pinyin": "yangchenghu",
+    "id": 120528
+  },
+  {
+    "name": "南屏景区",
+    "pinyin": "nanping",
+    "id": 120530
+  },
+  {
+    "name": "西江千户苗寨",
+    "pinyin": "xijiangqianhumiaovillage",
+    "id": 120531
+  },
+  {
+    "name": "西江千户苗寨",
+    "pinyin": "xijiangmiaovillage",
+    "id": 120531
+  },
+  {
+    "name": "黄龙溪古镇",
+    "pinyin": "huanglongxi",
+    "id": 120532
+  },
+  {
+    "name": "黄姚古镇",
+    "pinyin": "huangyaoancienttown",
+    "id": 120533
+  },
+  {
+    "name": "灵山胜境",
+    "pinyin": "lingshanbuddhistscenicspot",
+    "id": 120535
+  },
+  {
+    "name": "北投",
+    "pinyin": "beitou",
+    "id": 120539
+  },
+  {
+    "name": "若羌",
+    "pinyin": "ruoqiang",
+    "id": 120547
+  },
+  {
+    "name": "大别山",
+    "pinyin": "dabiemountains",
+    "id": 120549
+  },
+  {
+    "name": "大明山",
+    "pinyin": "damingshan",
+    "id": 120550
+  },
+  {
+    "name": "牛背山",
+    "pinyin": "niubeishan",
+    "id": 120551
+  },
+  {
+    "name": "黑水县",
+    "pinyin": "heishui",
+    "id": 120552
+  },
+  {
+    "name": "拉托维亚",
+    "pinyin": "latvia",
+    "id": 120554
+  },
+  {
+    "name": "山海关",
+    "pinyin": "shanhaiguan",
+    "id": 120556
+  },
+  {
+    "name": "西递",
+    "pinyin": "xidi",
+    "id": 120557
+  },
+  {
+    "name": "武陵源",
+    "pinyin": "wulingyuaninterestarea",
+    "id": 120559
+  },
+  {
+    "name": "科西嘉岛",
+    "pinyin": "corse",
+    "id": 128225
+  },
+  {
+    "name": "象岛",
+    "pinyin": "kochang",
+    "id": 128607
+  },
+  {
+    "name": "沙美岛",
+    "pinyin": "kosamed",
+    "id": 128671
+  },
+  {
+    "name": "黑风洞",
+    "pinyin": "batucaves",
+    "id": 128760
+  },
+  {
+    "name": "波尔",
+    "pinyin": "pohl",
+    "id": 131492
+  },
+  {
+    "name": "安道尔共和国",
+    "pinyin": "andorra",
+    "id": 134158
+  },
+  {
+    "name": "密苏里",
+    "pinyin": "masouri",
+    "id": 135576
+  },
+  {
+    "name": "天堂海滩",
+    "pinyin": "paradisebeach",
+    "id": 135747
+  },
+  {
+    "name": "长崎",
+    "pinyin": "nagasaki",
+    "id": 136061
+  },
+  {
+    "name": "高野山",
+    "pinyin": "koyasan",
+    "id": 136105
+  },
+  {
+    "name": "白滨",
+    "pinyin": "shirahama",
+    "id": 136108
+  },
+  {
+    "name": "海港城",
+    "pinyin": "harborcity",
+    "id": 136301
+  },
+  {
+    "name": "留尼汪",
+    "pinyin": "reunion",
+    "id": 136374
+  },
+  {
+    "name": "马特",
+    "pinyin": "matt",
+    "id": 136849
+  },
+  {
+    "name": "保利斯塔",
+    "pinyin": "paulista",
+    "id": 139552
+  },
+  {
+    "name": "萨尔托",
+    "pinyin": "salto",
+    "id": 141017
+  },
+  {
+    "name": "申根",
+    "pinyin": "schengen",
+    "id": 142698
+  },
+  {
+    "name": "Pinnawela",
+    "pinyin": "pinnawela",
+    "id": 143841
+  },
+  {
+    "name": "黄龙风景名胜区",
+    "pinyin": "huanglongnationalscenicarea",
+    "id": 143864
+  },
+  {
+    "name": "闸坡",
+    "pinyin": "zhapo",
+    "id": 143866
+  },
+  {
+    "name": "下川岛",
+    "pinyin": "xiachuandao",
+    "id": 143867
+  },
+  {
+    "name": "白云山",
+    "pinyin": "baiyunmountain",
+    "id": 143868
+  },
+  {
+    "name": "台儿庄",
+    "pinyin": "taierzhuang",
+    "id": 143872
+  },
+  {
+    "name": "黄果树景区",
+    "pinyin": "huangguoshuwaterfall",
+    "id": 143874
+  },
+  {
+    "name": "黄果树",
+    "pinyin": "huangguoshu",
+    "id": 143874
+  },
+  {
+    "name": "万州",
+    "pinyin": "wanzhou",
+    "id": 143877
+  },
+  {
+    "name": "四姑娘山景区",
+    "pinyin": "mountsiguniang",
+    "id": 143878
+  },
+  {
+    "name": "四姑娘山",
+    "pinyin": "siguniangshan",
+    "id": 143878
+  },
+  {
+    "name": "青城山",
+    "pinyin": "mountqingcheng",
+    "id": 143879
+  },
+  {
+    "name": "青城山",
+    "pinyin": "qingchengshan",
+    "id": 143879
+  },
+  {
+    "name": "福建土楼",
+    "pinyin": "fujiantulou",
+    "id": 143880
+  },
+  {
+    "name": "昌平",
+    "pinyin": "changping",
+    "id": 143881
+  },
+  {
+    "name": "房山",
+    "pinyin": "fangshan",
+    "id": 143882
+  },
+  {
+    "name": "阿拉善左旗",
+    "pinyin": "alashanzuoqi",
+    "id": 143886
+  },
+  {
+    "name": "花都",
+    "pinyin": "huadou",
+    "id": 143887
+  },
+  {
+    "name": "永定",
+    "pinyin": "yongding",
+    "id": 143895
+  },
+  {
+    "name": "佩特拉",
+    "pinyin": "petradistrict",
+    "id": 143896
+  },
+  {
+    "name": "伊比利亚",
+    "pinyin": "iberia",
+    "id": 1444299
+  },
+  {
+    "name": "洛克",
+    "pinyin": "rock",
+    "id": 1444466
+  },
+  {
+    "name": "太阳岛",
+    "pinyin": "sun",
+    "id": 1444682
+  },
+  {
+    "name": "满月岛",
+    "pinyin": "fullmoon",
+    "id": 1444710
+  },
+  {
+    "name": "卡尼岛",
+    "pinyin": "kani",
+    "id": 1444719
+  },
+  {
+    "name": "哈库拉岛",
+    "pinyin": "hakurahuraa",
+    "id": 1444720
+  },
+  {
+    "name": "白金岛",
+    "pinyin": "hudhuranfushi",
+    "id": 1444772
+  },
+  {
+    "name": "绚丽岛",
+    "pinyin": "rannalhi",
+    "id": 1444773
+  },
+  {
+    "name": "阿雅达岛",
+    "pinyin": "ayada",
+    "id": 1444775
+  },
+  {
+    "name": "芙花芬岛",
+    "pinyin": "huvafenfushiisland",
+    "id": 1444792
+  },
+  {
+    "name": "冲绳县",
+    "pinyin": "okinawaprefect",
+    "id": 1444854
+  },
+  {
+    "name": "北马里亚纳",
+    "pinyin": "northernmarian",
+    "id": 1444895
+  },
+  {
+    "name": "西哈努克",
+    "pinyin": "sihanoukville",
+    "id": 1444979
+  },
+  {
+    "name": "五泄",
+    "pinyin": "wuxie",
+    "id": 1445012
+  },
+  {
+    "name": "龙潭大峡谷",
+    "pinyin": "longtangrandcanyon",
+    "id": 1445017
+  },
+  {
+    "name": "龙潭大峡谷",
+    "pinyin": "longtandaxiagu",
+    "id": 1445017
+  },
+  {
+    "name": "八里沟景区",
+    "pinyin": "baligouscenicarea",
+    "id": 1445018
+  },
+  {
+    "name": "八里沟",
+    "pinyin": "baligou",
+    "id": 1445018
+  },
+  {
+    "name": "少林寺",
+    "pinyin": "songshanshaolinscenicarea",
+    "id": 1445019
+  },
+  {
+    "name": "少林寺",
+    "pinyin": "shaolinsi",
+    "id": 1445019
+  },
+  {
+    "name": "关林",
+    "pinyin": "guanlin",
+    "id": 1445020
+  },
+  {
+    "name": "白马寺",
+    "pinyin": "whitehorsetemple",
+    "id": 1445021
+  },
+  {
+    "name": "鸡冠洞",
+    "pinyin": "j",
+    "id": 1445022
+  },
+  {
+    "name": "鸡冠洞",
+    "pinyin": "jiguancave",
+    "id": 1445023
+  },
+  {
+    "name": "黄河游览区",
+    "pinyin": "yellowrivertouristarea",
+    "id": 1445024
+  },
+  {
+    "name": "中岳庙",
+    "pinyin": "zhongyuemiao",
+    "id": 1445026
+  },
+  {
+    "name": "康百万庄园",
+    "pinyin": "kangbaiwangarden",
+    "id": 1445027
+  },
+  {
+    "name": "万仙山景区",
+    "pinyin": "wanxianmountainscenicspot",
+    "id": 1445029
+  },
+  {
+    "name": "灵岩寺",
+    "pinyin": "lingyantemple",
+    "id": 1445030
+  },
+  {
+    "name": "灵岩寺",
+    "pinyin": "lingyansi",
+    "id": 1445030
+  },
+  {
+    "name": "红叶谷",
+    "pinyin": "redleafvalley",
+    "id": 1445031
+  },
+  {
+    "name": "红叶谷",
+    "pinyin": "hongyegu",
+    "id": 1445031
+  },
+  {
+    "name": "莽山",
+    "pinyin": "mangshan",
+    "id": 1445033
+  },
+  {
+    "name": "嵖岈山风景区",
+    "pinyin": "chayamountainscenicspot",
+    "id": 1445048
+  },
+  {
+    "name": "嵖岈山",
+    "pinyin": "chayashan",
+    "id": 1445048
+  },
+  {
+    "name": "绵山",
+    "pinyin": "mianshan",
+    "id": 1445062
+  },
+  {
+    "name": "雪乡",
+    "pinyin": "xuexiangnationalforestpark",
+    "id": 1445063
+  },
+  {
+    "name": "雪乡",
+    "pinyin": "xuexiang",
+    "id": 1445063
+  },
+  {
+    "name": "长汀县",
+    "pinyin": "changtingxian",
+    "id": 1445095
+  },
+  {
+    "name": "思茅",
+    "pinyin": "simao",
+    "id": 1445100
+  },
+  {
+    "name": "龙胜",
+    "pinyin": "longsheng",
+    "id": 1445120
+  },
+  {
+    "name": "萍乡武功山风景区",
+    "pinyin": "pingxiangwugongmountainscenicarea",
+    "id": 1445145
+  },
+  {
+    "name": "武功山",
+    "pinyin": "wugongshan",
+    "id": 1445145
+  },
+  {
+    "name": "少女峰",
+    "pinyin": "jungfrau",
+    "id": 1445150
+  },
+  {
+    "name": "崀山国家级风景区",
+    "pinyin": "langshannationalpark",
+    "id": 1445165
+  },
+  {
+    "name": "崀山",
+    "pinyin": "langshan",
+    "id": 1445165
+  },
+  {
+    "name": "霸王岭",
+    "pinyin": "bawangling",
+    "id": 1445170
+  },
+  {
+    "name": "尖峰岭",
+    "pinyin": "jianfengling",
+    "id": 1445175
+  },
+  {
+    "name": "七仙岭",
+    "pinyin": "qixianling",
+    "id": 1445176
+  },
+  {
+    "name": "三亚南山文化旅游区",
+    "pinyin": "sanyananshanculturaltourismzone",
+    "id": 1445180
+  },
+  {
+    "name": "塔河",
+    "pinyin": "tahe",
+    "id": 1445182
+  },
+  {
+    "name": "新丰",
+    "pinyin": "xinfeng",
+    "id": 1445183
+  },
+  {
+    "name": "龙门石窟",
+    "pinyin": "longmenshiku",
+    "id": 1445188
+  },
+  {
+    "name": "天目湖南山竹海景区",
+    "pinyin": "tianmulakenanshanbambooseascenicspot",
+    "id": 1445189
+  },
+  {
+    "name": "长兴岛",
+    "pinyin": "changxingdao",
+    "id": 1445196
+  },
+  {
+    "name": "新安江山水画廊",
+    "pinyin": "landscapegalleryofxinanriver",
+    "id": 1445197
+  },
+  {
+    "name": "新安江",
+    "pinyin": "xinanjiang",
+    "id": 1445197
+  },
+  {
+    "name": "西江苗寨",
+    "pinyin": "xijiangmiaozhai",
+    "id": 1445198
+  },
+  {
+    "name": "青浦",
+    "pinyin": "qingpu",
+    "id": 1445215
+  },
+  {
+    "name": "松江",
+    "pinyin": "songjiang",
+    "id": 1445218
+  },
+  {
+    "name": "神仙珊瑚岛",
+    "pinyin": "islandhideaway",
+    "id": 1445241
+  },
+  {
+    "name": "维戈",
+    "pinyin": "vigo",
+    "id": 1445254
+  },
+  {
+    "name": "棉花堡",
+    "pinyin": "pamukkale",
+    "id": 1445281
+  },
+  {
+    "name": "蜜月岛",
+    "pinyin": "meeru",
+    "id": 1445301
+  },
+  {
+    "name": "月桂岛",
+    "pinyin": "jresortalidhoo",
+    "id": 1445311
+  },
+  {
+    "name": "马祖",
+    "pinyin": "matsu",
+    "id": 1445356
+  },
+  {
+    "name": "白洋淀风景区",
+    "pinyin": "baiyangdianlake",
+    "id": 1445376
+  },
+  {
+    "name": "白洋淀",
+    "pinyin": "baiyangdian",
+    "id": 1445376
+  },
+  {
+    "name": "兰屿",
+    "pinyin": "lanyu",
+    "id": 1445381
+  },
+  {
+    "name": "光雾山旅游景区",
+    "pinyin": "guangwumountaintouristarea",
+    "id": 1445496
+  },
+  {
+    "name": "光雾山",
+    "pinyin": "guangwushan",
+    "id": 1445496
+  },
+  {
+    "name": "理县",
+    "pinyin": "licounty",
+    "id": 1445566
+  },
+  {
+    "name": "金瓜石",
+    "pinyin": "jinguashi",
+    "id": 1445581
+  },
+  {
+    "name": "合川",
+    "pinyin": "hechuan",
+    "id": 1445602
+  },
+  {
+    "name": "丹霞山",
+    "pinyin": "danxiamountain",
+    "id": 1445611
+  },
+  {
+    "name": "丹霞山",
+    "pinyin": "mountdanxia",
+    "id": 1445611
+  },
+  {
+    "name": "大理市",
+    "pinyin": "dalicity",
+    "id": 1445616
+  },
+  {
+    "name": "布里亚特共和国",
+    "pinyin": "republicofburyatia",
+    "id": 1445912
+  },
+  {
+    "name": "湄洲岛",
+    "pinyin": "meizhouisland",
+    "id": 1445940
+  },
+  {
+    "name": "湄洲岛",
+    "pinyin": "meizhoudao",
+    "id": 1445940
+  },
+  {
+    "name": "天台",
+    "pinyin": "tiantai",
+    "id": 1445965
+  },
+  {
+    "name": "当涂",
+    "pinyin": "dangtu",
+    "id": 1445969
+  },
+  {
+    "name": "宜黄",
+    "pinyin": "yihuang",
+    "id": 1445979
+  },
+  {
+    "name": "饶河",
+    "pinyin": "raohe",
+    "id": 1445998
+  },
+  {
+    "name": "逊克",
+    "pinyin": "xunke",
+    "id": 1445999
+  },
+  {
+    "name": "通河",
+    "pinyin": "tonghe",
+    "id": 1446000
+  },
+  {
+    "name": "抚远",
+    "pinyin": "fuyuan",
+    "id": 1446003
+  },
+  {
+    "name": "同江",
+    "pinyin": "tongjiang",
+    "id": 1446004
+  },
+  {
+    "name": "盘山",
+    "pinyin": "panshan",
+    "id": 1446028
+  },
+  {
+    "name": "望都",
+    "pinyin": "wangdu",
+    "id": 1446036
+  },
+  {
+    "name": "卢龙",
+    "pinyin": "lulong",
+    "id": 1446039
+  },
+  {
+    "name": "蒲县",
+    "pinyin": "pucounty",
+    "id": 1446107
+  },
+  {
+    "name": "汾西",
+    "pinyin": "fenxi",
+    "id": 1446118
+  },
+  {
+    "name": "神池",
+    "pinyin": "shenchi",
+    "id": 1446119
+  },
+  {
+    "name": "左云",
+    "pinyin": "zuoyun",
+    "id": 1446122
+  },
+  {
+    "name": "河曲",
+    "pinyin": "hequ",
+    "id": 1446123
+  },
+  {
+    "name": "清徐",
+    "pinyin": "qingxu",
+    "id": 1446125
+  },
+  {
+    "name": "偏关",
+    "pinyin": "pianguan",
+    "id": 1446126
+  },
+  {
+    "name": "佳县",
+    "pinyin": "jiaxian",
+    "id": 1446133
+  },
+  {
+    "name": "清涧",
+    "pinyin": "qingjian",
+    "id": 1446135
+  },
+  {
+    "name": "合阳",
+    "pinyin": "heyang",
+    "id": 1446142
+  },
+  {
+    "name": "淳化",
+    "pinyin": "chunhua",
+    "id": 1446143
+  },
+  {
+    "name": "凤县",
+    "pinyin": "fengcounty",
+    "id": 1446144
+  },
+  {
+    "name": "文县",
+    "pinyin": "wencounty",
+    "id": 1446178
+  },
+  {
+    "name": "镇原",
+    "pinyin": "zhenyuan",
+    "id": 1446185
+  },
+  {
+    "name": "西和",
+    "pinyin": "xihe",
+    "id": 1446186
+  },
+  {
+    "name": "西吉",
+    "pinyin": "xiji",
+    "id": 1446188
+  },
+  {
+    "name": "彭阳",
+    "pinyin": "pengyang",
+    "id": 1446189
+  },
+  {
+    "name": "盐池",
+    "pinyin": "yanchi",
+    "id": 1446190
+  },
+  {
+    "name": "顺昌",
+    "pinyin": "shunchang",
+    "id": 1446192
+  },
+  {
+    "name": "福安",
+    "pinyin": "fuan",
+    "id": 1446193
+  },
+  {
+    "name": "江陵",
+    "pinyin": "jiangling",
+    "id": 1446197
+  },
+  {
+    "name": "鹤峰",
+    "pinyin": "hefeng",
+    "id": 1446199
+  },
+  {
+    "name": "宣恩",
+    "pinyin": "xuanen",
+    "id": 1446200
+  },
+  {
+    "name": "永顺",
+    "pinyin": "yongshun",
+    "id": 1446211
+  },
+  {
+    "name": "绵竹",
+    "pinyin": "mianzhu",
+    "id": 1446217
+  },
+  {
+    "name": "炉霍",
+    "pinyin": "luhuo",
+    "id": 1446223
+  },
+  {
+    "name": "宁南",
+    "pinyin": "ningnan",
+    "id": 1446233
+  },
+  {
+    "name": "道孚",
+    "pinyin": "daofu",
+    "id": 1446234
+  },
+  {
+    "name": "荥经",
+    "pinyin": "xingjing",
+    "id": 1446235
+  },
+  {
+    "name": "青川",
+    "pinyin": "qingchuan",
+    "id": 1446240
+  },
+  {
+    "name": "沐川",
+    "pinyin": "muchuan",
+    "id": 1446241
+  },
+  {
+    "name": "马山",
+    "pinyin": "mashan",
+    "id": 1446255
+  },
+  {
+    "name": "武宣",
+    "pinyin": "wuxuan",
+    "id": 1446260
+  },
+  {
+    "name": "西盟",
+    "pinyin": "ximeng",
+    "id": 1446277
+  },
+  {
+    "name": "永善",
+    "pinyin": "yongshan",
+    "id": 1446278
+  },
+  {
+    "name": "漾濞",
+    "pinyin": "yangbi",
+    "id": 1446283
+  },
+  {
+    "name": "镇康",
+    "pinyin": "zhenkang",
+    "id": 1446295
+  },
+  {
+    "name": "道真",
+    "pinyin": "daozhen",
+    "id": 1446300
+  },
+  {
+    "name": "久治",
+    "pinyin": "jigzhi",
+    "id": 1446312
+  },
+  {
+    "name": "门源",
+    "pinyin": "menyuan",
+    "id": 1446317
+  },
+  {
+    "name": "阿巴嘎旗",
+    "pinyin": "abagaqi",
+    "id": 1446330
+  },
+  {
+    "name": "科右中旗",
+    "pinyin": "keyouzhongqi",
+    "id": 1446335
+  },
+  {
+    "name": "东乌旗",
+    "pinyin": "dongwuqi",
+    "id": 1446344
+  },
+  {
+    "name": "库伦旗",
+    "pinyin": "kulunqi",
+    "id": 1446346
+  },
+  {
+    "name": "巴林右旗",
+    "pinyin": "balinyouqi",
+    "id": 1446351
+  },
+  {
+    "name": "陈巴尔虎旗",
+    "pinyin": "chenbaerhuqi",
+    "id": 1446352
+  },
+  {
+    "name": "玛纳斯",
+    "pinyin": "manasi",
+    "id": 1446366
+  },
+  {
+    "name": "福海",
+    "pinyin": "fuhai",
+    "id": 1446398
+  },
+  {
+    "name": "墨竹工卡",
+    "pinyin": "mozhugongka",
+    "id": 1446407
+  },
+  {
+    "name": "古北水镇",
+    "pinyin": "beijingwtown",
+    "id": 1446421
+  },
+  {
+    "name": "重渡沟风景区",
+    "pinyin": "chongdugouscenicarea",
+    "id": 1446424
+  },
+  {
+    "name": "马公",
+    "pinyin": "magong",
+    "id": 1446426
+  },
+  {
+    "name": "富士山",
+    "pinyin": "mountfuji",
+    "id": 1446516
+  },
+  {
+    "name": "萨哈林",
+    "pinyin": "sakhalin",
+    "id": 1446567
+  },
+  {
+    "name": "阿尔泰",
+    "pinyin": "altai",
+    "id": 1446655
+  },
+  {
+    "name": "克里米亚半岛",
+    "pinyin": "crimeaisland",
+    "id": 1446715
+  },
+  {
+    "name": "东戴河风景度假区",
+    "pinyin": "dongdaihescenicarea",
+    "id": 1446796
+  },
+  {
+    "name": "东戴河",
+    "pinyin": "dongdaihe",
+    "id": 1446796
+  },
+  {
+    "name": "郎木寺",
+    "pinyin": "langmutempletown",
+    "id": 1446831
+  },
+  {
+    "name": "上海迪士尼度假区",
+    "pinyin": "shanghaidisneyresort",
+    "id": 1446916
+  },
+  {
+    "name": "图片",
+    "pinyin": "picture",
+    "id": 1446971
+  },
+  {
+    "name": "圣地亚哥",
+    "pinyin": "santiago",
+    "id": 1447011
+  },
+  {
+    "name": "雄安新区",
+    "pinyin": "xiongannewarea",
+    "id": 1447346
+  },
+  {
+    "name": "阿尔卑斯山",
+    "pinyin": "alps",
+    "id": 1447388
+  },
+  {
+    "name": "马特洪峰",
+    "pinyin": "matterhorn",
+    "id": 1447402
+  },
+  {
+    "name": "下地岛",
+    "pinyin": "shimojishima",
+    "id": 1452865
+  },
+  {
+    "name": "宝石岛",
+    "pinyin": "puliagemia",
+    "id": 1453324
+  },
+  {
+    "name": "文庙",
+    "pinyin": "rembia",
+    "id": 1453872
+  },
+  {
+    "name": "bray",
+    "pinyin": "bray",
+    "id": 1462758
+  },
+  {
+    "name": "暹罗",
+    "pinyin": "siam",
+    "id": 1462934
+  },
+  {
+    "name": "海德公园",
+    "pinyin": "hydepark",
+    "id": 1469353
+  },
+  {
+    "name": "罗德里格斯",
+    "pinyin": "rodriguez",
+    "id": 1474426
+  },
+  {
+    "name": "阿尔高",
+    "pinyin": "argao",
+    "id": 1474650
+  },
+  {
+    "name": "padi",
+    "pinyin": "padi",
+    "id": 1478292
+  },
+  {
+    "name": "马六甲",
+    "pinyin": "malakaregency",
+    "id": 1479718
+  },
+  {
+    "name": "laksa",
+    "pinyin": "laksa",
+    "id": 1496242
+  },
+  {
+    "name": "阿马尔",
+    "pinyin": "amar",
+    "id": 1509082
+  },
+  {
+    "name": "penang",
+    "pinyin": "penang",
+    "id": 1510857
+  },
+  {
+    "name": "tapas",
+    "pinyin": "tapas",
+    "id": 1512038
+  },
+  {
+    "name": "巴里岛",
+    "pinyin": "barrieisland",
+    "id": 1534602
+  },
+  {
+    "name": "克孜勒",
+    "pinyin": "kyzyl",
+    "id": 1543425
+  },
+  {
+    "name": "鲍里索夫",
+    "pinyin": "borisov",
+    "id": 1558424
+  },
+  {
+    "name": "woodbury",
+    "pinyin": "woodbury",
+    "id": 1581996
+  },
+  {
+    "name": "尼亚加拉",
+    "pinyin": "niagara",
+    "id": 1582134
+  },
+  {
+    "name": "塔拉斯",
+    "pinyin": "tarras",
+    "id": 1592409
+  },
+  {
+    "name": "埃特纳火山",
+    "pinyin": "etna",
+    "id": 1594428
+  },
+  {
+    "name": "阿尔卑斯山",
+    "pinyin": "italianalps",
+    "id": 1594477
+  },
+  {
+    "name": "波罗的海",
+    "pinyin": "balticsea",
+    "id": 1594487
+  },
+  {
+    "name": "峡湾国家公园",
+    "pinyin": "fiordlandnationalpark",
+    "id": 1594651
+  },
+  {
+    "name": "达卡",
+    "pinyin": "darica",
+    "id": 1595004
+  },
+  {
+    "name": "兰纳",
+    "pinyin": "ranna",
+    "id": 1595046
+  },
+  {
+    "name": "杨州",
+    "pinyin": "yangju",
+    "id": 1595433
+  },
+  {
+    "name": "吉尔吉斯",
+    "pinyin": "cerkes",
+    "id": 1604875
+  },
+  {
+    "name": "博卡",
+    "pinyin": "bocka",
+    "id": 1611014
+  },
+  {
+    "name": "卡姆拉",
+    "pinyin": "kammlach",
+    "id": 1632028
+  },
+  {
+    "name": "格兰德",
+    "pinyin": "grande",
+    "id": 1632995
+  },
+  {
+    "name": "莱茵河谷",
+    "pinyin": "rhinevalley",
+    "id": 1648719
+  },
+  {
+    "name": "彼得堡",
+    "pinyin": "peterborough",
+    "id": 1656591
+  },
+  {
+    "name": "伯恩茅斯",
+    "pinyin": "bournemouth",
+    "id": 1656592
+  },
+  {
+    "name": "西山",
+    "pinyin": "westhill",
+    "id": 1656764
+  },
+  {
+    "name": "艾尔斯",
+    "pinyin": "ayers",
+    "id": 1659401
+  },
+  {
+    "name": "科西嘉",
+    "pinyin": "corsica",
+    "id": 1662816
+  },
+  {
+    "name": "卢森堡",
+    "pinyin": "luxemburg",
+    "id": 1665432
+  },
+  {
+    "name": "hollywood",
+    "pinyin": "hollywood",
+    "id": 1667879
+  },
+  {
+    "name": "卡萨",
+    "pinyin": "kasaan",
+    "id": 1668337
+  },
+  {
+    "name": "科罗拉多",
+    "pinyin": "coronado",
+    "id": 1668356
+  },
+  {
+    "name": "阿尔",
+    "pinyin": "all",
+    "id": 1670397
+  },
+  {
+    "name": "哈特福德",
+    "pinyin": "hartfordtownship",
+    "id": 1673441
+  },
+  {
+    "name": "基诺",
+    "pinyin": "keno",
+    "id": 1675533
+  },
+  {
+    "name": "金沙滩",
+    "pinyin": "goldenbeach",
+    "id": 1675705
+  },
+  {
+    "name": "蓝泉",
+    "pinyin": "bluesprings",
+    "id": 1685188
+  },
+  {
+    "name": "加拉帕戈斯",
+    "pinyin": "galapagos",
+    "id": 1695382
+  },
+  {
+    "name": "科罗拉多大峡谷",
+    "pinyin": "grandcanyon",
+    "id": 1697324
+  },
+  {
+    "name": "厄恩湖",
+    "pinyin": "locherne",
+    "id": 1697452
+  },
+  {
+    "name": "黑岛",
+    "pinyin": "blackisle",
+    "id": 1697457
+  },
+  {
+    "name": "温德米尔湖",
+    "pinyin": "lakewindermere",
+    "id": 1697502
+  },
+  {
+    "name": "科茨",
+    "pinyin": "coats",
+    "id": 1698417
+  },
+  {
+    "name": "东岛",
+    "pinyin": "eysturoy",
+    "id": 1698856
+  },
+  {
+    "name": "克尔曼省",
+    "pinyin": "kerman",
+    "id": 1698927
+  },
+  {
+    "name": "布卡",
+    "pinyin": "bouca",
+    "id": 1700018
+  },
+  {
+    "name": "米苏拉塔",
+    "pinyin": "misurata",
+    "id": 1700111
+  },
+  {
+    "name": "仙女山",
+    "pinyin": "fairyhill",
+    "id": 1701454
+  },
+  {
+    "name": "伊达",
+    "pinyin": "idah",
+    "id": 1707701
+  },
+  {
+    "name": "哈库拉",
+    "pinyin": "jacura",
+    "id": 1719455
+  },
+  {
+    "name": "伊图里河",
+    "pinyin": "ituri",
+    "id": 1727055
+  },
+  {
+    "name": "哈利利",
+    "pinyin": "khalili",
+    "id": 1747110
+  },
+  {
+    "name": "mona",
+    "pinyin": "mona",
+    "id": 1792560
+  },
+  {
+    "name": "华雷斯",
+    "pinyin": "juarezmunicipality",
+    "id": 1861401
+  },
+  {
+    "name": "斯特兰德",
+    "pinyin": "strand",
+    "id": 1862928
+  },
+  {
+    "name": "蓝湾",
+    "pinyin": "bluebay",
+    "id": 1862976
+  },
+  {
+    "name": "卢布",
+    "pinyin": "loobu",
+    "id": 1863052
+  },
+  {
+    "name": "马拉桑",
+    "pinyin": "malanzan",
+    "id": 1875389
+  },
+  {
+    "name": "angelina",
+    "pinyin": "angelina",
+    "id": 1885065
+  },
+  {
+    "name": "花园大道",
+    "pinyin": "thegardenroute",
+    "id": 1902944
+  },
+  {
+    "name": "荷兰村",
+    "pinyin": "holambra",
+    "id": 1951314
+  },
+  {
+    "name": "米拉贝拉",
+    "pinyin": "mirabela",
+    "id": 1951977
+  },
+  {
+    "name": "图瓦",
+    "pinyin": "touvois",
+    "id": 1957840
+  },
+  {
+    "name": "慈城",
+    "pinyin": "chasong",
+    "id": 1958761
+  },
+  {
+    "name": "江南",
+    "pinyin": "kangnam",
+    "id": 1958869
+  },
+  {
+    "name": "香山",
+    "pinyin": "hyangsan",
+    "id": 1958890
+  },
+  {
+    "name": "普吉",
+    "pinyin": "pougy",
+    "id": 1965612
+  },
+  {
+    "name": "土库曼",
+    "pinyin": "turkmenistan",
+    "id": 1975712
+  },
+  {
+    "name": "尼奥",
+    "pinyin": "niaux",
+    "id": 1979720
+  },
+  {
+    "name": "马萨基",
+    "pinyin": "massaki",
+    "id": 1986007
+  },
+  {
+    "name": "卡布拉",
+    "pinyin": "kabula",
+    "id": 2006054
+  },
+  {
+    "name": "红海滩",
+    "pinyin": "praiavermelha",
+    "id": 2010574
+  },
+  {
+    "name": "珀斯",
+    "pinyin": "perth",
+    "id": 2014499
+  },
+  {
+    "name": "亚龙湾国家旅游度假区",
+    "pinyin": "yalongbay",
+    "id": 2020081
+  },
+  {
+    "name": "广州长隆度假区",
+    "pinyin": "guangzhouchimelongtouristresort",
+    "id": 2020086
+  },
+  {
+    "name": "连城县培田古村落",
+    "pinyin": "peitianancientvillage",
+    "id": 2020511
+  },
+  {
+    "name": "圣克鲁斯岛",
+    "pinyin": "santacruzisland",
+    "id": 2020608
+  },
+  {
+    "name": "洱海",
+    "pinyin": "erhailake",
+    "id": 2020651
+  },
+  {
+    "name": "海口观澜湖旅游度假区",
+    "pinyin": "missionhillshaikouresort",
+    "id": 2020752
+  },
+  {
+    "name": "圣玛丽亚岛",
+    "pinyin": "floreanaisland",
+    "id": 2024892
+  },
+  {
+    "name": "沙溪古镇",
+    "pinyin": "ancienttownshaxi",
+    "id": 2025134
+  },
+  {
+    "name": "大洋路",
+    "pinyin": "greatoceanroad",
+    "id": 2025149
+  },
+  {
+    "name": "潮汕地区",
+    "pinyin": "chaoshanregion",
+    "id": 2025172
+  },
+  {
+    "name": "野三坡百里峡景区",
+    "pinyin": "yesanpobailixiascenicarea",
+    "id": 2025178
+  },
+  {
+    "name": "北疆",
+    "pinyin": "northernxinjiang",
+    "id": 2025369
+  },
+  {
+    "name": "南疆",
+    "pinyin": "southernxinjiang",
+    "id": 2025380
+  },
+  {
+    "name": "易水湖景区",
+    "pinyin": "yishuilake",
+    "id": 2025617
+  },
+  {
+    "name": "狼牙山",
+    "pinyin": "langyamountain",
+    "id": 2025622
+  },
+  {
+    "name": "西湖风景名胜区",
+    "pinyin": "westlake",
+    "id": 2026903
+  },
+  {
+    "name": "茫崖",
+    "pinyin": "mangya",
+    "id": 2026914
+  },
+  {
+    "name": "庐山西海风景名胜区",
+    "pinyin": "lushanxihaiscenicarea",
+    "id": 2027196
+  },
+  {
+    "name": "珠海长隆度假区",
+    "pinyin": "zhuhaichimelonginternationaloceanresort",
+    "id": 2044800
+  },
+  {
+    "name": "圣灵群岛",
+    "pinyin": "whitsundayislands",
+    "id": 2127202
+  },
+  {
+    "name": "鲁朗林海",
+    "pinyin": "lulangforest",
+    "id": 2128606
+  },
+  {
+    "name": "汤旺河林海奇石风景区",
+    "pinyin": "tangwangriverlinhaiqishishiscenicarea",
+    "id": 2128607
+  },
+  {
+    "name": "肇兴侗寨",
+    "pinyin": "zhaoxingdongvillage",
+    "id": 2128615
+  },
+  {
+    "name": "恩施大峡谷",
+    "pinyin": "enshigrandcanyonscenicarea",
+    "id": 2128618
+  },
+  {
+    "name": "五营红松林海景区",
+    "pinyin": "wuyingnationalforestpark",
+    "id": 2128619
+  },
+  {
+    "name": "老君山景区",
+    "pinyin": "laojunmountainscenicspot",
+    "id": 2133555
+  },
+  {
+    "name": "大峡谷国家公园",
+    "pinyin": "grandcanyonnationalpark",
+    "id": 2134654
+  },
+  {
+    "name": "圣淘沙岛",
+    "pinyin": "sentosa",
+    "id": 2134677
+  },
+  {
+    "name": "那拉提旅游风景区",
+    "pinyin": "nalatiscenicarea",
+    "id": 2135211
+  },
+  {
+    "name": "乌兰毛都草原",
+    "pinyin": "ulanmodgrassland",
+    "id": 2135730
+  },
+  {
+    "name": "猪岛",
+    "pinyin": "pigbeach",
+    "id": 2138866
+  },
+  {
+    "name": "南澳岛",
+    "pinyin": "nanaoisland",
+    "id": 2140856
+  },
+  {
+    "name": "兴坪古镇",
+    "pinyin": "xingpingancienttown",
+    "id": 2140857
+  },
+  {
+    "name": "雨崩村",
+    "pinyin": "yubengvillage",
+    "id": 2140858
+  },
+  {
+    "name": "美林谷",
+    "pinyin": "mylinvalley",
+    "id": 2140859
+  },
+  {
+    "name": "东山岛",
+    "pinyin": "dongshanisland",
+    "id": 2140865
+  },
+  {
+    "name": "镇远古城",
+    "pinyin": "zhenyuanancienttown",
+    "id": 2140866
+  },
+  {
+    "name": "阆中古城",
+    "pinyin": "ancientcityoflangzhong",
+    "id": 2140867
+  },
+  {
+    "name": "海陵岛",
+    "pinyin": "hailingisland",
+    "id": 2140868
+  },
+  {
+    "name": "桑给巴尔岛",
+    "pinyin": "zanzibarisland",
+    "id": 2140895
+  },
+  {
+    "name": "五大连池风景区",
+    "pinyin": "wudalianchiscenicarea",
+    "id": 2140903
+  },
+  {
+    "name": "佩妮达岛",
+    "pinyin": "penidaisland",
+    "id": 2140908
+  },
+  {
+    "name": "普卡基湖",
+    "pinyin": "lakepukaki",
+    "id": 2140955
+  },
+  {
+    "name": "百内国家公园",
+    "pinyin": "torresdelpainenationalpark",
+    "id": 2140961
+  },
+  {
+    "name": "伊瓜苏国家公园",
+    "pinyin": "iguazunationalpark",
+    "id": 2140962
+  },
+  {
+    "name": "瓦卡奇纳",
+    "pinyin": "huacachina",
+    "id": 2141028
+  },
+  {
+    "name": "麦积山风景名胜区",
+    "pinyin": "tianshuimaijimountainscenicarea",
+    "id": 2141137
+  },
+  {
+    "name": "赛里木湖",
+    "pinyin": "sayramlake",
+    "id": 2141799
+  },
+  {
+    "name": "可可托海景区",
+    "pinyin": "keketuohaiscenicdistrict",
+    "id": 2141803
+  },
+  {
+    "name": "乌兰哈达火山地质公园",
+    "pinyin": "wulanhadavolcanogeopark",
+    "id": 2141895
+  },
+  {
+    "name": "巴音布鲁克景区",
+    "pinyin": "bayanbulak",
+    "id": 2141900
+  },
+  {
+    "name": "毕棚沟",
+    "pinyin": "bipenggou",
+    "id": 2141901
+  },
+  {
+    "name": "峨眉山",
+    "pinyin": "mountemei",
+    "id": 2141902
+  },
+  {
+    "name": "禾木风景区",
+    "pinyin": "hemuscenicarea",
+    "id": 2141910
+  },
+  {
+    "name": "海花岛旅游度假区",
+    "pinyin": "oceanflowerisland",
+    "id": 2141911
+  },
+  {
+    "name": "稻城亚丁",
+    "pinyin": "daochengyading",
+    "id": 2141912
+  },
+  {
+    "name": "长岛南北长山旅游景区",
+    "pinyin": "changdao",
+    "id": 2141968
+  },
+  {
+    "name": "芙蓉镇",
+    "pinyin": "furongtown",
+    "id": 2141969
+  },
+  {
+    "name": "喀拉峻景区",
+    "pinyin": "kalajunnationalpark",
+    "id": 2141973
+  },
+  {
+    "name": "达古冰川风景名胜区",
+    "pinyin": "daguglacier",
+    "id": 2141975
+  },
+  {
+    "name": "齐云山景区",
+    "pinyin": "qiyunshanmountainecologicalandculturaltourismzone",
+    "id": 2141976
+  },
+  {
+    "name": "福建土楼永定景区",
+    "pinyin": "fujiantuloutouristattraction",
+    "id": 2141977
+  },
+  {
+    "name": "扎尕那",
+    "pinyin": "zhagana",
+    "id": 2141978
+  },
+  {
+    "name": "平遥古城",
+    "pinyin": "pingyaoancientcity",
+    "id": 2141979
+  },
+  {
+    "name": "台儿庄古城",
+    "pinyin": "taierzhuangancienttown",
+    "id": 2141980
+  },
+  {
+    "name": "太白山国家森林公园",
+    "pinyin": "themounttaibainationalforestpark",
+    "id": 2141981
+  },
+  {
+    "name": "南岳衡山风景名胜区",
+    "pinyin": "mounthengshan",
+    "id": 2141985
+  },
+  {
+    "name": "福建土楼(南靖)景区",
+    "pinyin": "fujiantulouscenicarea",
+    "id": 2141986
+  },
+  {
+    "name": "井冈山",
+    "pinyin": "jinggangshanmountain",
+    "id": 2141992
+  },
+  {
+    "name": "太行山大峡谷",
+    "pinyin": "grandcanyonoftaihang",
+    "id": 2141998
+  },
+  {
+    "name": "东江湖旅游区",
+    "pinyin": "dongjianglaketouristarea",
+    "id": 2141999
+  },
+  {
+    "name": "天堂寨",
+    "pinyin": "tiantangzhai",
+    "id": 2142003
+  },
+  {
+    "name": "剑门关",
+    "pinyin": "jianmenpass",
+    "id": 2142004
+  },
+  {
+    "name": "和顺古镇景区",
+    "pinyin": "heshunancienttown",
+    "id": 2142005
+  },
+  {
+    "name": "川西",
+    "pinyin": "westernsichuan",
+    "id": 2149872
+  },
+  {
+    "name": "乌拉盖草原",
+    "pinyin": "ulagaigrassland",
+    "id": 2149876
+  },
+  {
+    "name": "葛仙村度假区",
+    "pinyin": "gesfairyvillage",
+    "id": 2149877
+  },
+  {
+    "name": "长白山万达国际度假区",
+    "pinyin": "changbaimountainwandainternationalresort",
+    "id": 2149878
+  },
+  {
+    "name": "武陵源",
+    "pinyin": "wulingyuan",
+    "id": 2149879
+  },
+  {
+    "name": "百里杜鹃风景区",
+    "pinyin": "hundredsofmilesofazaleas",
+    "id": 2149884
+  },
+  {
+    "name": "万峰林景区",
+    "pinyin": "wanfenglinscenicarea",
+    "id": 2149885
+  },
+  {
+    "name": "荔波茂兰自然保护区",
+    "pinyin": "maolankarstforest",
+    "id": 2149886
+  },
+  {
+    "name": "大觉山",
+    "pinyin": "dajuemountain",
+    "id": 2149887
+  },
+  {
+    "name": "云丘山景区",
+    "pinyin": "mountyunscenicarea",
+    "id": 2149888
+  },
+  {
+    "name": "石牛山景区",
+    "pinyin": "shiniumountain",
+    "id": 2149891
+  },
+  {
+    "name": "牟尼沟风景区",
+    "pinyin": "mounigouscenicarea",
+    "id": 2149892
+  },
+  {
+    "name": "神农谷国家森林公园",
+    "pinyin": "shennonggunationalforestpark",
+    "id": 2149893
+  },
+  {
+    "name": "王莽岭风景区",
+    "pinyin": "wangmanglingmountainscenicspot",
+    "id": 2149894
+  },
+  {
+    "name": "新乡南太行旅游度假区",
+    "pinyin": "xinxiangsoutherntaihangmountaintourismresort",
+    "id": 2149896
+  },
+  {
+    "name": "襄阳华侨城奇幻度假区",
+    "pinyin": "octfabland",
+    "id": 2149897
+  },
+  {
+    "name": "五女山景区",
+    "pinyin": "wunvshanscenicspot",
+    "id": 2149898
+  },
+  {
+    "name": "白石山世界地质公园",
+    "pinyin": "baishishanworldgeopark",
+    "id": 2149900
+  },
+  {
+    "name": "河南宝泉旅游区",
+    "pinyin": "baoquantouristresortarea",
+    "id": 2149901
+  },
+  {
+    "name": "乌蒙大草原",
+    "pinyin": "wumenggrassplain",
+    "id": 2149904
+  },
+  {
+    "name": "凤凰古城",
+    "pinyin": "fenghuangancienttown",
+    "id": 2149906
+  },
+  {
+    "name": "北大湖滑雪度假区",
+    "pinyin": "beidahuskiresort",
+    "id": 2149910
+  },
+  {
+    "name": "缙云仙都景区",
+    "pinyin": "xianduscenicarea",
+    "id": 2149911
+  },
+  {
+    "name": "阿那亚·秦皇岛",
+    "pinyin": "aranyaqinhuangdao",
+    "id": 2154880
+  },
+  {
+    "name": "华特迪士尼世界",
+    "pinyin": "waltdisneyworldresort",
+    "id": 2184808
+  },
+  {
+    "name": "望仙谷",
+    "pinyin": "vagooscenicarea",
+    "id": 2184816
+  },
+  {
+    "name": "米尔福德峡湾",
+    "pinyin": "milfordsoundpiopiotahi",
+    "id": 2184817
+  },
+  {
+    "name": "巴松措",
+    "pinyin": "basomtso",
+    "id": 2184819
+  },
+  {
+    "name": "阿尔山国家森林公园",
+    "pinyin": "aershannationalforestpark",
+    "id": 2184821
+  },
+  {
+    "name": "牛背山景区",
+    "pinyin": "niubeimountain",
+    "id": 2184823
+  },
+  {
+    "name": "南日岛",
+    "pinyin": "nanriisland",
+    "id": 2184824
+  },
+  {
+    "name": "珠峰景区",
+    "pinyin": "mtqomolangmanationalpark",
+    "id": 2184825
+  },
+  {
+    "name": "元阳哈尼梯田",
+    "pinyin": "yuanyanghaniterrace",
+    "id": 2184984
+  },
+  {
+    "name": "自贡方特恐龙王国",
+    "pinyin": "fantawilddinokingdom",
+    "id": 2184985
+  },
+  {
+    "name": "江布拉克",
+    "pinyin": "jiangbulak",
+    "id": 2184986
+  },
+  {
+    "name": "中旅松花湖度假区",
+    "pinyin": "lakesonghuahuresort",
+    "id": 2184987
+  },
+  {
+    "name": "费尔斯特",
+    "pinyin": "first",
+    "id": 2184991
+  },
+  {
+    "name": "恒山",
+    "pinyin": "hengshanmountain",
+    "id": 2184992
+  },
+  {
+    "name": "帕米尔高原",
+    "pinyin": "pamirplateau",
+    "id": 2185245
+  },
+  {
+    "name": "琼库什台",
+    "pinyin": "qiongkushitaivillage",
+    "id": 2185283
+  },
+  {
+    "name": "夏塔旅游区",
+    "pinyin": "xiatatouristattraction",
+    "id": 2185290
+  },
+  {
+    "name": "阿里山国家风景区",
+    "pinyin": "alishannationalscenicarea",
+    "id": 2185299
+  },
+  {
+    "name": "塔兰吉雷国家公园",
+    "pinyin": "tarangirenationalpark",
+    "id": 2185305
+  },
+  {
+    "name": "独库公路",
+    "pinyin": "dukuhighway",
+    "id": 2185358
+  },
+  {
+    "name": "陕北地区",
+    "pinyin": "northernshaanxi",
+    "id": 2185486
+  },
+  {
+    "name": "崂山风景区",
+    "pinyin": "laoshanscenicspot",
+    "id": 2186254
+  },
+  {
+    "name": "平潭岛",
+    "pinyin": "pingtanisland",
+    "id": 2186642
+  },
+  {
+    "name": "太行大峡谷景区",
+    "pinyin": "taihanggrandcanyonscenicarea",
+    "id": 2187069
+  },
+  {
+    "name": "湖北天堂寨",
+    "pinyin": "hubeitiantangzhai",
+    "id": 2187841
+  }
+]

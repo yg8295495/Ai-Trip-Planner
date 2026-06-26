@@ -1,44 +1,74 @@
-import { useTripStore } from '@/store/tripStore'
-import { useSession } from './useSession'
-import { usePolling } from './usePolling'
-import { readAllLines } from '@/utils/jsonl'
+import { useChatStore } from '@/stores/chatStore'
+import { ref } from 'vue'
 
 export function useAI() {
-  const store = useTripStore()
-  const session = useSession()
-  const polling = usePolling()
+  const store = useChatStore()
+  const isPolling = ref(false)
+  const currentSessionId = ref<string | null>(null)
 
   async function sendMessage(text: string) {
     const provider = import.meta.env.VITE_AI_PROVIDER || 'mimo'
+    
+    // 添加用户消息到chatStore
+    store.addMessage({
+      id: `msg_${Date.now()}`,
+      role: 'user',
+      text,
+      timestamp: new Date()
+    })
 
-    await session.sendMessage(text, provider)
+    try {
+      // 直接调用后端API
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: text,
+          provider,
+          session_id: currentSessionId.value
+        })
+      })
 
-    if (session.currentSessionPath.value) {
-      polling.startPolling(session.currentSessionPath.value)
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`)
+      }
+
+      const data = await response.json()
+      
+      // 更新session_id
+      if (data.session_id) {
+        currentSessionId.value = data.session_id
+      }
+
+      // 添加AI回复到chatStore
+      if (data.reply) {
+        store.addMessage({
+          id: `msg_${Date.now()}_ai`,
+          role: 'assistant',
+          text: data.reply,
+          timestamp: new Date()
+        })
+      }
+    } catch (error) {
+      console.error('AI请求失败:', error)
+      // 添加错误消息
+      store.addMessage({
+        id: `msg_${Date.now()}_error`,
+        role: 'assistant',
+        text: '抱歉，请求失败，请重试。',
+        timestamp: new Date()
+      })
     }
   }
 
-  async function refreshMessages() {
-    if (!session.currentSessionId.value || !session.currentSessionPath.value) return
-
-    const messages = await readAllLines(session.currentSessionPath.value)
-
-    const lastAI = messages
-      .filter(m => m.role === 'ai')
-      .pop()
-
-    if (lastAI && lastAI.text) {
-      const exists = store.messages.some(m => m.text === lastAI.text)
-      if (!exists) {
-        polling.handleAIResponse(lastAI)
-      }
-    }
+  function refreshMessages() {
+    // 新架构下不需要轮询，消息已直接更新到store
   }
 
   return {
     sendMessage,
     refreshMessages,
-    isPolling: polling.isPolling,
-    currentSessionId: session.currentSessionId,
+    isPolling,
+    currentSessionId
   }
 }

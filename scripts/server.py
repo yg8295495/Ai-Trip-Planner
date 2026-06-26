@@ -123,8 +123,8 @@ class JSONLHandler(BaseHTTPRequestHandler):
 
 
 def main():
-    server = HTTPServer(("localhost", 3001), JSONLHandler)
-    print("API server running on http://localhost:3001")
+    server = HTTPServer(("0.0.0.0", 3001), JSONLHandler)
+    print("API server running on http://0.0.0.0:3001 (accessible from LAN)")
     server.serve_forever()
 
 

@@ -1,4 +1,4 @@
-import type { PoiInfo } from '@/store/tripStore'
+import type { CtripPOI } from '@/types/poi'
 
 const AMAP_KEY = 'c866b4e29221cbc714a4fc78060f23b7'
 
@@ -9,7 +9,7 @@ export async function searchPoisByPolygon(
   pageSize: number = 25
 ): Promise<PoiInfo[]> {
   try {
-    const coords = polygon.map(([lat, lon]) => `${lon},${lat}`).join('|')
+    const coords = polygon.map(([lng, lat]) => `${lng},${lat}`).join('|')
     const url = `https://restapi.amap.com/v5/place/polygon?polygon=${coords}&types=${types}&show_fields=photos,business&key=${AMAP_KEY}&page_size=${pageSize}`
     const res = await fetch(url)
     const data = await res.json()
@@ -87,7 +87,8 @@ export function generateCorridorPolygon(
   const sampled = [polyline[0]]
   let acc = 0
   for (let i = 1; i < polyline.length; i++) {
-    const dist = haversine(polyline[i-1][0], polyline[i-1][1], polyline[i][0], polyline[i][1])
+    // polyline 是 lng,lat 格式，haversine 期望 lat,lng
+    const dist = haversine(polyline[i-1][1], polyline[i-1][0], polyline[i][1], polyline[i][0])
     acc += dist
     if (acc >= sampleInterval * 1000) {
       sampled.push(polyline[i])
@@ -96,24 +97,26 @@ export function generateCorridorPolygon(
   }
   sampled.push(polyline[polyline.length - 1])
 
-  // 计算偏移
+  // 计算偏移（polyline 是 lng,lat 格式，需要交换为 lat,lng 给 haversine/calculateBearing）
   const left: number[][] = []
   const right: number[][] = []
 
   for (let i = 0; i < sampled.length; i++) {
+    const lat = sampled[i][1]  // polyline[i][1] = lat
+    const lng = sampled[i][0]  // polyline[i][0] = lng
     let bearing: number
     if (i === 0) {
-      bearing = calculateBearing(sampled[0][0], sampled[0][1], sampled[1][0], sampled[1][1])
+      bearing = calculateBearing(sampled[0][1], sampled[0][0], sampled[1][1], sampled[1][0])
     } else if (i === sampled.length - 1) {
-      bearing = calculateBearing(sampled[i-1][0], sampled[i-1][1], sampled[i][0], sampled[i][1])
+      bearing = calculateBearing(sampled[i-1][1], sampled[i-1][0], sampled[i][1], sampled[i][0])
     } else {
-      bearing = calculateBearing(sampled[i-1][0], sampled[i-1][1], sampled[i+1][0], sampled[i+1][1])
+      bearing = calculateBearing(sampled[i-1][1], sampled[i-1][0], sampled[i+1][1], sampled[i+1][0])
     }
 
-    const [ll, lo] = offsetPoint(sampled[i][0], sampled[i][1], bearing + 90, offsetKm)
-    const [rl, ro] = offsetPoint(sampled[i][0], sampled[i][1], bearing - 90, offsetKm)
-    left.push([ll, lo])
-    right.push([rl, ro])
+    const [ll, lo] = offsetPoint(lat, lng, bearing + 90, offsetKm)
+    const [rl, ro] = offsetPoint(lat, lng, bearing - 90, offsetKm)
+    left.push([lo, ll])  // 输出回 lng,lat 格式
+    right.push([ro, rl])
   }
 
   return [...left, ...right.reverse()]

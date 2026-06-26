@@ -30,3 +30,7 @@ dist-ssr
 
 # Codex skills (local)
 .codex/
+.playwright-mcp/
+
+# Worktrees (isolated workspaces)
+.worktrees/

@@ -9,7 +9,39 @@
 
 ---
 
-## 1. 当前架构（v3.0，2026-06-14）
+## 1. 架构决策变更（2026-06-22）
+
+### 核心变更：从"OSM+携程双体系"转向"携程ID体系为主"
+
+**变更原因：**
+1. 携程数据本身有完整坐标（lat, lng），不需要OSM坐标
+2. 携程有丰富字段：名称、评分、评论数、标签、封面图、开园状态
+3. OSM匹配率只有16%，84%的携程景点无法入库
+4. 系统复杂度应该最小化
+
+**变更影响：**
+- ❌ 不再需要OSM匹配逻辑
+- ❌ 不再需要用 `ctrip_{poi_id}` 虚拟ID（但为兼容保留）
+- ✅ 直接用携程 `poi_id` 作为主键
+- ✅ 所有携程景点都能入库（100%）
+- ✅ OSM仅在冷启动时使用（找小众景点）
+
+**数据流向：**
+```
+携程API → collect_ctrip.py → ctrip_attractions.json
+                                    ↓
+                            import_ctrip_to_db.py
+                                    ↓
+                            poi_details + poi_images
+                                    ↓
+                            后端API /api/pois
+                                    ↓
+                            前端分类选择器
+```
+
+---
+
+## 2. 当前架构（v3.1，2026-06-22）
 
 ```
 ┌─ ChatPanel 340px可拖拽 ─┬─ MapPanel flex-1 ─────┬─ ItineraryStrip 260px ─┬─ PoiDrawer 320px（抽屉）─┐
@@ -19,85 +51,150 @@
 │ - Phosphor 图标         │ - POI marker         │ - 进入规划按钮          │ - 已选 POI 排序         │
 │ - 三色装饰条            │ - 归位/策略/缩放      │ - 路线卡（距离/时长     │ - 天气（按城市）       │
 │                         │ - 卫星切换            │   /收费/红绿灯）        │                        │
-│                         │                      │ - 3 策略切换器          │                        │
-│                         │                      │   (2/13/10)            │                        │
+│                         │ - 🆕 携程分类按钮     │ - 3 策略切换器          │                        │
+│                         │   (13个分类)          │   (2/13/10)            │                        │
 │                         │                      │ - 备选路线折叠          │                        │
 │                         │                      │ - 搜索/抽屉入口         │                        │
 └─────────────────────────┴──────────────────────┴─────────────────────────┴────────────────────────┘
 ```
 
-**设计风格**：Organic 有机（大地色系 + 马卡龙跳色点缀）
-
-**两阶段流程**（无 preview 卡顿）：
-- stage 1 = input：起/终点 + 旅行参数
-- stage 2 = confirmed：进入后默认策略 0（高速优先），4 策略可实时切换
+**新增功能：**
+- 地图左上角新增**携程景点分类按钮**（罗盘图标）
+- 点击展开13个分类：历史建筑、自然山水、主题乐园等
+- 每个分类最多显示25个景点
 
 ---
 
-## 2. 关键文件 & 职责
+## 3. 数据体系（2026-06-22）
 
-| 文件 | 职责 |
+### 3.1 采集数据
+
+| 指标 | 数值 |
 |------|------|
-| [src/store/tripStore.ts](file:///Users/LiYuan/Documents/Ai-TripPlanner/src/store/tripStore.ts) | 全局状态：params / locations / routeInfo / currentStrategy / candidatePois / selectedPois / mapControls / poiDrawerOpen |
-| [src/composables/useMap.ts](file:///Users/LiYuan/Documents/Ai-TripPlanner/src/composables/useMap.ts) | 高德地图封装：initMap / renderRouteByREST / panTo / setEndpointMarker / POI marker / 4 策略定义 |
-| [src/components/MapPanel/MapPanel.vue](file:///Users/LiYuan/Documents/Ai-TripPlanner/src/components/MapPanel/MapPanel.vue) | 地图组件：watch origin/dest → panTo(zoom=10)；watch currentStrategy → 重算+重搜；左上 4 策略面板默认折叠 |
-| [src/components/ItineraryStrip/ItineraryStrip.vue](file:///Users/LiYuan/Documents/Ai-TripPlanner/src/components/ItineraryStrip/ItineraryStrip.vue) | 260px 窄右栏：起终点输入 + 路线卡 + 4 策略切换器 + 搜索按钮 |
-| [src/components/PoiDrawer/PoiDrawer.vue](file:///Users/LiYuan/Documents/Ai-TripPlanner/src/components/PoiDrawer/PoiDrawer.vue) | 320px 抽屉：自定义地点 + 候选 POI + 已选 POI + 天气 |
-| [src/services/amapDistrict.ts](file:///Users/LiYuan/Documents/Ai-TripPlanner/src/services/amapDistrict.ts) | 行政区域预加载 + localStorage 缓存（v2 密钥）+ 客户端模糊匹配（替代输入提示 API） |
-| [src/services/amapRegeo.ts](file:///Users/LiYuan/Documents/Ai-TripPlanner/src/services/amapRegeo.ts) | 逆地理编码（替代周边搜索 + 地图点击查 POI） |
-| [src/services/amapGeolocation.ts](file:///Users/LiYuan/Documents/Ai-TripPlanner/src/services/amapGeolocation.ts) | AMap.Geolocation 插件（GPS + 电脑内置定位，替代 IP 定位） |
-| [src/services/amapWeather.ts](file:///Users/LiYuan/Documents/Ai-TripPlanner/src/services/amapWeather.ts) | 天气 base+all（独立池 5000/月） |
-| [src/services/poiSearch.ts](file:///Users/LiYuan/Documents/Ai-TripPlanner/src/services/poiSearch.ts) | 地理编码 + 多边形搜索（基础搜索池 5000/月） |
-| [src/composables/useAI.ts](file:///Users/LiYuan/Documents/Ai-TripPlanner/src/composables/useAI.ts) | LLM 消息发送（JSONL 文件桥接） |
-| [src/composables/useSession.ts](file:///Users/LiYuan/Documents/Ai-TripPlanner/src/composables/useSession.ts) | 会话管理（JSONL session 列表） |
-| [src/composables/usePolling.ts](file:///Users/LiYuan/Documents/Ai-TripPlanner/src/composables/usePolling.ts) | 轮询 AI 响应（默认 1s 间隔，30s 超时） |
+| 采集城市 | 10个核心城市 |
+| 采集景点 | 2,138个 |
+| 入库成功 | 2,138个（100%）|
+| 分类数 | 13个 |
+
+**核心城市：**
+北京、上海、广州、深圳、成都、杭州、武汉、重庆、南京、西安
+
+### 3.2 数据字段
+
+| 字段 | 说明 | 来源 |
+|------|------|------|
+| poi_id | 携程景点ID（主键） | 携程 |
+| name | 景点名称 | 携程 |
+| city | 城市 | 携程 |
+| lat/lng | 坐标 | 携程 |
+| score | 用户评分 | 携程 |
+| review_count | 点评数 | 携程 |
+| tags | 分类标签（13类） | 携程 |
+| cover_image | 封面图URL | 携程 |
+| open_status | 开园状态 | 携程 |
+| short_features | 短描述 | 携程 |
+| is_free | 是否免费 | 携程 |
+
+### 3.3 携程分类标签（13个）
+
+历史建筑、自然山水、主题乐园&游乐场、亲子同乐、博物馆&展馆、地标观景、城市漫步、夜游观景、赏花胜地、遛娃宝藏地、亲近动物、园林花园、缆车索道
+
+### 3.4 数据库表（2026-06-22 重构）
+
+**poi_details 表结构：**
+
+```sql
+CREATE TABLE poi_details (
+    osm_id TEXT PRIMARY KEY,          -- 兼容层：格式 ctrip_{poi_id}
+    ctrip_id INTEGER UNIQUE,          -- 实际业务主键：携程景点ID
+    gaode_id TEXT,
+    gaode_name TEXT,
+    keytag TEXT,
+    phone TEXT,
+    ticket TEXT,
+    opening_hours TEXT,
+    tips TEXT,
+    traffic TEXT,
+    review_total INTEGER,
+    review_good_count INTEGER,
+    review_mid_count INTEGER,
+    review_bad_count INTEGER,
+    review_good_rate REAL,
+    review_tags TEXT,
+    sub_pois TEXT,
+    summary_text TEXT
+);
+CREATE INDEX idx_details_ctrip_id ON poi_details(ctrip_id);
+```
+
+**字段说明：**
+- `osm_id`：兼容层，格式为 `ctrip_{poi_id}`，保持与现有代码兼容
+- `ctrip_id`：实际业务主键，携程景点ID，建立唯一索引
+- 其他字段：携程采集的景点详情数据
+
+**数据迁移结果：**
+- 总记录数：2,849
+- 成功迁移：2,138 条（有 ctrip_id）
+
+| 表名 | 说明 | 主键 |
+|------|------|------|
+| poi_details | 景点详情 | osm_id（兼容层）+ ctrip_id（业务主键）|
+| poi_images | 景点图片 | id（自增）|
+| local_pois | OSM数据（仅冷启动用）| osm_id |
 
 ---
 
-## 3. 高德 API 配额池现状（v2.3）
+## 4. API 接口
 
-| 池 | 配额 | 用途 | 状态 |
-|---|---|---|---|
-| 基础搜索服务 | 5000/月 **共享** | 关键字 / 周边 / 多边形 / ID / 输入提示 | ✅ **仅用 `poiSearch.ts` 的多边形搜索**（1 次/策略切换） |
-| 基础 LBS | 150k/日 | 地理编码 / 驾车路线 / 逆地理 / 行政区域 / 坐标转换 / IP 定位 | ✅ 充足 |
-| 基础地图定位 | 1.5M/日 | JS 地图初始化 / AMap.Geolocation / 静态地图 | ✅ 充足 |
-| 天气 | 5000/月 | 天气查询 | ✅ 充足 |
+### GET /api/pois
 
-**关键策略**：
-- 输入提示 ❌ → 客户端 `amapDistrict` 区划匹配（1 次启动调用 + localStorage 缓存）
-- 周边搜索 ❌ → 逆地理编码 `extensions=all` 替代
-- IP 定位 ❌ → AMap.Geolocation 插件替代（精度更高）
+查询携程景点数据
 
----
+**参数：**
+- `category`：携程分类标签（如"历史建筑"）
+- `city`：城市名称
+- `limit`：数量限制（默认25）
 
-## 4. 最近 5 个 commit
-
-```
-cb6d7f3 fix: 修正驾车策略参数 + 起终点输入交互优化 + 旧缓存清理机制
-ef27d5c chore: 清理冗余代码 + 重写项目状态文档
-4a3f6a2 refactor(ui): 260px 窄右栏 + POI 抽屉 + 路线决策数据
-fb8ffc8 fix(ui): single-page stage 2 + 4 策略切换器内联 + 起点/终点地图跟随
-ac85955 fix: address 8 UX bugs in route planning flow
-```
-4a3f6a2 refactor(ui): 260px 窄右栏 + POI 抽屉 + 路线决策数据
-fb8ffc8 fix(ui): single-page stage 2 + 4 策略切换器内联 + 起点/终点地图跟随
-ac85955 fix: 基础搜索 5,000 池月消耗从 292 降到 ~1
-3e7a8b1 feat: 行政区域缓存 + AMap.Geolocation + 逆地理编码
-fb205e2 chore: 初版基础架构（直接用高德 API，含 input_tips 大量消耗）
+**返回：**
+```json
+{
+  "pois": [...],
+  "total": 25,
+  "category": "历史建筑",
+  "categories": ["历史建筑", "自然山水", ...]
+}
 ```
 
 ---
 
-## 5. ⚠️ 用户反馈的 bug 历史（避免重蹈覆辙）
+## 5. 关键文件索引
 
-| bug | 原因 | 修复 |
-|---|---|---|
-| 「加载地名数据」banner 看不到 | 缓存命中后状态闪一下就 true | banner 加 setTimeout 1.8s 持续显示 |
-| 定位后地图不跟随 | 没调 `panTo` | MapPanel watch origin/dest → `panTo(lon, lat, 10)` |
-| 输入「昆明」下拉永远无匹配 | localStorage 旧版 v1 缓存可能为空 | 缓存 key v1→v2 强制重拉 |
-| 「进入规划」按钮卡灰 | `originValid/destValid` 状态机过于复杂 | 改为只看 `store.params.origin.lat` |
-| preview 阶段流程卡住 | 用户要求单页 | 删 stage 2 = preview，改为单页 stage 2 confirmed |
-| 4 策略切换卡点不动 | UI 误用 | 改在 confirmed 阶段头部 inline 切换器 |
+| 文件 | 说明 |
+|------|------|
+| `backend/collect_ctrip.py` | 携程采集脚本 |
+| `backend/import_ctrip_to_db.py` | 入库脚本 |
+| `backend/main.py` | 后端API（含 `/api/pois`）|
+| `backend/data/ctrip_attractions.json` | 携程采集数据 |
+| `src/services/ctripPoiService.ts` | 前端携程服务 |
+| `src/store/tripStore.ts` | 状态管理（含携程景点）|
+| `src/components/MapPanel/MapPanel.vue` | 地图组件（含分类选择器）|
+
+---
+
+## 6. 待办事项（按优先级）
+
+### 🔴 高优
+- [x] 空间检索API（POST /api/pois/search）
+- [x] OSM长尾发现（GET /api/pois/osm-discover）
+- [x] 前端视窗联动
+
+### 🟡 中优
+- [ ] 景点详情页完善（门票/时间/电话）
+- [ ] AI推荐集成携程数据
+- [ ] 扩展采集到更多城市
+
+### 🟢 低优
+- [ ] 多语言支持
 | 策略切换后景点推荐不更新 | 没自动重搜 | MapPanel watch currentStrategy → `searchPoisByRoute` |
 | 起点选「我的位置」被重新 geocode 覆盖 | `renderRouteByREST` 内部读 store 重复 geocode | 改成接收参数 origin/dest |
 | 路过常德而非长沙 | IP 定位漂移 | 改用 AMap.Geolocation |

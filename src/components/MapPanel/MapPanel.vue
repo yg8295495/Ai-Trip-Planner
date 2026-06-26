@@ -1,263 +1,226 @@
 <script setup lang="ts">
-import { watch, ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
 import { Icon } from '@iconify/vue'
-import { useTripStore } from '@/store/tripStore'
-import { useMap, ROUTE_STRATEGIES } from '@/composables/useMap'
-import PinInfoCard from './PinInfoCard.vue'
-import MapClickPopup from './MapClickPopup.vue'
+import { useChatStore } from '@/stores/chatStore'
+import { useRouteStore } from '@/stores/routeStore'
+import { usePoiStore } from '@/stores/poiStore'
+import { CtripMarkerManager } from '@/composables/useCtripMarkers'
+import { getCurrentPosition } from '@/services/amapGeolocation'
 
-const store = useTripStore()
+const chatStore = useChatStore()
+const routeStore = useRouteStore()
+const poiStore = usePoiStore()
+
 const mapContainer = ref<HTMLElement | null>(null)
-const {
-  renderPoiMarkers, renderRoutePolyline,
-  fitView, toggleSatellite, zoomIn, zoomOut,
-  onMapClick, getMap, addTempMarker, panTo,
-  setEndpointMarker,
-} = useMap(mapContainer)
-
-const isSatellite = ref(false)
-const clickPos = ref<{ lng: number; lat: number } | null>(null)
-const tempMarker = ref<any>(null)
-const strategyPanelOpen = ref(false)  // 默认折叠
-
+let mapInstance: any = null
+let markerManager: CtripMarkerManager | null = null
 let resizeObserver: ResizeObserver | null = null
 
-// 注入 panTo 到 store + 监听容器 resize
-onMounted(() => {
-  store.setMapControls({ panTo })
-  if (mapContainer.value) {
-    resizeObserver = new ResizeObserver(() => {
-      const m = getMap()
-      if (m) m.resize()
+// UI 状态
+const isSatellite = ref(false)
+const strategyPanelOpen = ref(false)
+const categoryPanelOpen = ref(false)
+const showMapHint = ref(false)
+
+// 全局桥接：InfoWindow 点击 "+ 加入自驾行程单"
+;(window as any).__addToItinerary = (poiId: string) => {
+  const poi = poiStore.candidatePois.find(p => p.poi_id === poiId) ||
+              poiStore.candidatePois.find(p => p.poi_id === poiId)
+  if (poi) {
+    routeStore.addWaypoint({
+      poi_id: poi.poi_id || poi.id,
+      name: poi.name,
+      lat: poi.lat || Number(poi.location?.split(',')[1]),
+      lng: poi.lng || Number(poi.location?.split(',')[0]),
+      keytag: poi.keytag || poi.rating || '',
+      score: poi.score || Number(poi.cost) || 4.5,
+      comment_count: poi.comment_count || 100,
+      category: poi.category || poi.type || '自然山水'
     })
-    resizeObserver.observe(mapContainer.value)
   }
-})
-
-onUnmounted(() => {
-  resizeObserver?.disconnect()
-})
-
-// 地图点击 -> 弹浮层 + 画临时 marker
-onMapClick((lng, lat) => {
-  const m = getMap()
-  if (tempMarker.value && m) m.remove(tempMarker.value)
-  clickPos.value = { lng, lat }
-  tempMarker.value = addTempMarker(lng, lat, '#F59E0B')
-})
-
-function closePopup() {
-  const m = getMap()
-  if (tempMarker.value && m) m.remove(tempMarker.value)
-  tempMarker.value = null
-  clickPos.value = null
 }
 
-// ============ 起点 / 终点变化 -> 自动地图跟随 ============
+onMounted(async () => {
+  if (!mapContainer.value || !(window as any).AMap) return
 
-// 起点：放 marker + panTo zoom 10
-watch(
-  () => store.params.origin,
-  (origin) => {
-    if (!origin || origin.lat == null || origin.lon == null) return
-    setEndpointMarker('origin', origin.lon, origin.lat, origin.shortName || '起点')
-    panTo(origin.lon, origin.lat, 10)
-  },
-  { immediate: true, deep: true }
-)
+  // 1. 获取用户位置
+  let defaultCenter: [number, number] = [116.40, 39.90]
+  try {
+    const pos = await getCurrentPosition()
+    if (pos && pos.lat && pos.lng) {
+      defaultCenter = [pos.lng, pos.lat]
+    }
+  } catch {}
 
-// 终点：放 marker + panTo zoom 10
-watch(
-  () => store.params.destination,
-  (dest) => {
-    if (!dest || dest.lat == null || dest.lon == null) return
-    setEndpointMarker('dest', dest.lon, dest.lat, dest.shortName || '终点')
-    panTo(dest.lon, dest.lat, 10)
-  },
-  { immediate: true, deep: true }
-)
+  // 2. 初始化高德地图
+  mapInstance = new (window as any).AMap.Map(mapContainer.value, {
+    zoom: 11,
+    center: defaultCenter,
+    viewMode: '2D'
+  })
 
-// 策略变化：重算路线（不自动搜 POI，用户手动点按钮搜）
-watch(
-  () => store.currentStrategy,
-  async (strategy) => {
-    const o = store.params.origin
-    const d = store.params.destination
-    if (!o || !d || o.lat == null || d.lat == null) return
-    store.isComputingRoute = true
-    try {
-      const routes = await store.computeRoutes(o, d, strategy)
-      if (routes.length > 0) {
-        store.setRouteAlternatives(routes)
-        store.setRouteInfo(routes[0])
-      } else {
-        store.setRouteAlternatives([])
+  // 3. 监听 resize
+  resizeObserver = new ResizeObserver(() => {
+    if (mapInstance) mapInstance.resize()
+  })
+  resizeObserver.observe(mapContainer.value)
+
+  // 4. 地图就绪
+  mapInstance.on('complete', () => {
+    markerManager = new CtripMarkerManager(mapInstance)
+    markerManager.initReactiveBridge(poiStore, routeStore)
+  })
+
+  // 5. 起终点标记
+  watch(
+    () => chatStore.params.origin,
+    (origin) => {
+      if (!origin || origin.lat == null || origin.lon == null) return
+      addEndpointMarker('origin', origin.lon, origin.lat, origin.shortName || '起点')
+      if (mapInstance) mapInstance.setZoomAndCenter(10, [origin.lon, origin.lat])
+    },
+    { immediate: true, deep: true }
+  )
+  watch(
+    () => chatStore.params.destination,
+    (dest) => {
+      if (!dest || dest.lat == null || dest.lon == null) return
+      addEndpointMarker('dest', dest.lon, dest.lat, dest.shortName || '终点')
+    },
+    { immediate: true, deep: true }
+  )
+
+  // 6. 路线数据 → 画线 + 搜索
+  watch(
+    () => routeStore.routeInfo,
+    async (info) => {
+      if (!mapInstance || !info || !info.polyline || info.polyline.length === 0) return
+
+      renderRoute(info)
+
+      try {
+        if (routeStore.isComputingRoute) return
+        await routeStore.searchPoisByRoute()
+      } catch (err) {
+        console.error('[MapPanel 长廊缝合失败]:', err)
       }
-    } finally {
-      store.isComputingRoute = false
-    }
-  }
-)
+    },
+    { deep: true }
+  )
+})
 
-// 监听 routeInfo -> 画线 + fitView
-watch(
-  () => store.routeInfo,
-  (info) => {
-    if (info && info.polyline && info.polyline.length > 0) {
-      // 直接用已有 polyline 画线，不重新调 API
-      renderRoutePolyline(info)
-      setTimeout(() => fitView(), 200)
-    }
-  },
-  { deep: true, immediate: false }
-)
+onBeforeUnmount(() => {
+  if (markerManager) markerManager.destroy()
+  if (mapInstance) mapInstance.destroy()
+  if (resizeObserver) resizeObserver.disconnect()
+})
 
-// 候选 / 选中 POI 变化 -> 渲染 marker
-watch(
-  () => store.candidatePois,
-  () => {
-    if (store.candidatePois.length > 0) {
-      renderPoiMarkers(store.candidatePois)
-    }
-  },
-  { deep: true }
-)
-watch(
-  () => store.selectedPois,
-  () => {
-    renderPoiMarkers(store.candidatePois)
-  },
-  { deep: true }
-)
+// ========== 辅助函数 ==========
 
-// ============ 控件事件 ============
-function handleFitView() { fitView() }
-function handleToggleSatellite() {
-  toggleSatellite()
-  isSatellite.value = !isSatellite.value
+function addEndpointMarker(type: string, lng: number, lat: number, label: string) {
+  if (!mapInstance) return
+  const color = type === 'origin' ? '#10B981' : '#EF4444'
+  const marker = new (window as any).AMap.Marker({
+    position: [lng, lat],
+    title: label,
+    label: {
+      content: `<div style="background:${color};color:white;padding:4px 8px;border-radius:4px;font-size:12px;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,0.3)">${label}</div>`,
+      direction: 'top',
+      offset: new (window as any).AMap.Pixel(0, -10)
+    }
+  })
+  mapInstance.add(marker)
 }
-function handleZoomIn() { zoomIn() }
-function handleZoomOut() { zoomOut() }
 
-// 地图左上策略按钮：仅切换策略（不弹阶段）
-async function handleMapStrategyClick(s: number) {
-  store.setCurrentStrategy(s)
+function renderRoute(info: any) {
+  if (!mapInstance) return
+  mapInstance.clearMap()
+  if (chatStore.params.origin) addEndpointMarker('origin', chatStore.params.origin.lon, chatStore.params.origin.lat, chatStore.params.origin.shortName || '起点')
+  if (chatStore.params.destination) addEndpointMarker('dest', chatStore.params.destination.lon, chatStore.params.destination.lat, chatStore.params.destination.shortName || '终点')
+  const polyline = new (window as any).AMap.Polyline({
+    path: info.polyline, strokeColor: '#3B82F6', strokeWeight: 6, strokeOpacity: 0.8
+  })
+  mapInstance.add(polyline)
+  mapInstance.setFitView()
+}
+
+// ========== 控件事件 ==========
+
+function handleFitView() { if (mapInstance) mapInstance.setFitView() }
+function handleToggleSatellite() { isSatellite.value = !isSatellite.value }
+function handleZoomIn() { if (mapInstance) mapInstance.zoomIn() }
+function handleZoomOut() { if (mapInstance) mapInstance.zoomOut() }
+
+function handleCategoryClick(category: string) {
+  if (poiStore.selectedCategory === category) {
+    poiStore.clearSelectedCategory()
+  } else {
+    poiStore.setSelectedCategory(category)
+  }
+}
+
+function handleClearCategory() {
+  poiStore.clearSelectedCategory()
+}
+
+function handleSearchOsm() {
+  if (poiStore.lastBounds) poiStore.discoverOsmPois(poiStore.lastBounds)
 }
 </script>
 
 <template>
-  <div class="relative h-full w-full">
+  <div class="relative h-full w-full overflow-hidden">
     <div ref="mapContainer" class="h-full w-full" />
 
-    <!-- 地图点击浮层 -->
-    <MapClickPopup
-      v-if="clickPos"
-      :lng="clickPos.lng"
-      :lat="clickPos.lat"
-      @close="closePopup"
-    />
-
-    <!-- 路线计算中 -->
-    <div v-if="store.isComputingRoute || store.isComputingStrategies" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white px-4 py-3 rounded-xl shadow-lg z-20 flex items-center gap-2">
-      <div class="animate-spin w-4 h-4 border-2 border-[#C66B3D] border-t-transparent rounded-full"></div>
-      <span class="text-sm text-[#2D2A26]">
-        {{ store.isComputingStrategies ? '计算策略路线中...' : '计算路线中...' }}
-      </span>
-    </div>
-
-    <!-- 左侧控制按钮 -->
-    <div class="absolute top-3 left-3 z-10 flex flex-col gap-2">
-      <div class="flex gap-2">
-        <button
-          @click="handleFitView"
-          class="bg-white w-9 h-9 rounded-xl shadow-md flex items-center justify-center text-[#2D2A26] hover:bg-[#F5F0E8] transition-colors"
-          title="归位"
-        >
-          <Icon icon="ph:crosshair" :width="18" :height="18" />
+    <!-- 顶置罗盘标签 -->
+    <div class="absolute top-4 left-4 right-16 z-10 flex flex-col gap-2 pointer-events-none">
+      <div class="flex items-center gap-2 pointer-events-auto">
+        <button @click="categoryPanelOpen = !categoryPanelOpen"
+          class="flex h-10 items-center gap-2 px-4 rounded-xl shadow-lg border backdrop-blur transition-all active:scale-95"
+          style="background: rgba(255,255,255,0.85); border-color: var(--color-border); color: var(--color-text)">
+          <Icon icon="ph:compass-duotone" class="w-5 h-5" style="color: var(--color-primary)" />
+          <span class="text-xs font-semibold tracking-wide">沿途风景发现</span>
+          <Icon :icon="categoryPanelOpen ? 'ph:caret-up' : 'ph:caret-down'" class="w-3 h-3 opacity-60" />
         </button>
-        <button
-          v-if="store.params.origin && store.params.destination && !strategyPanelOpen"
-          @click="strategyPanelOpen = true"
-          class="bg-white w-9 h-9 rounded-xl shadow-md flex items-center justify-center text-[#2D2A26] hover:bg-[#F5F0E8] transition-colors"
-          title="线路策略"
-        >
-          <Icon icon="ph:git-branch" :width="18" :height="18" />
+        <button v-if="poiStore.selectedCategory" @click="handleClearCategory"
+          class="h-7 text-[11px] px-2.5 rounded-lg border border-dashed flex items-center gap-1 transition-colors"
+          style="background: rgba(239,68,68,0.1); color: #EF4444; border-color: #EF4444">
+          <span>清除: {{ poiStore.selectedCategory }}</span>
+          <Icon icon="ph:x" class="w-3 h-3" />
         </button>
       </div>
-
-      <!-- 展开后的策略面板 -->
-      <div v-if="strategyPanelOpen && store.params.origin && store.params.destination" class="bg-white rounded-xl shadow-md overflow-hidden w-[220px]">
-        <div class="px-3 py-1.5 text-[11px] text-[#8B8578] bg-[#F5F0E8] border-b border-[#E8DCC7] flex items-center justify-between">
-          <span>线路策略</span>
-          <button class="text-[#8B8578] hover:text-[#C66B3D]" @click="strategyPanelOpen = false" title="折叠">&times;</button>
+      <div v-if="categoryPanelOpen" class="p-3 rounded-2xl shadow-xl border backdrop-blur" style="background: rgba(255,255,255,0.9); border-color: var(--color-border)">
+        <div class="flex flex-wrap gap-1.5">
+          <button v-for="cat in poiStore.CATEGORIES" :key="cat"
+            class="h-8 px-3 rounded-lg text-xs font-normal transition-all"
+            :style="poiStore.selectedCategory === cat ? { background: 'var(--color-primary)', color: 'white' } : { background: 'var(--color-surface-alt)', color: 'var(--color-text)' }"
+            @click="handleCategoryClick(cat)">
+            {{ cat }}
+          </button>
         </div>
-        <button
-          v-for="strategy in ROUTE_STRATEGIES"
-          :key="strategy.value"
-          :class="[
-            'w-full px-3 py-2 text-sm text-left transition-colors flex items-center gap-2',
-            store.currentStrategy === strategy.value
-              ? 'bg-[#FDF2EC] text-[#C66B3D] font-medium'
-              : 'text-[#2D2A26] hover:bg-[#F5F0E8]',
-          ]"
-          :title="strategy.desc"
-          @click="handleMapStrategyClick(strategy.value)"
-        >
-          <span>{{ strategy.label }}</span>
-          <span v-if="store.currentStrategy === strategy.value" class="text-[#C66B3D] text-xs ml-auto">&#10003;</span>
-        </button>
-        <div class="px-3 py-1.5 text-[10px] text-[#B0A99F] bg-[#F5F0E8] border-t border-[#E8DCC7]">
-          右栏已内嵌策略切换器
-        </div>
-      </div>
-
-      <div class="bg-white rounded-xl shadow-md p-2 text-[11px] text-[#8B8578] max-w-[220px]">
-        点击地图可添加地点或查找附近景点
       </div>
     </div>
 
     <!-- 右侧控件 -->
-    <div class="absolute top-3 right-3 z-10 flex flex-col gap-2">
-      <div class="bg-white rounded-xl shadow-md overflow-hidden">
-        <button
-          class="w-9 h-9 flex items-center justify-center text-[#2D2A26] hover:bg-[#F5F0E8] transition-colors border-b border-[#E8DCC7]"
-          @click="handleZoomIn"
-        >
-          <Icon icon="ph:plus" :width="16" :height="16" />
-        </button>
-        <button
-          class="w-9 h-9 flex items-center justify-center text-[#2D2A26] hover:bg-[#F5F0E8] transition-colors"
-          @click="handleZoomOut"
-        >
-          <Icon icon="ph:minus" :width="16" :height="16" />
-        </button>
-      </div>
-
-      <button
-        :class="[
-          'bg-white w-9 h-9 rounded-xl shadow-md flex items-center justify-center transition-colors',
-          isSatellite ? 'text-[#7EB8DA] bg-[#F0F7FB]' : 'text-[#2D2A26] hover:bg-[#F5F0E8]',
-        ]"
-        @click="handleToggleSatellite"
-        :title="isSatellite ? '普通地图' : '卫星地图'"
-      >
-        <Icon :icon="isSatellite ? 'ph:map-trifold' : 'ph:globe'" :width="18" :height="18" />
+    <div class="absolute bottom-6 right-4 z-10 flex flex-col gap-2">
+      <button @click="handleFitView"
+        class="w-10 h-10 rounded-xl shadow-lg flex items-center justify-center border backdrop-blur"
+        style="background: rgba(255,255,255,0.85); border-color: var(--color-border); color: var(--color-text)"
+        title="归位">
+        <Icon icon="ph:frame-corners" class="w-5 h-5" />
       </button>
     </div>
 
-    <!-- 搜索中提示 -->
-    <div v-if="store.isSearchingPois" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white px-4 py-3 rounded-xl shadow-lg z-20">
-      <div class="flex items-center gap-2">
-        <div class="animate-spin w-4 h-4 border-2 border-[#C66B3D] border-t-transparent rounded-full"></div>
-        <span class="text-sm text-[#2D2A26]">搜索沿途景点...</span>
+    <!-- 加载遮罩 -->
+    <div v-if="poiStore.isLoading || routeStore.isComputingRoute"
+      class="absolute inset-0 z-50 flex items-center justify-center transition-all"
+      style="background: rgba(255,255,255,0.1); backdrop-filter: blur(1px)">
+      <div class="border shadow-2xl rounded-2xl px-5 py-3.5 flex items-center gap-3"
+        style="background: var(--color-surface); border-color: var(--color-border)">
+        <div class="animate-spin w-5 h-5 border-2 border-t-transparent rounded-full"
+          style="border-color: var(--color-primary)"></div>
+        <span class="text-xs font-medium tracking-wide">正在缝合自驾时廊...</span>
       </div>
     </div>
-
-    <PinInfoCard
-      v-if="store.selectedLocationId"
-      :location="store.locations.find((l) => l.id === store.selectedLocationId)!"
-      @close="store.setSelectedLocation(null)"
-      @toggle="store.toggleLocation(store.selectedLocationId!)"
-    />
   </div>
 </template>
